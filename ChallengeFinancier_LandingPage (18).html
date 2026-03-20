@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChallengeFinancier™ — VoteConnect SARL</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#091509; --bg2:#122212; --bg3:#1c3c1c; --bg4:#0d1f0d;
+  --or:#c9a84c; --or2:#e2c060; --or3:#f5d97a;
+  --tx:#f5f0e8; --dim:#7aaa7a; --bord:rgba(201,168,76,.2);
+  --card:rgba(255,255,255,.03); --grn:rgba(46,110,46,.5);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 35% at 50% 0%,rgba(201,168,76,.07),transparent 55%);pointer-events:none;z-index:0}
+
+/* CI FLAG */
+.flag{display:flex;height:4px;width:100%;z-index:10;position:relative}
+.flag .a{flex:1;background:#f77f00}
+.flag .b{flex:1;background:#f5f0e8}
+.flag .c{flex:1;background:#009a44}
+
+/* TOPBAR */
+.topbar{background:rgba(9,21,9,.97);border-bottom:1px solid var(--bord);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:200;backdrop-filter:blur(16px)}
+.tb-left{display:flex;flex-direction:column;gap:1px}
+.tb-brand{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--or2);letter-spacing:2px;font-weight:700}
+.tb-sub{font-size:.6rem;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase}
+.tb-tag{font-size:.63rem;color:var(--or);border:1px solid rgba(201,168,76,.3);padding:3px 11px;border-radius:20px;letter-spacing:1px;white-space:nowrap}
+
+/* SHELL */
+.shell{max-width:720px;margin:0 auto;padding:0 18px 100px;position:relative;z-index:1}
+
+/* ── VIDÉO ── */
+.video-wrap{margin:24px 0 32px;position:relative;border-radius:16px;overflow:hidden;border:1px solid rgba(201,168,76,.25);box-shadow:0 12px 48px rgba(0,0,0,.6),0 0 0 1px rgba(201,168,76,.1)}
+.video-wrap iframe{width:100%;height:400px;border:none;display:block}
+.video-overlay-bar{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(9,21,9,.92),transparent);padding:14px 16px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.vbar-play{width:24px;height:24px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.vbar-play::after{content:'';border-left:9px solid var(--bg);border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
+.vbar-tags{display:flex;gap:6px;flex-wrap:wrap}
+.vbar-tag{font-size:.63rem;color:var(--or3);background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);padding:2px 9px;border-radius:12px;letter-spacing:.5px;font-weight:500}
+.vbar-tag.gr{color:#5de07a;background:rgba(46,200,80,.1);border-color:rgba(46,200,80,.25)}
+
+/* HERO */
+.hero{padding:12px 0 28px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;font-size:.67rem;letter-spacing:2px;text-transform:uppercase;color:var(--or2);border:1px solid rgba(201,168,76,.3);padding:5px 16px;border-radius:30px;margin-bottom:20px}
+.dot-live{width:7px;height:7px;background:#3ecf6e;border-radius:50%;box-shadow:0 0 6px #3ecf6e;animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,6.5vw,3.2rem);font-weight:900;line-height:1.06;margin-bottom:6px}
+.hero h1 em{display:block;font-style:normal;background:linear-gradient(135deg,var(--or2),var(--or3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-tagline{font-family:'Lora',serif;font-size:1rem;color:var(--tx);margin:0 auto 8px;max-width:520px;line-height:1.6;font-style:italic}
+.hero-sub{font-size:.85rem;color:var(--dim);max-width:500px;margin:0 auto 22px;line-height:1.7}
+.pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.pill{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:4px 13px;font-size:.72rem;color:var(--or3);font-weight:500}
+.pill.gr{background:rgba(46,200,80,.07);border-color:rgba(46,200,80,.2);color:#7de89a}
+
+/* TABS */
+.tabs-wrap{position:sticky;top:48px;z-index:150;background:rgba(9,21,9,.97);border-bottom:2px solid var(--bg3);backdrop-filter:blur(16px)}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);width:100%}
+.tab{padding:12px 4px;font-size:.68rem;font-weight:500;letter-spacing:.3px;text-transform:uppercase;color:var(--dim);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;text-align:center;font-family:'DM Sans',sans-serif;line-height:1.3}
+.tab:hover{color:var(--or2)}
+.tab.on{color:var(--or3);border-bottom-color:var(--or)}
+
+/* PANES */
+.pane{display:none;padding:28px 0 0;animation:fu .3s ease}
+.pane.on{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* UTILS */
+.sh{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--or2);margin-bottom:4px;font-weight:700}
+.ss{font-family:'Lora',serif;font-size:.82rem;color:var(--dim);font-style:italic;margin-bottom:18px}
+.rule{height:1px;background:linear-gradient(90deg,var(--or),transparent);margin-bottom:22px;opacity:.3}
+.hl{background:rgba(201,168,76,.07);border-left:3px solid var(--or);border-radius:0 10px 10px 0;padding:13px 16px;margin-bottom:18px;font-size:.84rem;line-height:1.7}
+.hl strong{color:var(--or3)}
+.hl.green{background:rgba(46,200,80,.06);border-left-color:#3ecf6e}
+.hl.green strong{color:#7de89a}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column}
+.step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.step:last-child{border-bottom:none}
+.sn{width:32px;height:32px;background:var(--bg3);border:1px solid var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.85rem;color:var(--or3);font-weight:700;flex-shrink:0;margin-top:2px}
+.sb strong{display:block;font-size:.88rem;color:var(--tx);margin-bottom:3px;font-weight:500}
+.sb span{font-size:.78rem;color:var(--dim);line-height:1.6}
+
+/* ECO CARDS — 3 piliers */
+.eco-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:500px){.eco-grid{grid-template-columns:1fr}}
+.eco-card{background:var(--card);border:1px solid var(--bord);border-radius:14px;padding:18px 14px;text-align:center;transition:all .2s;cursor:default}
+.eco-card:hover{border-color:rgba(201,168,76,.45);transform:translateY(-2px)}
+.eco-card.main{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.05)}
+.eco-icon{width:44px;height:44px;border-radius:10px;overflow:hidden;margin:0 auto 10px;background:var(--bg3);border:1px solid var(--bord)}
+.eco-icon img{width:100%;height:100%;object-fit:contain;padding:4px}
+.eco-name{font-family:'Playfair Display',serif;font-size:.92rem;color:var(--or2);margin-bottom:4px;font-weight:700}
+.eco-role{font-size:.72rem;color:var(--dim);line-height:1.5}
+.eco-badge{display:inline-block;font-size:.6rem;background:rgba(201,168,76,.15);color:var(--or3);border:1px solid rgba(201,168,76,.3);padding:2px 8px;border-radius:10px;margin-bottom:6px;letter-spacing:.5px}
+
+/* KPI */
+.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
+@media(max-width:480px){.kgrid{grid-template-columns:1fr 1fr}}
+.kcard{background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:14px 12px;text-align:center;transition:border-color .2s}
+.kcard:hover{border-color:rgba(201,168,76,.4)}
+.kv{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--or3);line-height:1;margin-bottom:3px}
+.kl{font-size:.68rem;color:var(--dim);line-height:1.4}
+
+/* TABLE */
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--bord);margin-bottom:18px}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+th{text-align:left;padding:9px 11px;background:rgba(0,0,0,.3);color:var(--or2);font-weight:600;font-size:.7rem;letter-spacing:.6px;border-bottom:1px solid var(--bord)}
+td{padding:8px 11px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle}
+tr:last-child td{border-bottom:none;font-weight:600;background:rgba(201,168,76,.05)}
+.g{color:#5de07a;font-weight:600}
+.o{color:var(--or3);font-weight:600}
+.r{color:#ff8888}
+
+/* INVEST CARDS */
+.icard{background:var(--card);border:1px solid var(--bord);border-radius:12px;padding:16px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:14px;transition:all .2s}
+.icard:hover{border-color:var(--or);transform:translateY(-1px)}
+.icard.feat{border-color:rgba(201,168,76,.45);background:rgba(201,168,76,.05)}
+.il strong{display:block;font-family:'Playfair Display',serif;font-size:1rem;color:var(--or2);margin-bottom:2px}
+.il span{font-size:.76rem;color:var(--dim);line-height:1.5}
+.ip{text-align:right;flex-shrink:0}
+.ip .amt{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--or3);white-space:nowrap}
+.ip .unit{font-size:.62rem;color:var(--dim)}
+.star{display:inline-block;font-size:.6rem;background:var(--or);color:var(--bg);padding:2px 9px;border-radius:10px;font-weight:700;letter-spacing:.5px;margin-bottom:4px}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:26px}
+.tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,var(--or),transparent)}
+.tli{position:relative;margin-bottom:18px}
+.tld{position:absolute;left:-26px;top:4px;width:16px;height:16px;background:var(--bg3);border:2px solid var(--or);border-radius:50%}
+.tld::after{content:'';position:absolute;top:3px;left:3px;width:6px;height:6px;background:var(--or3);border-radius:50%}
+.tly{font-size:.65rem;letter-spacing:1.5px;color:var(--or);text-transform:uppercase;margin-bottom:2px;font-weight:600}
+.tlt{font-family:'Playfair Display',serif;font-size:.92rem;color:var(--tx);margin-bottom:3px}
+.tls{font-size:.76rem;color:var(--dim);line-height:1.6}
+
+/* PARTENAIRE OFFICIEL */
+.partner-bar{display:flex;align-items:center;gap:12px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:12px 16px;margin-bottom:20px}
+.partner-logo{width:36px;height:36px;border-radius:8px;overflow:hidden;border:1px solid rgba(201,168,76,.3);flex-shrink:0}
+.partner-logo img{width:100%;height:100%;object-fit:contain;padding:3px}
+.partner-text strong{display:block;font-size:.82rem;color:var(--or3);margin-bottom:1px}
+.partner-text span{font-size:.72rem;color:var(--dim)}
+
+/* CTA */
+.cta-wrap{text-align:center;padding:4px 0 20px}
+.plbl{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.prix{font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;color:var(--or3);line-height:1;margin-bottom:3px}
+.pdesc{font-family:'Lora',serif;font-size:.8rem;color:var(--dim);font-style:italic;margin-bottom:24px}
+.qr-area{display:inline-flex;flex-direction:column;align-items:center;gap:9px;margin-bottom:22px}
+.qr-box{width:148px;height:148px;background:white;border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 28px rgba(0,0,0,.4),0 0 0 3px rgba(201,168,76,.25);padding:8px}
+.qr-box img{width:128px;height:128px;object-fit:contain;border-radius:6px;display:block}
+.qlbl{font-size:.68rem;color:var(--or2);letter-spacing:1.5px;text-transform:uppercase;font-weight:500}
+.csteps{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;text-align:left}
+.csr{display:flex;align-items:flex-start;gap:11px;padding:11px 13px;background:rgba(0,0,0,.2);border-radius:9px}
+.csn{width:24px;height:24px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;color:var(--bg);font-weight:700;flex-shrink:0;margin-top:1px}
+.cst{font-size:.8rem;line-height:1.5}
+.cst strong{color:var(--or3)}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:9px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:13px 20px;font-size:.9rem;font-weight:600;color:var(--or3);letter-spacing:.8px;margin-bottom:12px;width:100%}
+.urg{background:rgba(46,200,80,.07);border:1px solid rgba(46,200,80,.2);border-radius:10px;padding:11px 15px;display:flex;align-items:center;gap:10px;font-size:.78rem;color:#aaffcc}
+.urg strong{color:#5de07a}
+
+/* FOOTER */
+.foot{text-align:center;padding:22px 0 0;border-top:1px solid rgba(255,255,255,.06);margin-top:16px}
+.flogo{font-family:'Playfair Display',serif;font-size:.86rem;color:var(--or2);margin-bottom:5px}
+.fleg{font-size:.65rem;color:var(--dim);letter-spacing:.4px;line-height:1.9}
+.fmotto{color:var(--or)}
+
+/* SIGNATURE DANS S'INSCRIRE — styles réutilisés, plus de position:fixed */
+.sig-halo{position:relative;display:flex;align-items:center;justify-content:center}
+.sig-halo-photo::before,.sig-halo-photo::after{content:'';position:absolute;border-radius:50%;pointer-events:none}
+.sig-halo-photo::before{inset:-5px;border:2px solid rgba(201,168,76,.7);animation:spin 4s linear infinite,halo-pulse 2.5s ease-in-out infinite}
+.sig-halo-photo::after{inset:-10px;border:1.5px solid rgba(46,110,46,.5);animation:spin-rev 6s linear infinite,halo-pulse 3.2s ease-in-out infinite .6s}
+.sig-circle{width:60px;height:60px;border-radius:50%;border:2px solid var(--or);overflow:hidden;background:var(--bg3);box-shadow:0 0 14px rgba(201,168,76,.4);position:relative;z-index:1}
+.sig-circle img{width:100%;height:100%;object-fit:cover;display:block}
+.sig-name{font-size:.58rem;color:var(--or2);letter-spacing:.5px;text-align:center;white-space:nowrap;line-height:1.5;margin-top:4px}
+.sig-logos-col{display:flex;flex-direction:column;gap:6px;align-items:center}
+.sig-halo-logo{position:relative;display:flex;align-items:center;justify-content:center}
+.sig-halo-logo::before,.sig-halo-logo::after{content:'';position:absolute;border-radius:8px;pointer-events:none}
+.sig-halo-logo::before{inset:-3px;border:1.5px solid rgba(201,168,76,.6);animation:spin-rev 5s linear infinite,halo-pulse 2.8s ease-in-out infinite .3s}
+.sig-halo-logo::after{inset:-6px;border:1px solid rgba(93,224,122,.4);animation:spin 7s linear infinite,halo-pulse 3.5s ease-in-out infinite .9s}
+.sig-logo-sq{width:42px;height:42px;border-radius:8px;border:1.5px solid rgba(201,168,76,.4);overflow:hidden;background:var(--bg3);box-shadow:0 4px 12px rgba(0,0,0,.4);position:relative;z-index:1}
+.sig-logo-sq img{width:100%;height:100%;object-fit:contain;padding:4px;display:block}
+.sig-logo-name{font-size:.52rem;color:var(--dim);letter-spacing:.5px;text-align:center}
+
+/* Disposition QR + signatures côte à côte */
+.qr-signature-row{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:18px}
+.qr-center{display:flex;flex-direction:column;align-items:center;gap:9px}
+
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spin-rev{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+@keyframes halo-pulse{0%,100%{opacity:.5;scale:1}50%{opacity:1;scale:1.06}}
+</style>
+</head>
+<body>
+
+<div class="flag"><div class="a"></div><div class="b"></div><div class="c"></div></div>
+
+<nav class="topbar">
+  <div class="tb-left">
+    <div class="tb-brand">ChallengeFinancier™</div>
+    <div class="tb-sub">by VoteConnect SARL</div>
+  </div>
+  <div class="tb-tag">(2028 — 2030)</div>
+</nav>
+
+<main class="shell">
+
+  <!-- VIDÉO supprimée de l'intro — déplacée dans S'INSCRIRE -->
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge"><span class="dot-live"></span>SESSION INAUGURALE — Avril · Mai 2026</div>
+    <h1>Formez-vous.<em>Devenez le changement.</em></h1>
+    <p class="hero-tagline">Vous rêvez d'une carrière politique ? ChallengeFinancier™ vous donne les outils, la visibilité et les stratégies pour transformer ce rêve en mandat.</p>
+    <p class="hero-sub">Une recharge égale un impact. Chaque appel, un avenir. Traçons ensemble de nouveaux itinéraires de citoyenneté pour un progrès partagé.</p>
+    <div class="pills">
+      <div class="pill" style="background:rgba(247,127,0,.15);border-color:rgba(247,127,0,.5);color:#f77f00">Formation politique & financière</div>
+      
+      <div class="pill" style="background:rgba(245,240,232,.15);border-color:rgba(245,240,232,.6);color:#f5f0e8">Stratégies électorales innovantes</div>
+      <div class="pill" style="background:rgba(0,154,68,.15);border-color:rgba(0,154,68,.5);color:#00c45a">Incubateur NGD</div>
+      
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs-wrap">
+    <div class="tabs" role="tablist">
+      <button class="tab on" onclick="go('vision',this)">🌍 Vision</button>
+      <button class="tab" onclick="go('ecosysteme',this)">⚙️ Écosystème</button>
+      <button class="tab" onclick="go('formation',this)">🎓 Formation</button>
+      <button class="tab" onclick="go('impact',this)">📊 Impact</button>
+      <button class="tab" onclick="go('acces',this)">💳 S'inscrire</button>
+    </div>
+  </div>
+
+  <!-- ── PANE 1 : VISION ── -->
+  <div id="pane-vision" class="pane on">
+    <div class="sh">Votre tremplin vers le mandat</div>
+    <div class="ss">Un écosystème conçu pour les leaders d'opinion qui veulent changer les choses</div>
+    <div class="rule"></div>
+
+    <!-- Citation narrative -->
+    <div class="hl green">
+      <strong>Vous êtes leader d'opinion et rêvez d'une carrière politique.</strong> Avec VoteConnect et sa Plateforme ChallengeFinancier™, formez-vous, gagnez en visibilité, et accédez à des stratégies électorales innovantes. Grâce à NGD, bénéficiez d'un écosystème structurant pour votre positionnement politique. Avec CROIRE, mobilisez les électeurs et construisez une véritable alternative citoyenne.
+    </div>
+
+    <!-- 3 piliers visuels -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px">
+
+      <div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:14px;padding:16px 12px;text-align:center">
+        <div style="font-size:1.6rem;margin-bottom:8px">🎓</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--or2);margin-bottom:6px;font-weight:700">Se Former</div>
+        <div style="font-size:.72rem;color:var(--dim);line-height:1.6">8 modules · Bitcoin · Gouvernance · Stratégie électorale · Coaching live</div>
+      </div>
+
+      <div style="background:rgba(46,200,80,.05);border:1px solid rgba(46,200,80,.2);border-radius:14px;padding:16px 12px;text-align:center">
+        <div style="font-size:1.6rem;margin-bottom:8px">🌱</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:#7de89a;margin-bottom:6px;font-weight:700">S'Incuber</div>
+        <div style="font-size:.72rem;color:var(--dim);line-height:1.6">NGD · Visibilité nationale · Réseau · Accompagnement vers le mandat</div>
+      </div>
+
+      <div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.25);border-radius:14px;padding:16px 12px;text-align:center">
+        <div style="font-size:1.6rem;margin-bottom:8px">🗳️</div>
+        <div style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--or2);margin-bottom:6px;font-weight:700">Gagner</div>
+        <div style="font-size:.72rem;color:var(--dim);line-height:1.6">CROIRE · TCL · 509 mandats · Financement citoyen · Coalition 2030</div>
+      </div>
+
+    </div>
+
+    <!-- Parcours en 4 étapes -->
+    <div class="sh" style="font-size:1rem;margin-bottom:14px">Votre parcours de leader à élu</div>
+    <div class="steps">
+      <div class="step">
+        <div class="sn">I</div>
+        <div class="sb">
+          <strong>Inscrivez-vous sur ChallengeFinancier™ LMS</strong>
+          <span>52 500 FCFA · Module 1 accessible immédiatement · Clé d'activation LFA-XXXX-XXXX · 8 modules complets · Certification scoring 300–360 pts · Coaching live 2×/semaine avec Coach Morgan's sur ChallengeF TV.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">II</div>
+        <div class="sb">
+          <strong>Rejoignez automatiquement l'incubateur NGD</strong>
+          <span>Nouvelles Générations pour le Développement. Votre profil entre dans le registre national des futurs Conseillers Municipaux, Régionaux et Députés. Visibilité, accompagnement stratégique, mise en réseau avec 201 Bitcoin-Investisseurs Nationaux.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">III</div>
+        <div class="sb">
+          <strong>Activez le Dispositif CROIRE dans votre commune</strong>
+          <span>Coalition Républicaine d'Optimisation des Initiatives Révolutionnaires Endogènes. TCL finance votre campagne via les achats de vos électeurs — 1% reversé automatiquement. CashBack 2,5% versé en votre nom à la communauté via Wave chaque mois.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn">IV</div>
+        <div class="sb">
+          <strong>Accédez au mandat en 2028 — Coalition présidentielle en 2030</strong>
+          <span>509 Conseillers Municipaux et Régionaux élus en septembre 2028 forment le socle de la Coalition Pro-Bitcoin, pour la Présidentielle d'Octobre 2030. Une recharge égale un impact. Chaque appel, un avenir.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule" style="margin-top:20px"></div>
+
+    <!-- Partenaire officiel -->
+    <div class="partner-bar">
+      <div class="partner-logo">
+        <img src="https://i.ibb.co/LDQyx6c8/Logo-LFA-CI-2.png" alt="LFA-CI" loading="lazy">
+      </div>
+      <div class="partner-text">
+        <strong>LFA-CI — Partenaire Officiel N°1 de VoteConnect SARL</strong>
+        <span>Les Frères Africains — Section Côte d'Ivoire · 30 Architectes Bureau Exécutif · 509 communes et sous-préfectures cibles</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── PANE 2 : ÉCOSYSTÈME ── -->
+  <div id="pane-ecosysteme" class="pane">
+    <div class="sh">L'écosystème VoteConnect</div>
+    <div class="ss">Trois dispositifs. Une seule mission : vous porter au mandat.</div>
+    <div class="rule"></div>
+
+    <div class="eco-grid">
+      <div class="eco-card main">
+        <div class="eco-badge">PLATEFORME CENTRALE</div>
+        <div class="eco-icon" style="background:rgba(201,168,76,.1)">
+          <img src="https://i.ibb.co/99p8ZBzc/CF-LMS.png" alt="ChallengeFinancier LMS">
+        </div>
+        <div class="eco-name">ChallengeFinancier™</div>
+        <div class="eco-role">LMS de formation politique & financière. 8 modules. Certification. Coaching live. Point d'entrée unique de tout l'écosystème.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-badge">INCUBATEUR POLITIQUE</div>
+        <div class="eco-icon">
+          <img src="https://i.ibb.co/JW9mWgNJ/Logo-NGD.png" alt="NGD">
+        </div>
+        <div class="eco-name">NGD</div>
+        <div class="eco-role">Nouvelles Générations pour le Développement. Incubateur national de futurs élus. Chaque apprenant CF™ devient candidat Pro-Bitcoin potentiel — Conseiller Municipal / Régional et ou Député — dans sa Zone.</div>
+      </div>
+      <div class="eco-card">
+        <div class="eco-badge">COALITION ÉLECTORALE</div>
+        <div class="eco-icon">
+          <img src="https://i.ibb.co/BK6wP9Yk/Logo-CROIRE.png" alt="CROIRE">
+        </div>
+        <div class="eco-name">CROIRE</div>
+        <div class="eco-role">Coalition Républicaine d'Optimisation des Initiatives Révolutionnaires Endogènes. Contient le mécanisme TCL (cashback citoyen) et NGD.</div>
+      </div>
+    </div>
+
+    <div class="hl">
+      <strong>Comment les trois s'articulent :</strong><br>
+      Vous entrez par <strong>ChallengeFinancier™</strong> (formation) → vous rejoignez <strong>NGD</strong> (incubateur, visibilité) → vous bénéficiez de <strong>CROIRE</strong> (coalition, financement TCL, stratégie électorale) → vous accédez au mandat en 2028.
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="sn" style="font-size:.75rem">TCL</div>
+        <div class="sb">
+          <strong>Mécanisme TCL — Financement par les achats du quotidien</strong>
+          <span>Chaque commerçant conventionné TCL dans votre zone reverse 5,5% de commission. 1% est automatiquement dirigé vers votre candidature dès décembre 2026. CashBack 2,5% reversé aux communautés en votre nom via Wave. Zéro cotisation. Zéro dette.</span>
+        </div>
+      </div>
+      <div class="step">
+        <div class="sn" style="font-size:.75rem">NGD</div>
+        <div class="sb">
+          <strong>Incubateur NGD — De l'apprenant à l'élu</strong>
+          <span>Tout inscrit sur ChallengeFinancier™ LMS entre dans le registre NGD. Accompagnement individualisé, coaching stratégique, mise en réseau avec les 30 Architectes du Bureau Exécutif LFA-CI, préparation aux élections municipales et régionales de 2028.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="partner-bar">
+      <div class="partner-logo">
+        <img src="https://i.ibb.co/LDQyx6c8/Logo-LFA-CI-2.png" alt="LFA-CI" loading="lazy">
+      </div>
+      <div class="partner-text">
+        <strong>LFA-CI — Partenaire Officiel N°1 de VoteConnect SARL</strong>
+        <span>Réseau de déploiement national · 30 Architectes Bureau Exécutif · Présence dans les 509 communes et sous-préfectures cibles</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PANE 3 : FORMATION ── -->
+  <div id="pane-formation" class="pane">
+    <div class="sh">La formation ChallengeFinancier™</div>
+    <div class="ss">8 modules pour devenir un leader politique complet et crédible</div>
+    <div class="rule"></div>
+
+    <div class="hl green">
+      <strong>Première plateforme de formation civique, politique et financière orientée Bitcoin en Côte d'Ivoire.</strong> Conçue pour préparer 2 950 candidats aux municipales et régionales de 2028.
+    </div>
+
+    <div class="steps">
+      <div class="step"><div class="sn">01</div><div class="sb"><strong>Bitcoin & Souveraineté monétaire</strong><span>Comprendre le Bitcoin comme outil d'affranchissement du CFA. Positionnement différenciateur face aux candidats traditionnels. Mobilisation de la diaspora sans frontières.</span></div></div>
+      <div class="step"><div class="sn">02</div><div class="sb"><strong>Inflation, dette et fiscalité locale</strong><span>Maîtriser les mécanismes économiques qui affectent vos électeurs au quotidien. Devenir la voix crédible de leur réalité financière.</span></div></div>
+      <div class="step"><div class="sn">03</div><div class="sb"><strong>Accès au capital & financement citoyen</strong><span>TCL, CashBack, Wave Business, financement décentralisé. Vous financez votre campagne sans dépendre d'oligarques ni de partis.</span></div></div>
+      <div class="step"><div class="sn">04</div><div class="sb"><strong>Information politique & communication</strong><span>Maîtriser les réseaux sociaux, WhatsApp, YouTube. Construire votre image de leader. Devenir votre propre média de campagne.</span></div></div>
+      <div class="step"><div class="sn">05</div><div class="sb"><strong>Dépendance systémique & autonomie locale</strong><span>Comprendre pourquoi votre commune dépend du centre et comment inverser cette logique en créant de la valeur localement.</span></div></div>
+      <div class="step"><div class="sn">06</div><div class="sb"><strong>Gouvernance locale & mandat électif</strong><span>Les pouvoirs du Conseiller Municipal et Régional. Ce que vous pouvez faire dès votre élection. Les leviers réels du changement local.</span></div></div>
+      <div class="step"><div class="sn">07</div><div class="sb"><strong>Mobilisation électorale & stratégie de terrain</strong><span>Stratégie 90/10, profils candidats, organisation du terrain, tournées de sensibilisation, mobilisation des électeurs NGD déjà formés.</span></div></div>
+      <div class="step"><div class="sn">08</div><div class="sb"><strong>Vision 2030 — Coalition présidentielle CROIRE</strong><span>Comment vos 509 mandats locaux de 2028 constituent le socle de la coalition présidentielle de 2030. Votre rôle dans l'architecture nationale.</span></div></div>
+    </div>
+
+    <div class="rule" style="margin-top:20px"></div>
+    <div class="kgrid">
+      <div class="kcard"><div class="kv">8</div><div class="kl">modules de formation complets</div></div>
+      <div class="kcard"><div class="kv">2 950</div><div class="kl">candidats formés d'ici sept. 2028</div></div>
+      <div class="kcard"><div class="kv">2×/sem</div><div class="kl">coaching live ChallengeF TV YouTube</div></div>
+    </div>
+  </div>
+
+  <!-- ── PANE 4 : IMPACT ── -->
+  <div id="pane-impact" class="pane">
+    <div class="sh">L'impact chiffré du Dispositif CROIRE</div>
+    <div class="ss">Des projections fondées sur des données électorales officielles</div>
+    <div class="rule"></div>
+
+    <div class="kgrid">
+      <div class="kcard"><div class="kv">509</div><div class="kl">communes & sous-préfectures ciblées 2028</div></div>
+      <div class="kcard"><div class="kv">40,8 M</div><div class="kl">FCFA CashBack TCL reversés aux communautés 2026</div></div>
+      <div class="kcard"><div class="kv">+8,95 M</div><div class="kl">FCFA EBE VoteConnect décembre 2026</div></div>
+      <div class="kcard"><div class="kv">1 200</div><div class="kl">clients actifs TCL en décembre 2026</div></div>
+      <div class="kcard"><div class="kv">+182 M</div><div class="kl">FCFA EBE projeté 2027</div></div>
+      <div class="kcard"><div class="kv">2030</div><div class="kl">Coalition Pro-Bitcoin</div></div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Jalons stratégiques</th><th>Date</th><th>Indicateur clé</th></tr></thead>
+        <tbody>
+          <tr><td>Lancement ChallengeFinancier™ LMS</td><td class="o">Avr. 2026</td><td>7 zones · 200 Commerçants TCL · 14 Coadmins</td></tr>
+          <tr><td>Point mort TCL — EBE positif</td><td class="o">Juil. 2026</td><td class="g">EBE +96 688 FCFA · 500 clients actifs</td></tr>
+          <tr><td>Activation reversement Candidat 1%</td><td class="o">Déc. 2026</td><td class="g">3,3 M FCFA → 509 Candidats NGD/CROIRE</td></tr>
+          <tr><td>Déploiement national accéléré</td><td class="o">2027</td><td class="g">+182 M FCFA EBE · 8 500 clients · 14 zones</td></tr>
+          <tr><td>Élections Municipales & Régionales</td><td class="o">Sept. 2028</td><td class="g">509 élus Pro-Bitcoin · Coalition CROIRE</td></tr>
+          <tr><td>Présidentielle — Coalition Pro-Bitcoin</td><td class="o">2030</td><td class="g">1,44 M clients · 9,9 Mds FCFA CashBack/an</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="rule"></div>
+    <div class="sh" style="font-size:1rem;margin-bottom:14px">Financement par zone — Projection Déc. 2026</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Zone</th><th>Clients TCL</th><th>Volume achats</th><th>Reversement candidat 1%</th></tr></thead>
+        <tbody>
+          <tr><td>Cocody</td><td>200</td><td>55 M FCFA</td><td class="g">550 000 FCFA</td></tr>
+          <tr><td>Plateau</td><td>180</td><td>49,5 M FCFA</td><td class="g">495 000 FCFA</td></tr>
+          <tr><td>Treichville</td><td>170</td><td>46,8 M FCFA</td><td class="g">468 000 FCFA</td></tr>
+          <tr><td>Marcory</td><td>160</td><td>44 M FCFA</td><td class="g">440 000 FCFA</td></tr>
+          <tr><td>Koumassi</td><td>160</td><td>44 M FCFA</td><td class="g">440 000 FCFA</td></tr>
+          <tr><td>Yamoussoukro</td><td>180</td><td>49,5 M FCFA</td><td class="g">495 000 FCFA</td></tr>
+          <tr><td>Toumodi</td><td>150</td><td>41,3 M FCFA</td><td class="g">413 000 FCFA</td></tr>
+          <tr><td><strong>TOTAL 7 zones</strong></td><td><strong>1 200</strong></td><td class="o"><strong>330 M FCFA</strong></td><td class="g"><strong>3 301 000 FCFA</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── PANE 5 : S'INSCRIRE ── -->
+  <div id="pane-acces" class="pane">
+    <div class="cta-wrap">
+      <div class="plbl">INSCRIPTION + MODULE 1 — Pose des Fondations</div>
+      <div class="prix">52 500 <span style="font-size:1.3rem;color:var(--or2)">FCFA</span></div>
+      <div class="pdesc">Accès immédiat au CF-LMS en ligne · Fonctionne sur tous les appareils</div>
+
+      <!-- VIDÉO — Appel à l'action final -->
+      <div class="video-wrap" style="margin-bottom:24px">
+        <a href="https://youtu.be/3mdBztQiy4E" target="_blank" rel="noopener" style="display:block;position:relative;text-decoration:none">
+          <img
+            src="https://img.youtube.com/vi/3mdBztQiy4E/maxresdefault.jpg"
+            alt="Dispositif CROIRE — ChallengeFinancier™ 2026"
+            style="width:100%;height:auto;display:block;object-fit:cover;max-height:320px">
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(9,21,9,.35);gap:12px">
+            <div style="width:60px;height:60px;background:rgba(255,0,0,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(0,0,0,.5)">
+              <div style="border-left:22px solid white;border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:5px"></div>
+            </div>
+          </div>
+        </a>
+        <div class="video-overlay-bar" style="padding:10px 14px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;width:100%">
+            <div style="font-size:.72rem;color:rgba(245,217,122,.95);line-height:1.5;flex:1">
+              Regardez la vidéo, abonnez-vous à <strong>ChallengeF TV</strong> et partagez à <strong>5 personnes</strong> avant de vous inscrire.
+            </div>
+            <a href="http://www.youtube.com/@VoteConnect" target="_blank"
+              style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,0,0,.9);border:none;border-radius:10px;padding:5px 12px;font-size:.63rem;color:white;font-weight:700;letter-spacing:.5px;text-decoration:none;flex-shrink:0">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.54 3.5 12 3.5 12 3.5s-7.54 0-9.38.55A3.02 3.02 0 0 0 .5 6.19C0 8.04 0 12 0 12s0 3.96.5 5.81a3.02 3.02 0 0 0 2.12 2.14C4.46 20.5 12 20.5 12 20.5s7.54 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14C24 15.96 24 12 24 12s0-3.96-.5-5.81zM9.75 15.52V8.48L15.5 12l-5.75 3.52z"/></svg>
+              S'abonner ChallengeF TV
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="qr-signature-row">
+
+        <!-- GAUCHE : Photo Simplice -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div class="sig-halo sig-halo-photo">
+            <div class="sig-circle">
+              <img src="https://i.ibb.co/VWp3SGvq/Simplice-KOUAME.png" alt="Simplice KOUAME" loading="lazy">
+            </div>
+          </div>
+          <div class="sig-name">Simplice KOUAME<br>CEO — VoteConnect</div>
+        </div>
+
+        <!-- CENTRE : QR Wave -->
+        <div class="qr-center">
+          <div class="qr-box">
+            <img src="https://i.ibb.co/zVcnPS8d/Wave-Formation.png" alt="QR Wave Business VoteConnect">
+          </div>
+          <div class="qlbl">Wave Business · +225 07 67 81 43 33</div>
+        </div>
+
+        <!-- DROITE : Logos NGD + CROIRE -->
+        <div class="sig-logos-col">
+          <div class="sig-halo sig-halo-logo">
+            <div class="sig-logo-sq">
+              <img src="https://i.ibb.co/JW9mWgNJ/Logo-NGD.png" alt="NGD" loading="lazy">
+            </div>
+          </div>
+          <div class="sig-logo-name">NGD</div>
+          <div class="sig-halo sig-halo-logo">
+            <div class="sig-logo-sq">
+              <img src="https://i.ibb.co/BK6wP9Yk/Logo-CROIRE.png" alt="CROIRE" loading="lazy">
+            </div>
+          </div>
+          <div class="sig-logo-name">CROIRE</div>
+        </div>
+
+      </div>
+
+      <div class="csteps">
+        <!-- PARCOURS SIMPLIFIÉ — 3 étapes -->
+        <div style="text-align:left;margin-bottom:20px">
+
+          <!-- Étape 1 -->
+          <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+            <div style="width:36px;height:36px;background:var(--or);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;color:var(--bg);font-weight:700;flex-shrink:0;margin-top:2px">1</div>
+            <div>
+              <strong style="display:block;font-size:.9rem;color:var(--tx);margin-bottom:3px">Payez 52 500 FCFA via Wave</strong>
+              <span style="font-size:.78rem;color:var(--dim)">Scannez le QR ci-dessus ou envoyez directement au <strong style="color:var(--or3)">+225 07 67 81 43 33</strong> (Wave Business VoteConnect SARL). Aucune capture requise.</span>
+            </div>
+          </div>
+
+          <!-- Étape 2 — Bouton principal -->
+          <div style="display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+            <div style="width:36px;height:36px;background:#3ecf6e;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;color:var(--bg);font-weight:700;flex-shrink:0;margin-top:2px">2</div>
+            <div style="flex:1">
+              <strong style="display:block;font-size:.9rem;color:var(--tx);margin-bottom:8px">Cliquez sur le bouton ci-dessous</strong>
+              <a id="btn-paye"
+                href="#"
+                onclick="ouvrirModal(); return false;"
+                style="display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#25d366,#1da851);border-radius:14px;padding:16px 20px;font-size:.95rem;font-weight:700;color:white;letter-spacing:.5px;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.35);transition:transform .15s">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.858L.057 23.643a.75.75 0 0 0 .916.919l5.904-1.473A11.955 11.955 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.686-.526-5.207-1.437l-.372-.22-3.857.963.98-3.77-.242-.386A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+                J'ai payé les 52 500 FCFA
+              </a>
+              <div style="font-size:.7rem;color:var(--dim);margin-top:8px;text-align:center">→ Un message WhatsApp pré-rempli s'ouvre automatiquement vers l'Administrateur</div>
+            </div>
+          </div>
+
+          <!-- Étape 3 -->
+          <div style="display:flex;gap:14px;padding:14px 0">
+            <div style="width:36px;height:36px;background:var(--or2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;color:var(--bg);font-weight:700;flex-shrink:0;margin-top:2px">3</div>
+            <div>
+              <strong style="display:block;font-size:.9rem;color:var(--tx);margin-bottom:3px">Saisissez le code reçu de l'Administrateur</strong>
+              <span style="font-size:.78rem;color:var(--dim)">L'Admin vérifie votre paiement Wave et vous répond par WhatsApp avec votre <strong style="color:#f5d97a;letter-spacing:1px">Code LFA-XXXX-XXXX</strong>. Saisissez-le dans la fenêtre ouverte → le LMS se télécharge automatiquement. Délai : <strong style="color:var(--or3)">24h maximum</strong>.</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sécurité -->
+        <div style="background:rgba(46,200,80,.06);border:1px solid rgba(46,200,80,.2);border-radius:10px;padding:11px 14px;margin-bottom:16px;font-size:.76rem;color:#aaffcc;display:flex;gap:9px;align-items:flex-start">
+          <span style="flex-shrink:0">🛡️</span>
+          <span><strong style="color:#5de07a">Système Double Sécurité Wave v2 :</strong> Chaque paiement est vérifié manuellement sur le tableau de bord Wave Business VoteConnect SARL avant génération du Code d'activation. Zéro risque de fraude.</span>
+        </div>
+
+      </div>
+
+      <div class="wa-btn" style="margin-bottom:8px">💳 Wave Business · +225 07 67 81 43 33</div>
+      <div class="wa-btn" style="background:rgba(37,211,102,.1);border-color:rgba(37,211,102,.3);color:#5de07a">📱 WhatsApp Admin · +225 07 67 56 09 08</div>
+
+      <div class="urg" style="margin-top:12px">
+        <span style="font-size:1.1rem;flex-shrink:0">🌱</span>
+        <span><strong>SESSION INAUGURALE — Avril · Mai 2026.</strong> Places limitées. Traçons ensemble de nouveaux itinéraires de citoyenneté pour un progrès partagé.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       MODAL DOUBLE SÉCURITÉ — Compteur + Code + Téléchargement
+  ══════════════════════════════════════════════════════════ -->
+  <div id="modal-code" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(5,12,5,.92);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px">
+    <div style="background:linear-gradient(160deg,#112211,#0a180a);border:1px solid rgba(201,168,76,.35);border-radius:20px;width:100%;max-width:420px;padding:28px 24px;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.7)">
+
+      <!-- Fermer -->
+      <button onclick="fermerModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.3rem;cursor:pointer;line-height:1">✕</button>
+
+      <!-- ÉTAPE 1 : Attente code (visible par défaut) -->
+      <div id="modal-etape1">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:.65rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--or);margin-bottom:10px">Message envoyé ✓</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--tx);font-weight:700;margin-bottom:6px">En attente de votre Code</div>
+          <div style="font-size:.8rem;color:var(--dim);line-height:1.6">L'Administrateur vérifie votre paiement Wave et vous envoie votre code par WhatsApp.</div>
+        </div>
+
+        <!-- Compteur à rebours 24h -->
+        <div style="background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:16px;text-align:center;margin-bottom:22px">
+          <div style="font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:10px">Délai de traitement maximum</div>
+          <div style="display:flex;justify-content:center;gap:10px">
+            <div style="text-align:center">
+              <div id="cnt-h" style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--or3);line-height:1">24</div>
+              <div style="font-size:.62rem;color:var(--dim);letter-spacing:1px;margin-top:3px">HEURES</div>
+            </div>
+            <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--or);align-self:flex-start;margin-top:4px">:</div>
+            <div style="text-align:center">
+              <div id="cnt-m" style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--or3);line-height:1">00</div>
+              <div style="font-size:.62rem;color:var(--dim);letter-spacing:1px;margin-top:3px">MIN</div>
+            </div>
+            <div style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--or);align-self:flex-start;margin-top:4px">:</div>
+            <div style="text-align:center">
+              <div id="cnt-s" style="font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;color:var(--or3);line-height:1">00</div>
+              <div style="font-size:.62rem;color:var(--dim);letter-spacing:1px;margin-top:3px">SEC</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Saisie code -->
+        <div style="margin-bottom:16px">
+          <div style="font-size:.72rem;color:var(--or2);margin-bottom:10px;font-weight:500">Entrez le code <strong>LFA-XXXX-XXXX</strong> reçu de l'Administrateur par WhatsApp :</div>
+
+          <!-- 4 cases LFA - XXXX - XXXX -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:14px">
+            <div style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:8px;padding:8px 12px;font-size:.85rem;font-weight:700;color:var(--or3);letter-spacing:1px">LFA</div>
+            <div style="color:var(--or);font-size:1.2rem;font-weight:700">—</div>
+            <input id="code-part1" maxlength="4" placeholder="XXXX"
+              oninput="onPart1Input()"
+              style="width:64px;text-align:center;background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.35);border-radius:8px;padding:10px 6px;font-size:1rem;font-weight:700;color:var(--or3);letter-spacing:2px;font-family:'Playfair Display',serif;outline:none">
+            <div style="color:var(--or);font-size:1.2rem;font-weight:700">—</div>
+            <input id="code-part2" maxlength="4" placeholder="XXXX"
+              oninput="onPart2Input()"
+              style="width:64px;text-align:center;background:rgba(0,0,0,.3);border:1px solid rgba(201,168,76,.35);border-radius:8px;padding:10px 6px;font-size:1rem;font-weight:700;color:var(--or3);letter-spacing:2px;font-family:'Playfair Display',serif;outline:none">
+          </div>
+
+          <!-- Message erreur -->
+          <div id="code-erreur" style="display:none;background:rgba(196,48,48,.12);border:1px solid rgba(196,48,48,.3);border-radius:8px;padding:9px 13px;font-size:.75rem;color:#ff9999;text-align:center;margin-bottom:10px">
+            ❌ Code invalide. Vérifiez le code reçu par WhatsApp ou contactez l'Admin.
+          </div>
+
+          <button onclick="validerCode()"
+            style="width:100%;background:linear-gradient(135deg,var(--or),var(--or2));border:none;border-radius:12px;padding:14px;font-size:.9rem;font-weight:700;color:var(--bg);cursor:pointer;letter-spacing:.5px;font-family:'DM Sans',sans-serif">
+            ✓ Valider et accéder au téléchargement
+          </button>
+        </div>
+
+        <div style="text-align:center;font-size:.7rem;color:var(--dim)">
+          Pas encore reçu votre code ?
+          <a href="https://wa.me/2250767560908" target="_blank" style="color:var(--or2);text-decoration:none">Contacter l'Admin WhatsApp →</a>
+        </div>
+      </div>
+
+      <!-- ÉTAPE 2 : Succès + Téléchargement (caché par défaut) -->
+      <div id="modal-etape2" style="display:none;text-align:center">
+        <div style="width:64px;height:64px;background:linear-gradient(135deg,#25d366,#1da851);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 4px 20px rgba(37,211,102,.4)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+        </div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--or3);font-weight:700;margin-bottom:6px">Code validé ✓</div>
+        <div style="font-size:.82rem;color:var(--dim);margin-bottom:24px;line-height:1.6">Bienvenue dans <strong style="color:var(--or2)">ChallengeFinancier™</strong> !<br>Votre téléchargement démarre automatiquement.</div>
+
+        <a id="btn-telecharger" href="https://coachmorgans.github.io/lms-cf/lms_challengefinancier.html" target="_blank"
+          style="display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,var(--or),var(--or2));border-radius:14px;padding:16px 20px;font-size:.92rem;font-weight:700;color:var(--bg);text-decoration:none;margin-bottom:16px;box-shadow:0 4px 20px rgba(201,168,76,.35)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9l4-4 4 4h-2v4h-2v-4zm0-8V4h2v4h2l-4 4-4-4h2z"/></svg>
+          Accéder à ChallengeFinancier™ LMS
+        </a>
+
+        <div style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:11px 14px;font-size:.74rem;color:var(--dim);line-height:1.6;text-align:left">
+          <strong style="color:var(--or3)">Instructions :</strong><br>
+          1. Le LMS s'ouvre dans votre navigateur — fonctionne sur tous les appareils<br>
+          2. Onglet <strong>"S'inscrire"</strong> → entrez vos informations + Code LFA<br>
+          3. L'Admin active votre compte → Module 1 débloqué ✓<br>
+          4. Vous rejoignez automatiquement <strong>NGD</strong> et le Dispositif <strong>CROIRE</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+  // ── Génération code unique LFA-XXXX-XXXX ──────────────────────
+  function genererCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const part = () => Array.from({length:4}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+    return 'LFA-' + part() + '-' + part();
+  }
+
+  let codeSession = '';
+  let countdownTimer = null;
+
+  // ── Ouvrir la modal ────────────────────────────────────────────
+  function ouvrirModal() {
+    // Générer le code unique — connu uniquement de l'Admin
+    codeSession = genererCode();
+    const ref = 'CF-' + Date.now().toString().slice(-6);
+
+    // Message client → Admin : code déguisé en référence technique
+    // Le client voit une référence de dossier — seul l'Admin sait que c'est le code
+    const msgClient = encodeURIComponent(
+      '🎓 *ChallengeFinancier™ — Demande d\'accès Module 1*\n\n' +
+      '✅ Paiement de *52 500 FCFA* effectué via Wave Business.\n\n' +
+      '📋 Référence paiement : *' + ref + '*\n' +
+      '🗂️ N° Dossier technique : *' + codeSession + '*\n\n' +
+      '⏳ Merci de valider mon inscription et de m\'envoyer mon accès CF-LMS.\n\n' +
+      'VoteConnect SARL 🇨🇮'
+    );
+
+    // Ouvrir WhatsApp — message envoyé par le client
+    window.open('https://wa.me/2250767560908?text=' + msgClient, '_blank');
+
+    // Afficher la modal — cases VIDES — client attend le code de l'Admin
+    const modal = document.getElementById('modal-code');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    document.getElementById('modal-etape1').style.display = 'block';
+    document.getElementById('modal-etape2').style.display = 'none';
+    document.getElementById('code-part1').value = '';
+    document.getElementById('code-part2').value = '';
+    document.getElementById('code-erreur').style.display = 'none';
+    resetInputStyles();
+    demarrerCompteur(24 * 60 * 60);
+    setTimeout(() => document.getElementById('code-part1').focus(), 500);
+  }
+
+  // ── Fermer la modal ────────────────────────────────────────────
+  function fermerModal() {
+    document.getElementById('modal-code').style.display = 'none';
+    document.body.style.overflow = '';
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+  }
+
+  // ── Compteur à rebours ────────────────────────────────────────
+  function demarrerCompteur(secondesTotal) {
+    if (countdownTimer) clearInterval(countdownTimer);
+    let restant = secondesTotal;
+    function maj() {
+      const h = Math.floor(restant / 3600);
+      const m = Math.floor((restant % 3600) / 60);
+      const s = restant % 60;
+      document.getElementById('cnt-h').textContent = String(h).padStart(2,'0');
+      document.getElementById('cnt-m').textContent = String(m).padStart(2,'0');
+      document.getElementById('cnt-s').textContent = String(s).padStart(2,'0');
+      if (restant <= 0) clearInterval(countdownTimer);
+      restant--;
+    }
+    maj();
+    countdownTimer = setInterval(maj, 1000);
+  }
+
+  // ── Reset styles inputs ───────────────────────────────────────
+  function resetInputStyles() {
+    ['code-part1','code-part2'].forEach(id => {
+      document.getElementById(id).style.borderColor = 'rgba(201,168,76,.35)';
+    });
+  }
+
+  // ── Auto-focus part2 quand part1 complet ─────────────────────
+  function onPart1Input() {
+    const v = document.getElementById('code-part1').value;
+    document.getElementById('code-part1').value = v.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if (document.getElementById('code-part1').value.length === 4) {
+      document.getElementById('code-part2').focus();
+    }
+  }
+
+  // ── Vérification auto quand part2 complet ────────────────────
+  function onPart2Input() {
+    const v = document.getElementById('code-part2').value;
+    document.getElementById('code-part2').value = v.toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if (document.getElementById('code-part2').value.length === 4) {
+      setTimeout(validerCode, 300);
+    }
+  }
+
+  // ── Valider le code saisi par le client ───────────────────────
+  function validerCode() {
+    const p1 = document.getElementById('code-part1').value.trim().toUpperCase();
+    const p2 = document.getElementById('code-part2').value.trim().toUpperCase();
+    const codeSaisi = 'LFA-' + p1 + '-' + p2;
+    const erreur = document.getElementById('code-erreur');
+
+    if (!p1 || !p2 || p1.length < 4 || p2.length < 4) {
+      erreur.textContent = '⚠️ Veuillez renseigner les 4 caractères de chaque partie.';
+      erreur.style.display = 'block';
+      return;
+    }
+
+    // Comparaison avec le code généré — connu uniquement de l'Admin
+    if (codeSaisi === codeSession) {
+      // ✅ Code correct — l'Admin a bien transmis le bon code
+      erreur.style.display = 'none';
+      if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
+      document.getElementById('btn-telecharger').href = LMS_DOWNLOAD_URL;
+      // Marquer que le client vient d'un vrai paiement Wave
+      sessionStorage.setItem('paid_via_landing', 'true');
+      document.getElementById('modal-etape1').style.display = 'none';
+      document.getElementById('modal-etape2').style.display = 'block';
+      // Redirection directe vers le LMS en ligne — fonctionne sur tous appareils
+      setTimeout(() => {
+        sessionStorage.setItem('paid_via_landing', 'true');
+        window.open(LMS_DOWNLOAD_URL, '_blank');
+      }, 1500);
+    } else {
+      // ❌ Code incorrect
+      erreur.textContent = '❌ Code incorrect. Vérifiez le code reçu de l\'Administrateur par WhatsApp.';
+      erreur.style.display = 'block';
+      ['code-part1','code-part2'].forEach(id => {
+        const el = document.getElementById(id);
+        el.style.borderColor = 'rgba(196,48,48,.7)';
+        setTimeout(() => el.style.borderColor = 'rgba(201,168,76,.35)', 2000);
+      });
+    }
+  }
+
+  // Fermer au clic sur l'overlay
+  document.getElementById('modal-code').addEventListener('click', function(e) {
+    if (e.target === this) fermerModal();
+  });
+
+  // 🔧 URL de téléchargement du LMS — à remplacer par votre lien Drive
+  const LMS_DOWNLOAD_URL = 'https://coachmorgans.github.io/lms-cf/lms_challengefinancier.html';
+  </script>
+
+  <footer class="foot">
+    <div class="flogo">ChallengeFinancier™ · VoteConnect SARL · Dispositif CROIRE</div>
+    <div class="fleg">
+      RCCM n° CI-ABJ-03-2025-B12-03666 · CC n° 2504848 N · Cocody, Abidjan<br>
+      Partenaire Officiel N°1 : LFA-CI (Les Frères Africains — Section Côte d'Ivoire)<br>
+      © 2026 VoteConnect SARL — Tous droits réservés<br>
+      <span class="fmotto">La Révolution par la Base · Municipales 2028 · Présidentielle 2030</span>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+function go(id, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
+  document.getElementById('pane-' + id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo({ top: document.querySelector('.tabs-wrap').offsetTop - 2, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
