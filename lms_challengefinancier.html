@@ -199,7 +199,83 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .timeline-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--vv);min-width:90px;padding-top:2px}
 .timeline-content{font-size:13px;line-height:1.6}
 /* RESPONSIVE */
-@media(max-width:900px){.sidebar{transform:translateX(-265px);transition:transform .3s ease}.sidebar.mob-open{transform:translateX(0)}.main-content{margin-left:0;padding:18px}.grid-3{grid-template-columns:1fr 1fr}.grid-4{grid-template-columns:1fr 1fr}.mob-btn{display:flex !important}.mob-ov.mob-open{opacity:1;pointer-events:all}.sidebar-logo{padding-top:16px !important}.sidebar-logo .brand{font-size:14px !important}}.mob-btn{display:none;position:fixed;top:12px;left:12px;z-index:9999;background:#0d2b1a;border:1px solid #c9a84c;border-radius:10px;padding:10px 12px;cursor:pointer;flex-direction:column;gap:5px}.mob-btn span{display:block;width:22px;height:2px;background:#c9a84c;border-radius:2px}.mob-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
+@media(max-width:900px){
+  /* SIDEBAR */
+  .sidebar{transform:translateX(-265px);transition:transform .3s ease}
+  .sidebar.mob-open{transform:translateX(0)}
+  .mob-btn{display:flex !important}
+  .mob-ov.mob-open{opacity:1;pointer-events:all}
+  .sidebar-logo{padding-top:16px !important}
+  .sidebar-logo .brand{font-size:14px !important}
+  /* MAIN */
+  .main-content{margin-left:0;padding:14px}
+  /* GRIDS */
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  /* AUTH BOX */
+  .auth-box{padding:24px 16px;border-radius:16px}
+  .logo-auth .brand{font-size:20px !important}
+  /* PROFIL SELECTOR */
+  .profil-selector{grid-template-columns:1fr 1fr}
+  /* TARIFICATION MODULES — fix débordement texte */
+  .auth-box [style*="display:flex"][style*="justify-content:space-between"]{flex-wrap:wrap;gap:6px}
+  .auth-box [style*="white-space:nowrap"]{white-space:normal !important;font-size:13px !important}
+  /* COACH SESSIONS */
+  .coach-word-header{flex-direction:column;align-items:flex-start}
+  /* TABS */
+  .tabs{flex-wrap:wrap}
+  .tab-btn{font-size:11px;padding:6px 10px}
+  /* MODULE CARDS */
+  .module-card{padding:16px}
+  /* STAT CARDS */
+  .stat-card{padding:14px}
+  /* PAGE HEADER */
+  .page-header h1{font-size:22px}
+  /* WAVE BUTTON in auth */
+  .auth-box a[href*="wave.com"]{font-size:13px !important;padding:12px 14px !important}
+  /* USER ROW admin */
+  .user-row{flex-wrap:wrap}
+  /* ADMIN GRID */
+  .admin-section [style*="grid-template-columns:1fr 1fr"]{display:block !important}
+  /* MODAL */
+  .modal{padding:20px 16px}
+  /* COACH PROFILE */
+  .coach-big-name{font-size:22px}
+}
+@media(max-width:480px){
+  .auth-box{padding:20px 12px;border-radius:12px}
+  .logo-auth .brand{font-size:17px !important}
+  /* Tarification : stack vertical propre */
+  .auth-box [style*="display:flex"][style*="align-items:center"][style*="justify-content:space-between"]{
+    flex-direction:column;align-items:flex-start !important;gap:4px
+  }
+  /* Prix module — plus petit */
+  .auth-box [style*="font-size:15px"][style*="font-weight:700"]{font-size:13px !important}
+  /* Bouton Wave — pleine largeur */
+  .auth-box a[href*="wave.com"]{
+    width:100%;justify-content:center;font-size:14px !important;
+    padding:14px !important;border-radius:10px !important
+  }
+  /* Wave modal */
+  #wave-secure-overlay>div{padding:20px 14px}
+  /* Grid modules */
+  .grid-2{grid-template-columns:1fr}
+  /* Page header */
+  .page-header h1{font-size:19px}
+  .page-header p{font-size:12px}
+  /* Coach word */
+  .coach-word{padding:18px 14px}
+  /* Cert badge */
+  .cert-score{font-size:36px}
+  /* Stat value */
+  .stat-value{font-size:20px}
+  /* Tabs */
+  .tab-btn{font-size:10px;padding:5px 8px}
+  /* Data table responsive */
+  .data-table{font-size:11px}
+  .data-table th,.data-table td{padding:8px 8px}
+  /* Notif */
+  .notif{right:10px;left:10px;max-width:none}
+}.mob-btn{display:none;position:fixed;top:12px;left:12px;z-index:9999;background:#0d2b1a;border:1px solid #c9a84c;border-radius:10px;padding:10px 12px;cursor:pointer;flex-direction:column;gap:5px}.mob-btn span{display:block;width:22px;height:2px;background:#c9a84c;border-radius:2px}.mob-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
 /* ======== V5 : WAVE SÉCURISÉ & PDF PAYANT ======== */
 .activation-key-box{font-family:'DM Mono',monospace;font-size:18px;letter-spacing:4px;color:#fff;background:linear-gradient(135deg,#1a5c35,#22a852);border:2px solid var(--vv);border-radius:12px;padding:16px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
 .activation-key-box:hover{box-shadow:0 0 20px rgba(34,168,82,.4)}
@@ -329,7 +405,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
                 <div style="font-weight:700;font-size:13px;color:var(--orc)">🎓 Module 1 — Accès Initial</div>
                 <div style="font-size:11px;color:var(--gr);margin-top:2px">Inscription · 1-1.5 sem. théorie + 2.5-3 sem. pratique terrain</div>
               </div>
-              <div style="font-family:DM Mono,monospace;font-size:15px;font-weight:700;color:var(--orc);white-space:nowrap">52 500 FCFA</div>
+              <div style="font-family:DM Mono,monospace;font-size:15px;font-weight:700;color:var(--orc);white-space:normal">52 500 FCFA</div>
             </div>
             <!-- Modules 2-8 -->
             <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--brd);border-radius:8px;padding:10px 14px">
@@ -337,7 +413,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
                 <div style="font-weight:600;font-size:13px;color:var(--bl)">📚 Modules 2 à 8 — Mensuel</div>
                 <div style="font-size:11px;color:var(--gr);margin-top:2px">1 module / mois · Théorie + Pratique + 2×1h Coach Live ChallengeF TV/semaine</div>
               </div>
-              <div style="font-family:DM Mono,monospace;font-size:15px;font-weight:700;color:var(--vv);white-space:nowrap">17 500 FCFA<span style="font-size:10px;font-weight:400;color:var(--gr)">/mois</span></div>
+              <div style="font-family:DM Mono,monospace;font-size:15px;font-weight:700;color:var(--vv);white-space:normal">17 500 FCFA<span style="font-size:10px;font-weight:400;color:var(--gr)">/mois</span></div>
             </div>
             <!-- Total -->
             <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(34,168,82,.06);border:1px solid rgba(34,168,82,.2);border-radius:8px;padding:8px 14px">
@@ -3577,6 +3653,19 @@ function adminUploadPdfFile(moduleId, inputEl){
 // ============================================================
 // V5 — RESET CIBLÉ (conserve : contenu modules, identifiants admin, prix PDF)
 // ============================================================
+function resetPlatformTotal(){
+  // Reset immédiat sans confirmation — appelé au démarrage si demandé
+  const keysToDelete=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k&&k.startsWith('cf2_'))keysToDelete.push(k);
+  }
+  keysToDelete.forEach(k=>localStorage.removeItem(k));
+  // Réinitialiser codes par défaut
+  const defaults=['LFA-2026-DEMO','LFA-2026-TEST','LFA-2026-BETA','LFA-2026-ALFA','LFA-2026-ZETA'];
+  localStorage.setItem('cf2_invite_codes',JSON.stringify(defaults.map(c=>({code:c,used:false,usedBy:'',createdAt:new Date().toISOString()}))));
+}
+
 function resetPlatform(){
   const confirmed=confirm(
     '⚠️ REMISE À ZÉRO DE LA PLATEFORME\n\n'
@@ -3624,6 +3713,12 @@ function resetPlatform(){
 // BOOT
 // ============================================================
 window.onload=function(){
+  // Réinitialisation complète si paramètre URL ?reset=1
+  if(location.search.includes('reset=1')){
+    resetPlatformTotal();
+    location.href=location.pathname;
+    return;
+  }
   // Protection clic droit sur contenu pédagogique
   document.addEventListener('contextmenu',e=>{
     const target=e.target.closest('.lecon-content,.coach-word-body,.pdf-card');
