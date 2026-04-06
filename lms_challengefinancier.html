@@ -15,7 +15,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .auth-box{background:var(--card);border:1px solid var(--bro);border-radius:24px;padding:48px;width:100%;max-width:500px;position:relative;box-shadow:0 40px 80px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05)}
 .auth-box::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:2px;background:linear-gradient(90deg,transparent,var(--or),transparent)}
 .logo-auth{text-align:center;margin-bottom:32px}
-.logo-auth .brand{font-family:'Playfair Display',serif;font-size:clamp(16px,5.5vw,26px);font-weight:900;background:linear-gradient(135deg,var(--or),var(--orc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
+.logo-auth .brand{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--or),var(--orc));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo-auth .sub{font-size:10px;color:var(--vv);letter-spacing:3px;text-transform:uppercase;margin-top:4px}
 .logo-auth .coach{font-size:12px;color:var(--gr);margin-top:8px;font-style:italic}
 .profil-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
@@ -199,7 +199,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .timeline-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--vv);min-width:90px;padding-top:2px}
 .timeline-content{font-size:13px;line-height:1.6}
 /* RESPONSIVE */
-@media(max-width:900px){.sidebar{transform:translateX(-265px);transition:transform .3s ease}.sidebar.mob-open{transform:translateX(0)}.main-content{margin-left:0;padding:18px}.grid-3{grid-template-columns:1fr 1fr}.grid-4{grid-template-columns:1fr 1fr}.mob-btn{display:flex !important}.mob-ov.mob-open{opacity:1;pointer-events:all}.sidebar-logo{padding-top:16px !important}.sidebar-logo .brand{font-size:14px !important}}.mob-btn{display:none;position:fixed;top:12px;left:12px;z-index:9999;background:#0d2b1a;border:1px solid #c9a84c;border-radius:10px;padding:10px 12px;cursor:pointer;flex-direction:column;gap:5px}.mob-btn span{display:block;width:22px;height:2px;background:#c9a84c;border-radius:2px}.mob-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
+@media(max-width:900px){.sidebar{transform:translateX(-265px)}.main-content{margin-left:0;padding:18px}.grid-3{grid-template-columns:1fr 1fr}.grid-4{grid-template-columns:1fr 1fr}}
 /* ======== V5 : WAVE SÉCURISÉ & PDF PAYANT ======== */
 .activation-key-box{font-family:'DM Mono',monospace;font-size:18px;letter-spacing:4px;color:#fff;background:linear-gradient(135deg,#1a5c35,#22a852);border:2px solid var(--vv);border-radius:12px;padding:16px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
 .activation-key-box:hover{box-shadow:0 0 20px rgba(34,168,82,.4)}
@@ -295,7 +295,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           &nbsp;• Paiement de <strong>52 500 FCFA</strong> via QR Wave ci-dessous<br>
           &nbsp;• Réception de votre <strong>Code d&apos;Invitation</strong> par SMS/WhatsApp (24h)<br>
           &nbsp;• Validation de votre compte par l&apos;Administrateur<br>
-          <span style="color:var(--vv);font-size:11px">Donne accès au Module 1 + 2×1h Coach Live ChallengeF TV/semaine</span>
+          <span style="color:var(--vv);font-size:11px">Donne accès au Module 1 + 2×1h Coach Live LFA TV/semaine</span>
         </div>
         <div class="form-group"><label>Nom complet</label><input type="text" id="reg-name" placeholder="Ex: N'Guessan Adjoua Marie"></div>
         <div class="form-group"><label>Mot de passe (6 caractères min.)</label><input type="password" id="reg-pwd" placeholder="••••••••"></div>
@@ -335,7 +335,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
             <div style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--brd);border-radius:8px;padding:10px 14px">
               <div>
                 <div style="font-weight:600;font-size:13px;color:var(--bl)">📚 Modules 2 à 8 — Mensuel</div>
-                <div style="font-size:11px;color:var(--gr);margin-top:2px">1 module / mois · Théorie + Pratique + 2×1h Coach Live ChallengeF TV/semaine</div>
+                <div style="font-size:11px;color:var(--gr);margin-top:2px">1 module / mois · Théorie + Pratique + 2×1h Coach Live LFA TV/semaine</div>
               </div>
               <div style="font-family:DM Mono,monospace;font-size:15px;font-weight:700;color:var(--vv);white-space:nowrap">17 500 FCFA<span style="font-size:10px;font-weight:400;color:var(--gr)">/mois</span></div>
             </div>
@@ -348,7 +348,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           <!-- Zoom info -->
           <div style="margin-top:10px;padding:8px 12px;background:rgba(34,168,82,.05);border-left:3px solid var(--vv);border-radius:0 6px 6px 0">
             <div style="font-size:11px;color:var(--vv);font-weight:600">📹 2 × 1h Coach Live / semaine</div>
-            <div style="font-size:10px;color:var(--gr);margin-top:2px">Sessions Live ChallengeF TV avec Simplice KOUAME — Lien YouTube partagé après activation</div>
+            <div style="font-size:10px;color:var(--gr);margin-top:2px">Sessions Live LFA TV avec Simplice KOUAME — Lien YouTube partagé après activation</div>
           </div>
         </div>
 
@@ -356,7 +356,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <div style="background:var(--card2);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px">
           <div style="font-size:11px;color:var(--gr);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">💳 Paiement Wave Business</div>
           <div style="display:inline-block;background:#fff;border-radius:12px;padding:8px;margin-bottom:10px;box-shadow:0 4px 20px rgba(0,0,0,.3)">
-            <img src="https://i.ibb.co/zVcnPS8d/Wave-Formation.png"
+            <img src="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/"
                  alt="QR Code Wave Business — VoteConnect ChallengeFinancier"
                  width="160" height="160"
                  style="display:block;border-radius:6px"
@@ -418,7 +418,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </div>
 
 <!-- APP -->
-<button class="mob-btn" onclick="mobT()" aria-label="Menu"><span></span><span></span><span></span></button><div class="mob-ov" id="mob-ov" onclick="mobT()"></div><div id="app">
+<div id="app">
   <nav class="sidebar">
     <div class="sidebar-logo">
       <div class="brand">ChallengeFinancier™</div>
@@ -449,7 +449,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     </div>
 
     <div class="page" id="page-admin-users">
-      <div class="page-header"><h1>⚙️ Panneau Admin — Gestion des Utilisateurs</h1><p>Validation, création et gestion des comptes ChallengeFinancier™ LMS</p></div>
+      <div class="page-header"><h1>⚙️ Panneau Admin — Gestion des Utilisateurs</h1><p>Validation, création et gestion des comptes LFA-CI</p></div>
       <div id="admin-users-content"></div>
     </div>
     <div class="page" id="page-stats"><div class="page-header"><h1>Statistiques Globales</h1><p>Vue d'ensemble des 7 zones pilotes</p></div><div id="stats-content"></div></div>
@@ -677,7 +677,7 @@ quiz:[
 tpGroupe:[
   "Débat : 'Votre commune en 2025 — Citez 3 problèmes non résolus depuis au moins deux mandats et identifiez le mécanisme truqué responsable dans chaque cas'",
   "Analyse collective des chiffres d'abstention 2025 dans votre zone pilote — Qui sont ces abstentionnistes ? Comment les mobiliser d'ici 2028 ?",
-  "Visionnage et discussion des Déclarations Solennelles d'octobre 2025 (YouTube ChallengeF TV) — Quel impact dans votre entourage ?",
+  "Visionnage et discussion des Déclarations Solennelles d'octobre 2025 (YouTube LFA-TV) — Quel impact dans votre entourage ?",
   "Exercice de positionnement 90/10 : Chaque participant se positionne dans sa catégorie (commerçant, agriculteur, jeune, informel) et formule sa candidature idéale en 2028"
 ],
 tpIndividuel:[
@@ -1487,13 +1487,6 @@ function loadU(k,d){if(!currentUser)return d;return load(currentUser.name.replac
 
 // ── Constantes sécurité ─────────────────────────────────────
 const ADMIN_PWD = 'VoteConnect2026';
-
-const GS_API = 'https://script.google.com/macros/s/AKfycbxW73fX1LW7cx9gEp_jiHP83TEuSl2KwrdDbW9A0RUKeaOH4C8KWFNF6NsrYuLNGy7z/exec';
-async function apiPost(data){try{const r=await fetch(GS_API,{method:'POST',body:JSON.stringify(data)});return await r.json();}catch(e){return null;}}
-async function apiGet(action){try{const r=await fetch(GS_API+'?action='+action);return await r.json();}catch(e){return null;}}
-async function syncCodesFromGS(){const r=await apiGet('getCodes');if(r&&r.success&&r.codes.length>0){const local=r.codes.map(c=>({code:c.code,used:c.utilise==='OUI',usedBy:c.utilisePar||'',createdAt:c.creeLe||new Date().toISOString()}));saveInviteCodes(local);}}
-async function syncUsersFromGS(){const r=await apiGet('getUsers');if(r&&r.success&&r.users.length>0){const users=getUsers();r.users.forEach(u=>{const k=u.nom.toLowerCase().replace(/\s+/g,'_');if(!users[k]){users[k]={fullName:u.nom,zone:u.zone,cat:u.categorie,status:u.statut==='ACTIF'?'active':u.statut==='BLOQUÉ'?'blocked':'pending',registeredAt:u.inscritLe,inviteCode:u.code,ref:u.ref};}else{if(u.statut==='ACTIF')users[k].status='active';if(u.statut==='BLOQUÉ')users[k].status='blocked';}}); saveUsers(users);}}
-
 const FORMATEUR_CODE = 'LFA-FORM-2026';
 const ADMIN_ID = 'admin';
 
@@ -1511,7 +1504,6 @@ function initInviteCodes(){
     saveInviteCodes(defaults.map(c=>({code:c,used:false,usedBy:'',createdAt:new Date().toISOString()})));
   }
 }
-syncCodesFromGS();
 
 // ── Navigation entre vues auth ───────────────────────────────
 function authShowView(view){
@@ -1547,18 +1539,7 @@ function doLoginApprenant(){
   if(!user){authError('❌ Compte introuvable. Vérifiez votre nom ou inscrivez-vous.');return;}
   if(user.role!=='apprenant'){authError('❌ Ce compte n\'est pas un compte Apprenant.');return;}
   if(user.pwd!==pwd){authError('❌ Mot de passe incorrect.');return;}
-  if(user.status==='pending'){
-    authError('\u23F3 Vérification en cours...');
-    apiGet('getUsers').then(r=>{
-      if(r&&r.success){
-        const gu=r.users.find(u=>u.nom.toLowerCase().replace(/\s+/g,'_')===key);
-        if(gu&&gu.statut==='ACTIF'){
-          user.status='active';users[key]=user;saveUsers(users);
-          currentUser={name:user.fullName,fullName:user.fullName,role:'apprenant',zone:user.zone,cat:user.cat,ref:user.ref||key,inviteCode:user.inviteCode||'—',status:'active'};
-          save('last_user2',currentUser);initApp();
-        }else{authError('\u23F3 Votre compte est en attente de validation par l\'Administrateur.');}
-      }else{authError('\u23F3 Votre compte est en attente de validation par l\'Administrateur.');}
-    });return;}
+  if(user.status==='pending'){authError('\u23F3 Votre compte est en attente de validation par l\'Administrateur.');return;}
   if(user.status==='blocked'){authError('🚫 Votre compte a été suspendu. Contactez l\'Admin.');return;}
   currentUser={name:user.fullName,fullName:user.fullName,role:'apprenant',zone:user.zone,cat:user.cat,ref:user.ref||key,inviteCode:user.inviteCode||'—'};
   save('last_user2',currentUser); initApp();
@@ -1593,17 +1574,12 @@ function doRegisterApprenant(){
   saveUsers(users);
   codeObj.used=true; codeObj.usedBy=name; codeObj.usedAt=now.toISOString();
   saveInviteCodes(codes);
-  apiPost({action:'inscrireUser',nom:name,zone,categorie:cat,code});
-  apiPost({action:'utiliserCode',code,nom:name});
-  // Sauvegarder bon de commande UNIQUEMENT si paiement réel via Landing Page
-  const paidViaLanding=sessionStorage.getItem('paid_via_landing')==='true';
-  if(paidViaLanding){
-    sessionStorage.removeItem('paid_via_landing');
-    const bons=load('bons_commande',[]);
-    bons.push({ref,name,zone,cat,code,montant:'52 500 FCFA',module:'Module 1 — Accès Initial',date:now.toISOString(),type:'BON_COMMANDE',status:'en_attente',paiementWave:true});
-    save('bons_commande',bons);
-    showDocumentModal('bon',{ref,name,zone,cat,code,montant:'52 500 FCFA',date:now});
-  }
+  // Sauvegarder bon de commande
+  const bons=load('bons_commande',[]);
+  bons.push({ref,name,zone,cat,code,montant:'52 500 FCFA',module:'Module 1 — Accès Initial',date:now.toISOString(),type:'BON_COMMANDE',status:'en_attente'});
+  save('bons_commande',bons);
+  // Afficher le bon de commande
+  showDocumentModal('bon',{ref,name,zone,cat,code,montant:'52 500 FCFA',date:now});
   document.getElementById('reg-name').value='';
   document.getElementById('reg-pwd').value='';
   document.getElementById('reg-code').value='';
@@ -1727,17 +1703,17 @@ function renderDashboard(){
   const cp=Math.min(100,Math.round(totalScore/360*100));
   document.getElementById('dash-cert').innerHTML=`<div class="cert-badge"><div class="cert-title">ChallengeFinancier™</div><div class="cert-score">${totalScore}</div><div class="cert-level">${getCert(totalScore)} — ${cp}%</div><div style="margin-top:18px"><div class="progress-bar" style="height:7px"><div class="progress-fill gold" style="width:${cp}%"></div></div><div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gr);margin-top:5px"><span>0</span><span>216 Standard</span><span>250 Distinction</span><span>300 Excellence</span></div></div></div>`;
 
-  // === ChallengeF TV — SESSIONS COACH LIVE YOUTUBE (apprenants actifs) ===
+  // === LFA TV — SESSIONS COACH LIVE YOUTUBE (apprenants actifs) ===
   if(currentUser.role==='apprenant'){
     const z1=load('zoom_link_1',''), z2=load('zoom_link_2','');
-    const defaultYT='https://www.youtube.com/@VoteConnect';
+    const defaultYT='https://youtube.com/@lfa-tv-h5z?si=CJp2mRyrA8auG-pf';
     const mkLink=(z,label)=>{
       const url = z || defaultYT;
       const isLive = url.includes('/live/') || url.includes('live');
       const badge = isLive ? '<span style="background:var(--or);color:#0a0f0a;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:1px">🟡 LIVE</span>' : '<span style="background:#333;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:1px">▶ VIDÉO</span>';
-      return `<a href="${url}" target="_blank" style="display:flex;align-items:center;gap:12px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:12px 16px;text-decoration:none;margin-bottom:8px"><span style="font-size:22px">📺</span><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--orc)">${label} — Regarder sur ChallengeF TV ${badge}</div><div style="font-size:10px;color:var(--gr);margin-top:2px;font-family:monospace">${url.substring(0,50)}${url.length>50?"...":""}</div></div><span style="color:var(--orc);font-size:18px">→</span></a>`;
+      return `<a href="${url}" target="_blank" style="display:flex;align-items:center;gap:12px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:12px 16px;text-decoration:none;margin-bottom:8px"><span style="font-size:22px">📺</span><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--orc)">${label} — Regarder sur LFA TV ${badge}</div><div style="font-size:10px;color:var(--gr);margin-top:2px;font-family:monospace">${url.substring(0,50)}${url.length>50?"...":""}</div></div><span style="color:var(--orc);font-size:18px">→</span></a>`;
     };
-    const ytBlock=`<div class="card-or" style="margin-top:18px;border-color:rgba(201,168,76,.25)"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="font-size:28px">📺</span><div><div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--orc);font-weight:700">Sessions Coach Live — ChallengeF TV</div><div style="font-size:11px;color:var(--gr);margin-top:2px">2 × 1h/semaine avec Simplice KOUAME · Chaîne YouTube ChallengeF TV</div></div></div>${mkLink(z1,'Session 1')}${mkLink(z2,'Session 2')}<div style="text-align:center;margin-top:6px"><a href="https://www.youtube.com/@VoteConnect" target="_blank" style="font-size:11px;color:var(--orc);text-decoration:none;font-weight:600">📺 Accéder à toutes les vidéos ChallengeF TV →</a></div></div>`;
+    const ytBlock=`<div class="card-or" style="margin-top:18px;border-color:rgba(201,168,76,.25)"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="font-size:28px">📺</span><div><div style="font-family:'Playfair Display',serif;font-size:15px;color:var(--orc);font-weight:700">Sessions Coach Live — LFA TV</div><div style="font-size:11px;color:var(--gr);margin-top:2px">2 × 1h/semaine avec Simplice KOUAME · Chaîne YouTube LFA TV</div></div></div>${mkLink(z1,'Session 1')}${mkLink(z2,'Session 2')}<div style="text-align:center;margin-top:6px"><a href="https://youtube.com/@lfa-tv-h5z?si=CJp2mRyrA8auG-pf" target="_blank" style="font-size:11px;color:var(--orc);text-decoration:none;font-weight:600">📺 Accéder à toutes les vidéos LFA TV →</a></div></div>`;
     document.getElementById('page-dashboard').insertAdjacentHTML('beforeend',ytBlock);
   }
 }
@@ -1755,7 +1731,7 @@ function getUnlockedModules(){
     : (currentUser.username || (currentUser.fullName||'').toLowerCase().replace(/\s+/g,'_'));
   const unlocked = load('unlocked_modules_'+ukey, []);
   if(!Array.isArray(unlocked) || unlocked.length===0){
-    const isAct=currentUser.status==='active'; return isAct?[1]:[];
+    return (currentUser.status==='active') ? [1] : [];
   }
   if(currentUser.status==='active' && !unlocked.includes(1)) unlocked.unshift(1);
   return unlocked;
@@ -1802,43 +1778,6 @@ function openModule(id){
   renderModuleDetail(currentModule);
   showPage('page-module-detail');
 }
-
-function accederModuleSuivant(id){
-  // Vérifier si le module suivant est débloqué (payé et validé par Admin)
-  const unlocked = getUnlockedModules();
-  if(unlocked.includes(id)){
-    openModule(id);
-  } else {
-    // Afficher modal de paiement obligatoire
-    const m = MODULES_DATA.find(x=>x.id===id);
-    const titre = m ? m.titre : 'Module '+id;
-    const old = document.getElementById('paywall-overlay');
-    if(old) old.remove();
-    const prix = '17 500 FCFA';
-    const overlay = document.createElement('div');
-    overlay.id = 'paywall-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px';
-    overlay.innerHTML = `
-      <div style="background:linear-gradient(160deg,#112211,#0a180a);border:1px solid rgba(201,168,76,.4);border-radius:20px;max-width:380px;width:100%;padding:28px 24px;text-align:center;position:relative">
-        <button onclick="document.getElementById('paywall-overlay').remove()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer">✕</button>
-        <div style="font-size:2.5rem;margin-bottom:12px">🔒</div>
-        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:#e2c060;font-weight:700;margin-bottom:6px">Module ${id} — Accès Payant</div>
-        <div style="font-size:.82rem;color:#7aaa7a;margin-bottom:4px">${titre}</div>
-        <div style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:14px;margin:18px 0">
-          <div style="font-size:.68rem;letter-spacing:2px;text-transform:uppercase;color:#7aaa7a;margin-bottom:6px">Tarif mensuel</div>
-          <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:#f5d97a;line-height:1">${prix}</div>
-          <div style="font-size:.72rem;color:#7aaa7a;margin-top:4px">Paiement Wave Business · Activation sous 24h</div>
-        </div>
-        <button onclick="document.getElementById('paywall-overlay').remove();demanderPaiementModule(${id})" style="width:100%;background:linear-gradient(135deg,#c9a84c,#e2c060);border:none;border-radius:12px;padding:14px;font-size:.92rem;font-weight:700;color:#091509;cursor:pointer;letter-spacing:.5px;margin-bottom:10px">
-          💳 Payer ${prix} et débloquer ce module
-        </button>
-        <div style="font-size:.72rem;color:#7aaa7a">Vous recevrez votre accès par WhatsApp dans les 24h après validation de votre paiement Wave.</div>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-  }
-}
-
 
 function renderModuleDetail(m){
   const prog=loadU('progress',{}),scores=loadU('scores',{}),notes=loadU('notes',{});
@@ -1905,7 +1844,7 @@ function renderModuleDetail(m){
     </div>
     <div style="margin-top:22px;padding-top:18px;border-top:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center">
       <div><span style="font-size:12px;color:var(--gr)">Progression : </span><span style="font-size:12px;color:var(--vv)">${p}%</span>${score>0?`<span style="font-size:12px;color:var(--orc);margin-left:12px">Score : ${score} pts</span>`:''}</div>
-      ${m.id<8?`<button class="btn btn-outline btn-sm" onclick="accederModuleSuivant(${m.id+1})">Module suivant →</button>`:''}
+      ${m.id<8?`<button class="btn btn-outline btn-sm" onclick="openModule(${m.id+1})">Module suivant →</button>`:''}
     </div>
   `;
 
@@ -2042,7 +1981,7 @@ function submitQuiz(){
   const scores=loadU('scores',{});scores[m.id]=Math.max(scores[m.id]||0,score);saveU('scores',scores);
   const prog=loadU('progress',{});prog[m.id]=Math.max(prog[m.id]||0,score>=(m.quiz.length*4)?100:75);saveU('progress',prog);
   const pct=Math.round(score/(m.quiz.length*5)*100);
-  document.getElementById('quiz-content').insertAdjacentHTML('beforeend',`<div class="card-or" style="margin-top:22px;text-align:center"><div style="font-size:38px;margin-bottom:10px">${pct>=60?'🏆':'📚'}</div><div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--orc);margin-bottom:6px">${score} / ${m.quiz.length*5} points</div><div style="font-size:13px;color:var(--gr);margin-bottom:18px">${pct}% de réussite</div><div style="display:flex;gap:10px;justify-content:center"><button class="btn btn-green" onclick="openModule(${m.id})">← Retour au module</button>${m.id<8?`<button class="btn btn-gold" onclick="accederModuleSuivant(${m.id+1})">Module suivant →</button>`:''}</div></div>`);
+  document.getElementById('quiz-content').insertAdjacentHTML('beforeend',`<div class="card-or" style="margin-top:22px;text-align:center"><div style="font-size:38px;margin-bottom:10px">${pct>=60?'🏆':'📚'}</div><div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--orc);margin-bottom:6px">${score} / ${m.quiz.length*5} points</div><div style="font-size:13px;color:var(--gr);margin-bottom:18px">${pct}% de réussite</div><div style="display:flex;gap:10px;justify-content:center"><button class="btn btn-green" onclick="openModule(${m.id})">← Retour au module</button>${m.id<8?`<button class="btn btn-gold" onclick="openModule(${m.id+1})">Module suivant →</button>`:''}</div></div>`);
   showNotif(`✓ Quiz soumis — Score : ${score}/${m.quiz.length*5} pts`);
 }
 
@@ -2187,9 +2126,6 @@ function renderStats(){
 // ============================================================
 
 function renderAdminUsers(){
-  syncUsersFromGS().then(()=>renderAdminUsersLocal());
-}
-function renderAdminUsersLocal(){
   const users=getUsers();
   const codes=getInviteCodes();
   const pendingList=Object.values(users).filter(u=>u.status==='pending');
@@ -2220,8 +2156,8 @@ function renderAdminUsersLocal(){
               <div class="ur-info">Inscrit le ${new Date(u.registeredAt).toLocaleDateString('fr-FR')}</div>
             </div>
             <span class="badge-pending">EN ATTENTE</span>
-            <button data-key="${u.fullName.toLowerCase().replace(/\s+/g,'_')}" data-status="active" onclick="adminValidateUser(this.dataset.key,this.dataset.status)" style="padding:6px 14px;background:var(--vv);border:none;border-radius:7px;color:#fff;font-size:12px;cursor:pointer;font-weight:600">✅ Valider</button>
-            <button data-key="${u.fullName.toLowerCase().replace(/\s+/g,'_')}" data-status="blocked" onclick="adminValidateUser(this.dataset.key,this.dataset.status)" style="padding:6px 14px;background:#ef4444;border:none;border-radius:7px;color:#fff;font-size:12px;cursor:pointer;font-weight:600">🚫 Rejeter</button>
+            <button onclick="adminValidateUser('${u.fullName.toLowerCase().replace(/\s+/g,'_')}','active')" style="padding:6px 14px;background:var(--vv);border:none;border-radius:7px;color:#fff;font-size:12px;cursor:pointer;font-weight:600">✅ Valider</button>
+            <button onclick="adminValidateUser('${u.fullName.toLowerCase().replace(/\s+/g,'_')}','blocked')" style="padding:6px 14px;background:#ef4444;border:none;border-radius:7px;color:#fff;font-size:12px;cursor:pointer;font-weight:600">🚫 Rejeter</button>
           </div>`).join('')
       }
     </div>
@@ -2259,9 +2195,9 @@ function renderAdminUsersLocal(){
       <button onclick="adminCreateFormateur()" style="padding:10px 20px;background:linear-gradient(135deg,var(--vm),var(--vv));border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">➕ Créer le compte Formateur</button>
     </div>
 
-    <!-- LIENS ChallengeF TV YOUTUBE LIVE — Coach Sessions -->
+    <!-- LIENS LFA TV YOUTUBE LIVE — Coach Sessions -->
     <div class="admin-section">
-      <h4>📺 ChallengeF TV — Sessions Coach Live YouTube (2×/semaine)</h4>
+      <h4>📺 LFA TV — Sessions Coach Live YouTube (2×/semaine)</h4>
       <div style="margin-bottom:12px;font-size:12px;color:var(--gr);line-height:1.6">
         Ces liens YouTube sont affichés aux apprenants actifs dans leur tableau de bord. Mettez à jour l'URL du Live YouTube chaque semaine avant la session.
       </div>
@@ -2282,9 +2218,9 @@ function renderAdminUsersLocal(){
         </div>
       </div>
       <div style="background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--orc);margin-bottom:10px">
-        📺 Chaîne ChallengeF TV par défaut : <a href="https://www.youtube.com/@VoteConnect" target="_blank" style="color:var(--orc);font-weight:700">https://www.youtube.com/@VoteConnect</a> — Renseignez ci-dessus l'URL du Live ou de la vidéo de la session du moment.
+        📺 Chaîne LFA TV par défaut : <a href="https://youtube.com/@lfa-tv-h5z" target="_blank" style="color:var(--orc);font-weight:700">youtube.com/@lfa-tv-h5z</a> — Renseignez ci-dessus l'URL du Live ou de la vidéo de la session du moment.
       </div>
-      <div id="zoom-saved-status" style="font-size:11px;color:var(--vv);display:none">✅ Liens ChallengeF TV sauvegardés — visibles par les apprenants actifs</div>
+      <div id="zoom-saved-status" style="font-size:11px;color:var(--vv);display:none">✅ Liens LFA TV sauvegardés — visibles par les apprenants actifs</div>
       <!-- Pré-remplissage géré par adminPrefillYoutubeLinks() appelé dans renderAdminUsers() -->
     </div>
 
@@ -2363,13 +2299,12 @@ function renderAdminUsersLocal(){
 
 function adminValidateUser(key, newStatus){
   const users=getUsers();
-  let k=key;
-  if(!users[k]){k=Object.keys(users).find(x=>users[x].fullName&&users[x].fullName.toLowerCase().replace(/\s+/g,'_')===key);}
-  if(!k||!users[k]){showNotif('❌ Utilisateur introuvable. Rechargez.');return;}
-  users[k].status=newStatus;users[k].updatedAt=new Date().toISOString();saveUsers(users);
-  apiPost({action:'validerUser',nom:users[k].fullName,statut:newStatus});
+  if(!users[key]){showNotif('\u274C Utilisateur introuvable.');return;}
+  users[key].status=newStatus;
+  users[key].updatedAt=new Date().toISOString();
+  saveUsers(users);
   if(newStatus==='active'){
-    const u=users[k]||users[key];
+    const u=users[key];
     const now=new Date();
     const bons=load('bons_commande',[]);
     const bon=bons.find(b=>b.ref===u.ref);
@@ -2450,21 +2385,17 @@ function adminCreateFormateur(){
   renderAdminUsers();
 }
 
-async function adminGenerateCodes(){
+function adminGenerateCodes(){
   const nb=parseInt(document.getElementById('nb-codes').value)||5;
-  showNotif('⏳ Génération en cours...');
-  const result=await apiPost({action:'genererCode',nombre:nb});
-  if(result&&result.success&&result.codes){
-    const codes=getInviteCodes();
-    const newCodes=result.codes.map(c=>({code:c,used:false,usedBy:'',createdAt:new Date().toISOString()}));
-    saveInviteCodes([...codes,...newCodes]);
-    showNotif(`⚡ ${nb} codes générés et synchronisés !`);
-  }else{
-    const codes=getInviteCodes();const newCodes=[];
-    for(let i=0;i<nb;i++){const rand=Math.random().toString(36).substring(2,6).toUpperCase();const year=new Date().getFullYear();newCodes.push({code:`LFA-${year}-${rand}`,used:false,usedBy:'',createdAt:new Date().toISOString()});}
-    saveInviteCodes([...codes,...newCodes]);
-    showNotif(`⚡ ${nb} codes générés localement`);
+  const codes=getInviteCodes();
+  const newCodes=[];
+  for(let i=0;i<nb;i++){
+    const rand=Math.random().toString(36).substring(2,6).toUpperCase();
+    const year=new Date().getFullYear();
+    newCodes.push({code:`LFA-${year}-${rand}`,used:false,usedBy:'',createdAt:new Date().toISOString()});
   }
+  saveInviteCodes([...codes,...newCodes]);
+  showNotif(`⚡ ${nb} codes d'invitation générés !`);
   renderAdminUsers();
 }
 
@@ -2481,7 +2412,7 @@ function adminSaveZoom(n){
   save("zoom_link_"+n, val);
   const st=document.getElementById("zoom-saved-status");
   if(st){st.style.display="block";setTimeout(()=>{st.style.display="none";},3000);}
-  showNotif("\u2705 Lien ChallengeF TV Session "+n+" sauvegard\u00e9 !");
+  showNotif("\u2705 Lien LFA TV Session "+n+" sauvegard\u00e9 !");
 }
 function adminPrefillYoutubeLinks(){
   setTimeout(function(){
@@ -2566,7 +2497,7 @@ function showDocumentModal(type, data){
     <!-- QR Wave Business — Paiement par scan après impression -->
     <div style="border:1px solid #d0e8f8;background:#f0f7ff;border-radius:8px;padding:14px 16px;margin-bottom:14px;text-align:center">
       <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Scanner le QR</div>
-      <img src="https://i.ibb.co/zVcnPS8d/Wave-Formation.png"
+      <img src="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/"
            alt="QR Code Wave Business — VoteConnect ChallengeFinancier"
            style="width:130px;height:130px;border-radius:8px;border:2px solid #1565c0;display:block;margin:0 auto 8px auto"
            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -2809,7 +2740,7 @@ function buildDocHTML(type,data){
     </div>
     <div style="border:1px solid #d0e8f8;background:#f0f7ff;border-radius:8px;padding:14px 16px;margin-bottom:14px;text-align:center">
       <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Scanner le QR</div>
-      <img src="https://i.ibb.co/zVcnPS8d/Wave-Formation.png"
+      <img src="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/"
            alt="QR Code Wave Business — VoteConnect ChallengeFinancier"
            style="width:130px;height:130px;border-radius:8px;border:2px solid #1565c0;display:block;margin:0 auto 8px auto">
       <div style="font-size:11px;color:#1565c0;font-weight:700">+225 07 67 81 43 33</div>
@@ -2838,7 +2769,7 @@ function renderRessources(){
       <div class="card"><div style="font-size:26px;margin-bottom:10px">🧰</div><h3 style="font-size:14px;margin-bottom:12px;color:var(--orc)">Outils Pédagogiques</h3><div style="font-size:12px;color:var(--gr);line-height:1.8">• Calculateur Financier ChallengeFinancier™ (à venir)<br>• Simulateur d'Investissement VoteConnect (à venir)<br>• Calculateurs RSI, Boule de Neige<br>• Simulateur TCL - projections personnalisées<br>• ChatGPT (IA pédagogique)</div></div>
       <div class="card"><div style="font-size:26px;margin-bottom:10px">👨‍💼</div><h3 style="font-size:14px;margin-bottom:12px;color:var(--orc)">Experts Partenaires</h3><div style="font-size:12px;color:var(--gr);line-height:1.8">• Banquiers d'Investissement<br>• Conseillers Fiscaux (DGI-CI)<br>• Investisseurs Immobiliers<br>• Analystes Financiers BRVM<br>• Experts Bitcoin Afrique francophone</div></div>
       <div class="card-or"><div style="font-size:26px;margin-bottom:10px">🌐</div><h3 style="font-size:14px;margin-bottom:12px;color:var(--orc)">Plateformes VoteConnect</h3><div style="font-size:12px;line-height:2"><div>🌐 <span style="color:var(--vv)">www.challengefinancier.com</span></div><div>🌐 <span style="color:var(--vv)">ngd.framer.website</span></div><div>🌐 <span style="color:var(--vv)">diaspora-invest.challengefinancier.com</span></div><div>🌐 <span style="color:var(--vv)">www.petitionlegitimite.ci</span></div><div>📞 +225 0707786614 | +225 0767814333</div></div></div>
-      <div class="card"><div style="font-size:26px;margin-bottom:10px">🌍</div><h3 style="font-size:14px;margin-bottom:12px;color:var(--orc)">Communautés</h3><div style="font-size:12px;color:var(--gr);line-height:1.8">• Groupe Facebook NGD<br>• Ma Côte d'Ivoire<br>• Mille Volontaires<br>• Les Frères Africains — LFA<br>• Groupe Bitcoin VoteConnect<br>• ChallengeF TV (YouTube)</div></div>
+      <div class="card"><div style="font-size:26px;margin-bottom:10px">🌍</div><h3 style="font-size:14px;margin-bottom:12px;color:var(--orc)">Communautés</h3><div style="font-size:12px;color:var(--gr);line-height:1.8">• Groupe Facebook NGD<br>• Ma Côte d'Ivoire<br>• Mille Volontaires<br>• Les Frères Africains — LFA<br>• Groupe Bitcoin VoteConnect<br>• LFA TV (YouTube)</div></div>
       <div class="card"><div style="font-size:26px;margin-bottom:10px">🏆</div><h3 style="font-size:14px;margin-bottom:12px;color:var(--orc)">Grille de Certification</h3><div style="font-size:13px;line-height:2.2"><div><span class="chip chip-gold">EXCELLENCE</span> <span style="color:var(--gr);margin-left:8px">300–360 pts</span></div><div><span class="chip chip-green">DISTINCTION</span> <span style="color:var(--gr);margin-left:8px">250–299 pts</span></div><div><span class="chip chip-blue">STANDARD</span> <span style="color:var(--gr);margin-left:8px">216–249 pts</span></div><div><span class="chip chip-gray">PARTICIPATION</span> <span style="color:var(--gr);margin-left:8px">&lt; 216 pts</span></div></div></div>
     </div>
     <div class="card-or" style="margin-top:20px">
@@ -2900,7 +2831,7 @@ function showWaveSecureModal(targetId, targetType){
     +'VoteConnect SARL | www.challengefinancier.com'
   );
   const waUrl='https://wa.me/2250767560908?text='+waMsg;
-  const waveQR='https://pay.wave.com/m/M_OfH8X0ix7Rl1/c/ci/';
+  const waveQR='https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/';
 
   const overlay=document.createElement('div');
   overlay.id='wave-secure-overlay';
@@ -3645,6 +3576,5 @@ window.onload=function(){
   if(last&&last.name){currentUser=last;currentRole=last.role;initApp()}
 };
 </script>
-<script>function mobT(){var s=document.querySelector(".sidebar");var o=document.getElementById("mob-ov");if(s)s.classList.toggle("mob-open");if(o)o.classList.toggle("mob-open");}</script>
 </body>
 </html>
