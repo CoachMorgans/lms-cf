@@ -355,13 +355,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <!-- QR Wave réel -->
         <div style="background:var(--card2);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px">
           <div style="font-size:11px;color:var(--gr);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">💳 Paiement Wave Business</div>
-          <div style="display:inline-block;background:#fff;border-radius:12px;padding:8px;margin-bottom:10px;box-shadow:0 4px 20px rgba(0,0,0,.3)">
-            <img src="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/"
-                 alt="QR Code Wave Business — VoteConnect ChallengeFinancier"
-                 width="160" height="160"
-                 style="display:block;border-radius:6px"
-                 onerror="this.style.display=&apos;none&apos;;document.getElementById(&apos;qr-fallback&apos;).style.display=&apos;block&apos;">
-            <div id="qr-fallback" style="display:none;width:160px;height:160px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#666;text-align:center;padding:10px">QR Code Wave<br>Connexion requise</div>
+          <div style="margin-bottom:10px">
+            <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
+               style="display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:12px;padding:14px 20px;font-size:14px;font-weight:700;text-decoration:none;box-shadow:0 4px 20px rgba(0,80,200,.4)">
+              <span style="font-size:24px">💳</span>
+              <span>Payer 52 500 FCFA via Wave</span>
+            </a>
           </div>
           <div style="font-size:13px;color:var(--bl);font-weight:700">Scannez pour payer 52 500 FCFA</div>
           <div style="font-size:10px;color:var(--orc);margin-top:4px;font-weight:600">VoteConnect sarl — ChallengeFinancier™</div>
@@ -2566,11 +2565,10 @@ function showDocumentModal(type, data){
     <!-- QR Wave Business — Paiement par scan après impression -->
     <div style="border:1px solid #d0e8f8;background:#f0f7ff;border-radius:8px;padding:14px 16px;margin-bottom:14px;text-align:center">
       <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Scanner le QR</div>
-      <img src="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/"
-           alt="QR Code Wave Business — VoteConnect ChallengeFinancier"
-           style="width:130px;height:130px;border-radius:8px;border:2px solid #1565c0;display:block;margin:0 auto 8px auto"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;width:130px;height:130px;border:2px dashed #1565c0;border-radius:8px;align-items:center;justify-content:center;font-size:10px;color:#1565c0;text-align:center;padding:8px;margin:0 auto 8px auto">QR Code Wave<br>Connexion requise</div>
+      <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
+         style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:700;text-decoration:none;margin:0 auto 8px auto;max-width:200px">
+        💳 Payer via Wave
+      </a>
       <div style="font-size:11px;color:#1565c0;font-weight:700">+225 07 67 81 43 33</div>
       <div style="font-size:10px;color:#666;margin-top:3px">VoteConnect Formation — Wave Business</div>
     </div>
@@ -2809,9 +2807,10 @@ function buildDocHTML(type,data){
     </div>
     <div style="border:1px solid #d0e8f8;background:#f0f7ff;border-radius:8px;padding:14px 16px;margin-bottom:14px;text-align:center">
       <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Scanner le QR</div>
-      <img src="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/"
-           alt="QR Code Wave Business — VoteConnect ChallengeFinancier"
-           style="width:130px;height:130px;border-radius:8px;border:2px solid #1565c0;display:block;margin:0 auto 8px auto">
+      <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
+         style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:700;text-decoration:none;margin:0 auto 8px auto;max-width:200px">
+        💳 Payer via Wave
+      </a>
       <div style="font-size:11px;color:#1565c0;font-weight:700">+225 07 67 81 43 33</div>
       <div style="font-size:10px;color:#666;margin-top:3px">VoteConnect Formation — Wave Business</div>
     </div>
