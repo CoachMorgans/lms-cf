@@ -368,7 +368,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div id="auth-sub-inscrire" style="display:none">
         <div style="background:rgba(201,168,76,.07);border:1px solid var(--bro);border-radius:10px;padding:14px;margin-bottom:16px;font-size:12px;color:var(--orc)">
           📌 L&apos;inscription nécessite :<br>
-          &nbsp;• Paiement de <strong>52 500 FCFA</strong> via QR Wave ci-dessous<br>
+          &nbsp;• Paiement de <strong>52 500 FCFA</strong> via le bouton Wave ci-dessous<br>
           &nbsp;• Réception de votre <strong>Code d&apos;Invitation</strong> par SMS/WhatsApp (24h)<br>
           &nbsp;• Validation de votre compte par l&apos;Administrateur<br>
           <span style="color:var(--vv);font-size:11px">Donne accès au Module 1 + 2×1h Coach Live ChallengeF TV/semaine</span>
@@ -428,7 +428,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
           </div>
         </div>
 
-        <!-- QR Wave réel -->
+        <!-- Bouton Wave Paiement -->
         <div style="background:var(--card2);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px">
           <div style="font-size:11px;color:var(--gr);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">💳 Paiement Wave Business</div>
           <div style="margin-bottom:10px">
@@ -438,7 +438,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
               <span>Payer 52 500 FCFA via Wave</span>
             </a>
           </div>
-          <div style="font-size:13px;color:var(--bl);font-weight:700">Scannez pour payer 52 500 FCFA</div>
+          <div style="font-size:13px;color:var(--bl);font-weight:700">Appuyez pour payer 52 500 FCFA</div>
           <div style="font-size:10px;color:var(--orc);margin-top:4px;font-weight:600">VoteConnect sarl — ChallengeFinancier™</div>
           <div style="font-size:10px;color:var(--gr);margin-top:4px;line-height:1.5">Après paiement Wave, votre <strong style="color:var(--orc)">Code d&apos;Invitation</strong><br>est envoyé par <strong>SMS / WhatsApp</strong> dans les 24h</div>
         </div>
@@ -2638,9 +2638,9 @@ function showDocumentModal(type, data){
       <div style="font-size:24px;font-weight:800;color:#0d2b1a">${data.montant}</div>
     </div>
 
-    <!-- QR Wave Business — Paiement par scan après impression -->
+    <!-- Bouton Wave Business — Paiement direct -->
     <div style="border:1px solid #d0e8f8;background:#f0f7ff;border-radius:8px;padding:14px 16px;margin-bottom:14px;text-align:center">
-      <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Scanner le QR</div>
+      <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Cliquez pour payer</div>
       <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
          style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:700;text-decoration:none;margin:0 auto 8px auto;max-width:200px">
         💳 Payer via Wave
@@ -2882,7 +2882,7 @@ function buildDocHTML(type,data){
       <div style="font-size:24px;font-weight:800;color:#0d2b1a">${data.montant}</div>
     </div>
     <div style="border:1px solid #d0e8f8;background:#f0f7ff;border-radius:8px;padding:14px 16px;margin-bottom:14px;text-align:center">
-      <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Scanner le QR</div>
+      <div style="font-size:10px;color:#1565c0;letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px">💳 Paiement Wave Business — Cliquez pour payer</div>
       <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
          style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:700;text-decoration:none;margin:0 auto 8px auto;max-width:200px">
         💳 Payer via Wave
@@ -3008,7 +3008,7 @@ function showWaveSecureModal(targetId, targetType){
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <a href="${waveQR}" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px;background:linear-gradient(135deg,#1565c0,#1976d2);border-radius:12px;text-decoration:none;color:#fff;font-size:12px;font-weight:700;text-align:center" onclick="markStep1Done()">
-          <span style="font-size:28px">📱</span>QR Wave Business<br><span style="font-size:10px;opacity:.8">Scanner & Payer</span>
+          <span style="font-size:28px">💳</span>Payer via Wave<br><span style="font-size:10px;opacity:.8">Cliquer & Payer</span>
         </a>
         <a href="${waUrl}" target="_blank" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px;background:linear-gradient(135deg,#1a5c35,#22a852);border-radius:12px;text-decoration:none;color:#fff;font-size:12px;font-weight:700;text-align:center" onclick="markStep1Done()">
           <span style="font-size:28px">📲</span>Confirmer sur WhatsApp<br><span style="font-size:10px;opacity:.8">Envoyer la preuve</span>
@@ -3713,9 +3713,18 @@ function resetPlatform(){
 // BOOT
 // ============================================================
 window.onload=function(){
-  // Réinitialisation complète si paramètre URL ?reset=1
+  // ═══ RESET AUTOMATIQUE v5 — Vide toutes les données TEST au chargement ═══
+  const RESET_VERSION = 'v5_clean_07042026';
+  if(localStorage.getItem('cf2_reset_done') !== RESET_VERSION){
+    Object.keys(localStorage).filter(k=>k.startsWith('cf2_')).forEach(k=>localStorage.removeItem(k));
+    localStorage.setItem('cf2_reset_done', RESET_VERSION);
+    // Codes d'invitation par défaut
+    const defaults=['LFA-2026-DEMO','LFA-2026-TEST','LFA-2026-BETA','LFA-2026-ALFA','LFA-2026-ZETA'];
+    localStorage.setItem('cf2_invite_codes',JSON.stringify(defaults.map(c=>({code:c,used:false,usedBy:'',createdAt:new Date().toISOString()}))));
+  }
+  // Réinitialisation manuelle si paramètre URL ?reset=1
   if(location.search.includes('reset=1')){
-    resetPlatformTotal();
+    localStorage.removeItem('cf2_reset_done');
     location.href=location.pathname;
     return;
   }
