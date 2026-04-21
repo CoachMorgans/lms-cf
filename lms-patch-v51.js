@@ -131,17 +131,9 @@
     var lf = lc.find(function(c){ return c.code === cle && !c.used; });
     if (lf) { doConnect(cle, null, inp, load, btn); return; }
 
-    /* 2. CF-DB → Paiement_LMS */
-    fetch(GS_CF + '?action=verifier_cle_lfa&cle=' + encodeURIComponent(cle))
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if (d && (d.success || d.valid)) {
-          doConnect(cle, d, inp, load, btn);
-        } else {
-          lfaErr('\u274c Cl\u00e9 LFA invalide. V\u00e9rifiez dans le Bot @ChallengeFinancierbot', inp, load, btn, errD);
-        }
-      })
-      .catch(function(){ doConnect(cle, null, inp, load, btn); }); /* offline OK */
+    /* 2. CF-DB route verifier_cle_lfa — à déployer après 1er Mai
+       En attendant : accepter toute clé au format valide */
+    doConnect(cle, null, inp, load, btn);
   };
 
   function doConnect(cle, d, inp, load, btn) {
