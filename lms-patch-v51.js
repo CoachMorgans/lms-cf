@@ -168,9 +168,8 @@
     if (inp)  inp.className = 'lfa-input ok';
 
     localStorage.setItem('cf2_last_user2', JSON.stringify(u));
-    if (typeof window.currentUser !== 'undefined') window.currentUser = u;
-    if (typeof window.initApp === 'function') window.initApp();
-    else location.reload();
+    /* Reload pour que window.onload initialise la variable let currentUser du LMS */
+    location.reload();
   }
 
   function lfaErr(msg, inp, load, btn, errEl) {
