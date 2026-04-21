@@ -190,6 +190,30 @@
   window.doRegisterApprenant = function(){ showLfaErr('\u2139\ufe0f Inscription via le Bot @ChallengeFinancierbot. Utilisez votre Cl\u00e9 LFA.'); };
   window.authSubTab          = function(){};
 
+
+  /* ── Photo Coach Morgan's — remplace l'icône poing fermé ── */
+  function patchCoachPhoto() {
+    var el = document.querySelector('.coach-big-avatar');
+    if (el && el.textContent.trim() === '✊') {
+      el.innerHTML = '<img src="https://i.ibb.co/VWp3SGvq/Simplice-KOUAME.png"'
+        + ' alt="Coach Morgan\'s — Simplice KOUAME"'
+        + ' style="width:80px;height:80px;border-radius:50%;object-fit:cover;'
+        + 'border:3px solid var(--or,#c9a84c);display:block"'
+        + ' onerror="this.style.display=\'none\'">';
+      el.style.background = 'none';
+      el.style.padding = '0';
+    }
+  }
+
+  /* Observer la page Coach pour injecter la photo au rendu */
+  var _origShowPage = window.showPage;
+  window.showPage = function(pid) {
+    if (typeof _origShowPage === 'function') _origShowPage(pid);
+    if (pid === 'page-coach') {
+      setTimeout(patchCoachPhoto, 100);
+    }
+  };
+
   /* Init */
   function init() { inject(); patchChoiceBtn(); }
   document.readyState === 'loading'
