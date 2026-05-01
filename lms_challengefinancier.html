@@ -333,7 +333,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div style="display:grid;gap:12px;margin-bottom:20px">
         <button class="auth-choice-btn" onclick="authShowView('login-apprenant')">
           <span style="font-size:22px">🎓</span>
-          <div><div style="font-weight:700;font-size:14px">Apprenant</div><div style="font-size:11px;opacity:.7">Se connecter avec ma Clé LFA</div></div>
+          <div><div style="font-weight:700;font-size:14px">Apprenant</div><div style="font-size:11px;opacity:.7">Se connecter ou s'inscrire</div></div>
           <span style="margin-left:auto;opacity:.5">→</span>
         </button>
         <button class="auth-choice-btn" onclick="authShowView('login-formateur')">
@@ -360,8 +360,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
       <!-- Connexion -->
       <div id="auth-sub-connexion">
-        <div class="form-group"><label>Clé LFA — format : LFA-2026-XXXX</label><input type="text" id="app-login-name" placeholder="LFA-2026-XXXX" style="font-family:monospace;letter-spacing:2px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
-        <div class="form-group" style="display:none"><label>Mot de passe</label><input type="password" id="app-login-pwd" placeholder="••••••••"></div>
+        <div class="form-group"><label>Nom d'utilisateur</label><input type="text" id="app-login-name" placeholder="Votre nom enregistré"></div>
+        <div class="form-group"><label>Mot de passe</label><input type="password" id="app-login-pwd" placeholder="••••••••"></div>
         <button class="btn-primary" onclick="doLoginApprenant()">Se connecter →</button>
       </div>
       <!-- Inscription -->
@@ -481,7 +481,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <button type="button" onclick="var f=document.getElementById('admin-login-pwd');f.type=f.type==='password'?'text':'password';this.textContent=f.type==='password'?'👁':'🙈'"
       style="padding:10px 12px;background:var(--card2);border:1px solid var(--brd);border-radius:8px;color:var(--gr);cursor:pointer;font-size:14px;white-space:nowrap">👁</button>
   </div>
-  <div style="font-size:10px;color:var(--gr);margin-top:5px;font-family:monospace">Voir WhatsApp Admin</div>
+  <div style="font-size:10px;color:var(--gr);margin-top:5px;font-family:monospace">VoteConnect2026</div>
 </div>
       <button class="btn-primary" onclick="doLoginAdmin()">Accéder au Panneau Admin →</button>
     </div>
@@ -1563,9 +1563,9 @@ function loadU(k,d){if(!currentUser)return d;return load(currentUser.name.replac
 // ── Constantes sécurité ─────────────────────────────────────
 const ADMIN_PWD = 'VoteConnect2026';
 
-const GS_API = 'https://script.google.com/macros/s/AKfycbwI46jHy_eQP0sdwRfqoU9jt32KjL4muCLneCIl3z_OI6KT7hdtMf7FZP9Tt5g9EU2d/exec';
+const GS_API = 'https://script.google.com/macros/s/AKfycbwqy5wimZj2XVxlbKMvk4bpPGMmsl5aq2ELr2h0pxrsiIqySiDST8IeWNolO6G6dd5H/exec';
 async function apiPost(data){try{const r=await fetch(GS_API,{method:'POST',body:JSON.stringify(data)});return await r.json();}catch(e){return null;}}
-async function apiGet(action){try{const r=await fetch(GS_API+'?route='+action);return await r.json();}catch(e){return null;}}
+async function apiGet(action){try{const r=await fetch(GS_API+'?action='+action);return await r.json();}catch(e){return null;}}
 async function syncCodesFromGS(){const r=await apiGet('getCodes');if(r&&r.success&&r.codes.length>0){const local=r.codes.map(c=>({code:c.code,used:c.utilise==='OUI',usedBy:c.utilisePar||'',createdAt:c.creeLe||new Date().toISOString()}));saveInviteCodes(local);}}
 async function syncUsersFromGS(){const r=await apiGet('getUsers');if(r&&r.success&&r.users.length>0){const users=getUsers();r.users.forEach(u=>{const k=u.nom.toLowerCase().replace(/\s+/g,'_');if(!users[k]){users[k]={fullName:u.nom,zone:u.zone,cat:u.categorie,status:u.statut==='ACTIF'?'active':u.statut==='BLOQUÉ'?'blocked':'pending',registeredAt:u.inscritLe,inviteCode:u.code,ref:u.ref};}else{if(u.statut==='ACTIF')users[k].status='active';if(u.statut==='BLOQUÉ')users[k].status='blocked';}}); saveUsers(users);}}
 
@@ -1613,13 +1613,15 @@ function authError(msg){
 
 // ── Connexion Apprenant ──────────────────────────────────────
 function doLoginApprenant(){
-  const lfa=(document.getElementById('app-login-name').value||'').trim().toUpperCase();
-  if(!lfa||lfa.length<8){authError('⚠️ Entrez votre Clé LFA (ex: LFA-2026-ABCD).');return;}
+  const name=document.getElementById('app-login-name').value.trim();
+  const pwd=document.getElementById('app-login-pwd').value;
+  if(!name||!pwd){authError('⚠️ Renseignez votre nom et mot de passe.');return;}
   const users=getUsers();
-  const key=Object.keys(users).find(k=>users[k]&&((users[k].inviteCode||'').toUpperCase()===lfa))||lfa.toLowerCase().replace(/[^a-z0-9]/g,'_');
+  const key=name.toLowerCase().replace(/\s+/g,'_');
   const user=users[key];
-  if(!user){authError('❌ Clé LFA invalide. Contactez : +225 07 67 56 09 08');return;}
+  if(!user){authError('❌ Compte introuvable. Vérifiez votre nom ou inscrivez-vous.');return;}
   if(user.role!=='apprenant'){authError('❌ Ce compte n\'est pas un compte Apprenant.');return;}
+  if(user.pwd!==pwd){authError('❌ Mot de passe incorrect.');return;}
   if(user.status==='pending'){
     authError('\u23F3 Vérification en cours...');
     apiGet('getUsers').then(r=>{
@@ -1706,7 +1708,7 @@ function doLoginAdmin(){
   const id  = idEl.value.trim();
   const pwd = pwdEl.value.trim();
   if(id!==ADMIN_ID||pwd!==ADMIN_PWD){
-    authError('\u274C Identifiants incorrects. ID : '+ADMIN_ID+' | MDP : '+ADMIN_PWD);
+    authError('\u274C Identifiants incorrects. ID : '+ADMIN_ID+' | MDP : '+ADMIN_PWD);
     pwdEl.value='';
     pwdEl.focus();
     return;
@@ -2740,8 +2742,6 @@ function printDocument(htmlContent, titre){
   <button class="print-btn" style="background:#6c757d;color:#fff" onclick="window.close()">✕ Fermer</button>
 </div>
 ${htmlContent}
-<script src="lms-patch-v51.js"></script>
-<script src="lms-patch-v51.js"></script>
 </body></html>`);
   win.document.close();
   setTimeout(()=>win.focus(), 300);
@@ -3095,7 +3095,7 @@ function validateActivationKey(ref,targetType,targetId){
   const keyVal=(keyInput?keyInput.value.trim():'');
   const feedback=document.getElementById('activation-key-feedback');
 
-  if(!keyVal||keyVal.length<8){
+  if(!keyVal||keyVal.length<10){
     if(keyInput)keyInput.classList.add('input-err');
     if(feedback){feedback.textContent='⚠️ Entrez une clé valide au format LFA-XXXX-XXXX';feedback.style.color='#e74c3c';}
     return;
@@ -3431,8 +3431,6 @@ function _generateAutoPdf(m, userName){
     Document généré le ${dateStr} — Document nominatif : ${userName} — Usage strictement personnel
   </div>
 </div>
-<script src="lms-patch-v51.js"></script>
-<script src="lms-patch-v51.js"></script>
 </body></html>`);
   win.document.close();
   setTimeout(()=>win.focus(),300);
@@ -3463,8 +3461,6 @@ function _downloadAdminPdf(fileData, m, userName){
 <div class="wm-wrap">
   <iframe src="${fileData}"></iframe>
 </div>
-<script src="lms-patch-v51.js"></script>
-<script src="lms-patch-v51.js"></script>
 </body></html>`);
   win.document.close();
 }
@@ -3753,5 +3749,6 @@ window.onload=function(){
 };
 </script>
 <script>function mobT(){var s=document.querySelector(".sidebar");var o=document.getElementById("mob-ov");if(s)s.classList.toggle("mob-open");if(o)o.classList.toggle("mob-open");}</script>
-
 <script src="lms-patch-v51.js"></script>
+</body>
+</html>
