@@ -333,7 +333,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div style="display:grid;gap:12px;margin-bottom:20px">
         <button class="auth-choice-btn" onclick="authShowView('login-apprenant')">
           <span style="font-size:22px">🎓</span>
-          <div><div style="font-weight:700;font-size:14px">Apprenant</div><div style="font-size:11px;opacity:.7">Se connecter ou s'inscrire</div></div>
+          <div><div style="font-weight:700;font-size:14px">Apprenant</div><div style="font-size:11px;opacity:.7">Se connecter avec ma Clé LFA</div></div>
           <span style="margin-left:auto;opacity:.5">→</span>
         </button>
         <button class="auth-choice-btn" onclick="authShowView('login-formateur')">
@@ -360,8 +360,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       </div>
       <!-- Connexion -->
       <div id="auth-sub-connexion">
-        <div class="form-group"><label>Nom d'utilisateur</label><input type="text" id="app-login-name" placeholder="Votre nom enregistré"></div>
-        <div class="form-group"><label>Mot de passe</label><input type="password" id="app-login-pwd" placeholder="••••••••"></div>
+        <div class="form-group"><label>Clé LFA — format : LFA-2026-XXXX</label><input type="text" id="app-login-name" placeholder="LFA-2026-XXXX" style="font-family:monospace;letter-spacing:2px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"></div>
+        <div class="form-group" style="display:none"><label>Mot de passe</label><input type="password" id="app-login-pwd" placeholder="••••••••"></div>
         <button class="btn-primary" onclick="doLoginApprenant()">Se connecter →</button>
       </div>
       <!-- Inscription -->
@@ -1613,9 +1613,9 @@ function authError(msg){
 
 // ── Connexion Apprenant ──────────────────────────────────────
 function doLoginApprenant(){
-  const name=document.getElementById('app-login-name').value.trim();
-  const pwd=document.getElementById('app-login-pwd').value;
-  if(!name||!pwd){authError('⚠️ Renseignez votre nom et mot de passe.');return;}
+  const key=(document.getElementById('app-login-name').value||'').trim().toUpperCase();
+  if(!key||key.length<8){authError('⚠️ Entrez votre Clé LFA (ex: LFA-2026-ABCD).');return;}
+  const pwd=key;
   const users=getUsers();
   const key=name.toLowerCase().replace(/\s+/g,'_');
   const user=users[key];
