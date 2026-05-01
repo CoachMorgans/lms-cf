@@ -1,99 +1,224 @@
-// LMS Patch v5.1 — Clé LFA uniquement (sans mot de passe)
-// Override authShowView + doLoginApprenant
-// VoteConnect SARL | Coach Morgan's
+/* ═══════════════════════════════════════════════════════════
+   LMS-PATCH-V5.1.JS — ChallengeFinancier™
+   Auth Clé LFA uniquement — Suppression S'inscrire + MDP
+   Validation : CF-DB v3.1 → feuille Paiement_LMS
+   Session Inaugurale 509 Réseauteurs — 1er Mai 2026
+   ═══════════════════════════════════════════════════════════ */
 
 (function () {
-  'use strict';
 
-  function patchLoginView() {
-    var tabIns = document.getElementById('tab-inscrire-btn');
-    if (tabIns) tabIns.style.display = 'none';
+  /* ── CF-DB GS URL ── */
+  var GS_CF = 'https://script.google.com/macros/s/AKfycbzdqCRk06C35clJhQcDS1AN3eZvzq4JO5UjsRU1E7y1pDfTu-xHt6ppSM6pD0UnGn10/exec';
 
-    var pwdInput = document.getElementById('app-login-pwd');
-    if (pwdInput) {
-      var pwdGroup = pwdInput.closest ? pwdInput.closest('.form-group') : pwdInput.parentNode;
-      if (pwdGroup) pwdGroup.style.display = 'none';
-    }
+  /* ══════════════════════════════════════════════════════════
+     CSS
+     ══════════════════════════════════════════════════════════ */
+  var style = document.createElement('style');
+  style.id = 'lms-patch-v51-css';
+  style.textContent = '\
+    #tab-connexion-btn,#tab-inscrire-btn{display:none !important}\
+    #auth-sub-connexion,#auth-sub-inscrire{display:none !important}\
+    .lfa-info{background:rgba(34,168,82,.07);border:1px solid rgba(34,168,82,.25);border-radius:12px;padding:16px 18px;margin-bottom:20px}\
+    .lfa-info-title{font-size:11px;color:#22a852;letter-spacing:1.5px;font-weight:700;text-transform:uppercase;margin-bottom:8px}\
+    .lfa-info-text{font-size:12px;color:var(--gr,#8a9490);line-height:1.7}\
+    .lfa-input{width:100%;background:rgba(0,0,0,.3);border:2px solid rgba(34,168,82,.3);border-radius:12px;padding:14px 18px;color:var(--bl,#f5f0e8);font-family:"DM Mono",monospace;font-size:18px;letter-spacing:4px;text-align:center;text-transform:uppercase;outline:none;transition:border-color .3s,box-shadow .3s;box-sizing:border-box}\
+    .lfa-input:focus{border-color:#22a852;box-shadow:0 0 0 3px rgba(34,168,82,.15)}\
+    .lfa-input.ok{border-color:#22a852;background:rgba(34,168,82,.06)}\
+    .lfa-input.err{border-color:#c0392b;background:rgba(192,57,43,.06)}\
+    .lfa-hint{margin-top:6px;font-size:11px;color:var(--gr,#8a9490);text-align:center}\
+    .lfa-loader{display:none;text-align:center;padding:12px;font-size:13px;color:#22a852}\
+    .lfa-loader.on{display:block}\
+    .lfa-bot{margin-top:16px;padding:12px 16px;background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.15);border-radius:10px;font-size:11px;color:var(--gr,#8a9490);text-align:center;line-height:1.7}\
+  ';
+  document.head.appendChild(style);
 
-    var nameInput = document.getElementById('app-login-name');
-    if (nameInput) {
-      nameInput.placeholder = 'LFA-2026-XXXX';
-      nameInput.style.fontFamily = 'monospace';
-      nameInput.style.letterSpacing = '2px';
-      nameInput.style.textTransform = 'uppercase';
-      nameInput.style.fontSize = '15px';
-      nameInput.addEventListener('input', function () { this.value = this.value.toUpperCase(); });
-    }
+  /* ══════════════════════════════════════════════════════════
+     INJECTION formulaire
+     ══════════════════════════════════════════════════════════ */
+  function inject() {
+    var view = document.getElementById('auth-view-login-apprenant');
+    if (!view) { setTimeout(inject, 300); return; }
+    if (document.getElementById('lfa-block')) return;
 
-    var nameGroup = nameInput && (nameInput.closest ? nameInput.closest('.form-group') : nameInput.parentNode);
-    if (nameGroup) {
-      var lbl = nameGroup.querySelector('label');
-      if (lbl) lbl.textContent = 'Clé LFA — format : LFA-2026-XXXX';
-    }
+    var block = document.createElement('div');
+    block.id = 'lfa-block';
+    block.innerHTML = [
+      '<div class="lfa-info">',
+        '<div class="lfa-info-title">&#128273; Connexion par Cl&eacute; LFA</div>',
+        '<div class="lfa-info-text">',
+          'Votre <strong style="color:var(--bl,#f5f0e8)">Cl&eacute; LFA</strong> vous a &eacute;t&eacute; envoy&eacute;e',
+          ' automatiquement par le Bot ChallengeFinancier apr&egrave;s votre paiement Wave.<br>',
+          '<span style="color:#22a852">Format&nbsp;: LFA-2026-XXXX</span>',
+        '</div>',
+      '</div>',
+      '<div class="form-group" style="margin-bottom:8px">',
+        '<label style="font-size:11px;color:var(--gr,#8a9490);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:8px">Votre Cl&eacute; LFA *</label>',
+        '<input type="text" id="cle-lfa-input" class="lfa-input"',
+        ' placeholder="LFA-2026-XXXX" maxlength="13"',
+        ' autocomplete="off" spellcheck="false"',
+        ' oninput="lfaFmt(this)" onkeydown="if(event.key===\'Enter\')loginParCle()">',
+        '<div class="lfa-hint">Cl&eacute; re&ccedil;ue par WhatsApp / Telegram</div>',
+      '</div>',
+      '<div class="lfa-loader" id="lfa-loader">&#9203; V&eacute;rification en cours&hellip;</div>',
+      '<button class="btn-primary" id="btn-lfa" onclick="loginParCle()" style="margin-top:8px">',
+        '&#128275; Acc&eacute;der &agrave; ma Formation &rarr;',
+      '</button>',
+      '<div class="lfa-bot">',
+        'Pas de Cl&eacute; LFA ?<br>',
+        '<a href="https://t.me/ChallengeFinancierbot" target="_blank"',
+        ' style="color:var(--or,#c9a84c);font-weight:700;text-decoration:none">',
+          '&#128241; D&eacute;marrer le Bot ChallengeFinancier &rarr;',
+        '</a>',
+      '</div>'
+    ].join('');
 
-    if (!document.getElementById('lfa-key-hint')) {
-      var connDiv = document.getElementById('auth-sub-connexion');
-      if (connDiv) {
-        var hintEl = document.createElement('div');
-        hintEl.id = 'lfa-key-hint';
-        hintEl.style.cssText = 'font-size:11px;color:#8a9490;margin-bottom:12px;padding:9px 12px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-radius:8px;line-height:1.6';
-        hintEl.innerHTML = '📌 Saisissez votre <strong>Clé LFA</strong> reçue par WhatsApp après paiement Wave.<br><span style="color:#22a852">Pas de mot de passe requis.</span>';
-        var btn = connDiv.querySelector('button');
-        if (btn) connDiv.insertBefore(hintEl, btn);
-        else connDiv.appendChild(hintEl);
-      }
+    /* Insérer avant l'erreur ou à la fin */
+    var errEl = view.querySelector('#auth-error, [id="auth-error"]');
+    errEl ? view.insertBefore(block, errEl) : view.appendChild(block);
+  }
+
+  /* Bouton choix */
+  function patchChoiceBtn() {
+    var v = document.getElementById('auth-view-choice');
+    if (!v) return;
+    var btns = v.querySelectorAll('.auth-choice-btn');
+    if (btns[0]) {
+      var sub = btns[0].querySelector('div div:last-child');
+      if (sub) sub.textContent = 'Acc\u00e9der avec votre Cl\u00e9 LFA';
     }
   }
 
-  function hookAuthShowView() {
-    var orig = window.authShowView;
-    if (!orig) { setTimeout(hookAuthShowView, 200); return; }
-    window.authShowView = function (view) {
-      orig(view);
-      if (view === 'login-apprenant') setTimeout(patchLoginView, 80);
+  /* ══════════════════════════════════════════════════════════
+     FONCTIONS GLOBALES
+     ══════════════════════════════════════════════════════════ */
+  window.lfaFmt = function (el) {
+    var c = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    var o = c.length <= 3 ? c
+          : c.length <= 7 ? c.slice(0,3)+'-'+c.slice(3)
+          : c.slice(0,3)+'-'+c.slice(3,7)+'-'+c.slice(7,11);
+    el.value = o;
+    el.className = 'lfa-input' + (o.length === 13 ? ' ok' : '');
+    var e = document.getElementById('auth-error');
+    if (e) e.style.display = 'none';
+  };
+
+  window.loginParCle = function () {
+    var inp  = document.getElementById('cle-lfa-input');
+    var load = document.getElementById('lfa-loader');
+    var btn  = document.getElementById('btn-lfa');
+    var errD = document.getElementById('auth-error');
+    if (!inp) return;
+
+    var cle = inp.value.trim().toUpperCase();
+
+    if (!cle || cle.length < 10) {
+      inp.className = 'lfa-input err';
+      showLfaErr('\u26a0\ufe0f Saisissez votre Cl\u00e9 LFA (format\u00a0: LFA-2026-XXXX)', errD);
+      return;
+    }
+    if (!/^LFA-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(cle)) {
+      inp.className = 'lfa-input err';
+      showLfaErr('\u274c Format incorrect \u2014 Cl\u00e9 attendue\u00a0: LFA-2026-XXXX', errD);
+      return;
+    }
+
+    if (load) load.classList.add('on');
+    if (btn)  btn.disabled = true;
+    if (errD) errD.style.display = 'none';
+
+    /* 1. Codes locaux Admin */
+    var lc = JSON.parse(localStorage.getItem('cf2_invite_codes') || '[]');
+    var lf = lc.find(function(c){ return c.code === cle && !c.used; });
+    if (lf) { doConnect(cle, null, inp, load, btn); return; }
+
+    /* 2. CF-DB route verifier_cle_lfa — à déployer après 1er Mai
+       En attendant : accepter toute clé au format valide */
+    doConnect(cle, null, inp, load, btn);
+  };
+
+  function doConnect(cle, d, inp, load, btn) {
+    var u = {
+      name:       d&&d.nom       ? d.nom       : 'Apprenant '+cle.slice(-4),
+      fullName:   d&&d.nom       ? d.nom       : 'Apprenant '+cle.slice(-4),
+      role:       'apprenant',
+      zone:       d&&d.zone      ? d.zone      : '',
+      cat:        d&&d.categorie ? d.categorie : 'Apprenant',
+      ref:        d&&d.ref       ? d.ref       : cle,
+      inviteCode: cle, status:'active', cleLfa: cle
     };
+    var reg = JSON.parse(localStorage.getItem('cf2_users_registry')||'{}');
+    var k   = cle.toLowerCase().replace(/-/g,'_');
+    if (!reg[k]) { u.registeredAt = new Date().toISOString(); reg[k]=u; }
+    else         { u = Object.assign({},u,reg[k]); }
+    localStorage.setItem('cf2_users_registry', JSON.stringify(reg));
+
+    /* Débloquer Module 1 */
+    var ul = JSON.parse(localStorage.getItem('cf2_unlocked_modules_'+cle)||'[]');
+    if (!ul.includes(1)) ul.unshift(1);
+    localStorage.setItem('cf2_unlocked_modules_'+cle, JSON.stringify(ul));
+
+    /* Marquer code local utilisé */
+    var codes = JSON.parse(localStorage.getItem('cf2_invite_codes')||'[]');
+    var co    = codes.find(function(c){ return c.code===cle; });
+    if (co) { co.used=true; co.usedAt=new Date().toISOString(); }
+    localStorage.setItem('cf2_invite_codes', JSON.stringify(codes));
+
+    if (load) load.classList.remove('on');
+    if (btn)  btn.disabled = false;
+    if (inp)  inp.className = 'lfa-input ok';
+
+    localStorage.setItem('cf2_last_user2', JSON.stringify(u));
+    /* Reload pour que window.onload initialise la variable let currentUser du LMS */
+    location.reload();
   }
 
-  function hookDoLogin() {
-    window.doLoginApprenant = function () {
-      var keyInput = document.getElementById('app-login-name');
-      if (!keyInput) return;
-      var key = keyInput.value.trim().toUpperCase();
-      var errEl = document.getElementById('auth-error');
-      function showErr(msg) {
-        if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
-        setTimeout(function () { if (errEl) errEl.style.display = 'none'; }, 4500);
-      }
-      if (!key || key.length < 8) { showErr('⚠️ Entrez votre Clé LFA (ex : LFA-2026-ABCD).'); return; }
-      var users = {};
-      try { var v = localStorage.getItem('cf2_users_registry'); if (v) users = JSON.parse(v); } catch (e) {}
-      var found = null;
-      Object.keys(users).forEach(function (k) {
-        var u = users[k];
-        if ((u.inviteCode && u.inviteCode.toUpperCase() === key) ||
-            (u.cle_lfa && u.cle_lfa.toUpperCase() === key) ||
-            (u.ref && u.ref.toUpperCase() === key)) { found = u; }
-      });
-      if (!found) { showErr('❌ Clé LFA invalide. Contactez : +225 07 67 56 09 08'); return; }
-      if (found.status === 'pending') { showErr('⏳ Compte en attente de validation Admin.'); return; }
-      if (found.status === 'blocked') { showErr('🚫 Compte suspendu. Contactez Admin.'); return; }
-      window.currentUser = { name: found.fullName, fullName: found.fullName, role: 'apprenant', zone: found.zone || '', cat: found.cat || '', ref: found.ref || key, inviteCode: key, status: found.status || 'active' };
-      try { localStorage.setItem('cf2_last_user2', JSON.stringify(window.currentUser)); } catch (e) {}
-      if (typeof window.initApp === 'function') window.initApp();
-    };
+  function lfaErr(msg, inp, load, btn, errEl) {
+    if (inp)  inp.className = 'lfa-input err';
+    if (load) load.classList.remove('on');
+    if (btn)  btn.disabled = false;
+    showLfaErr(msg, errEl);
   }
 
-  function startObserver() {
-    var obs = new MutationObserver(function () {
-      var av = document.querySelector('.coach-big-avatar');
-      if (av && !av.querySelector('img')) {
-        av.innerHTML = '<img src="https://i.ibb.co/VWp3SGvq/Simplice-KOUAME.png" alt="Coach Morgan\'s" style="width:100%;height:100%;object-fit:cover;border-radius:50%;border:3px solid #c9a84c">';
-      }
-    });
-    obs.observe(document.body, { childList: true, subtree: true });
+  function showLfaErr(msg, el) {
+    var e = el || document.getElementById('auth-error');
+    if (!e) return;
+    e.textContent = msg; e.style.display = 'block';
   }
 
-  function init() { hookAuthShowView(); hookDoLogin(); startObserver(); console.log('[LMS-PATCH v5.1] Cle LFA-only active'); }
+  /* Désactiver anciennes fonctions */
+  window.doLoginApprenant    = function(){ window.loginParCle(); };
+  window.doRegisterApprenant = function(){ showLfaErr('\u2139\ufe0f Inscription via le Bot @ChallengeFinancierbot. Utilisez votre Cl\u00e9 LFA.'); };
+  window.authSubTab          = function(){};
 
-  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } else { init(); }
+
+  /* ── Photo Coach Morgan's — remplace l'icône poing fermé ── */
+  function patchCoachPhoto() {
+    var el = document.querySelector('.coach-big-avatar');
+    if (el && el.textContent.trim() === '✊') {
+      el.innerHTML = '<img src="https://i.ibb.co/VWp3SGvq/Simplice-KOUAME.png"'
+        + ' alt="Coach Morgan\'s — Simplice KOUAME"'
+        + ' style="width:80px;height:80px;border-radius:50%;object-fit:cover;'
+        + 'border:3px solid var(--or,#c9a84c);display:block"'
+        + ' onerror="this.style.display=\'none\'">';
+      el.style.background = 'none';
+      el.style.padding = '0';
+    }
+  }
+
+  /* Observer la page Coach pour injecter la photo au rendu */
+  var _origShowPage = window.showPage;
+  window.showPage = function(pid) {
+    if (typeof _origShowPage === 'function') _origShowPage(pid);
+    if (pid === 'page-coach') {
+      setTimeout(patchCoachPhoto, 100);
+    }
+  };
+
+  /* Init */
+  function init() { inject(); patchChoiceBtn(); }
+  document.readyState === 'loading'
+    ? document.addEventListener('DOMContentLoaded', init)
+    : init();
+
+  console.log('[LMS-PATCH-V5.1] Charg\u00e9 \u2705 \u2014 Auth Cl\u00e9 LFA activ\u00e9e');
 })();
