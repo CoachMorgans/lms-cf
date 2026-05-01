@@ -1613,15 +1613,13 @@ function authError(msg){
 
 // ── Connexion Apprenant ──────────────────────────────────────
 function doLoginApprenant(){
-  const key=(document.getElementById('app-login-name').value||'').trim().toUpperCase();
-  if(!key||key.length<8){authError('⚠️ Entrez votre Clé LFA (ex: LFA-2026-ABCD).');return;}
-  const pwd=key;
+  const lfa=(document.getElementById('app-login-name').value||'').trim().toUpperCase();
+  if(!lfa||lfa.length<8){authError('⚠️ Entrez votre Clé LFA (ex: LFA-2026-ABCD).');return;}
   const users=getUsers();
-  const key=name.toLowerCase().replace(/\s+/g,'_');
+  const key=Object.keys(users).find(k=>users[k]&&((users[k].inviteCode||'').toUpperCase()===lfa))||lfa.toLowerCase().replace(/[^a-z0-9]/g,'_');
   const user=users[key];
-  if(!user){authError('❌ Compte introuvable. Vérifiez votre nom ou inscrivez-vous.');return;}
+  if(!user){authError('❌ Clé LFA invalide. Contactez : +225 07 67 56 09 08');return;}
   if(user.role!=='apprenant'){authError('❌ Ce compte n\'est pas un compte Apprenant.');return;}
-  if(user.pwd!==pwd){authError('❌ Mot de passe incorrect.');return;}
   if(user.status==='pending'){
     authError('\u23F3 Vérification en cours...');
     apiGet('getUsers').then(r=>{
