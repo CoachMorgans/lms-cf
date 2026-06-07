@@ -466,14 +466,18 @@ tr:hover td{background:rgba(255,255,255,.03);}
     <div class="admin-grid" id="admin-stats-grid">
       <!-- Stats injectées -->
     </div>
-    <div style="margin-bottom:16px;">
-      <button class="btn btn-primary btn-sm" onclick="adminLoadUsers()" style="margin-right:8px;">
+    <div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-primary btn-sm" onclick="adminLoadUsers()">
         🔄 Actualiser
       </button>
       <button class="btn btn-ghost btn-sm" onclick="adminExportCSV()">
         📥 Exporter CSV
       </button>
+      <button class="btn btn-ghost btn-sm" onclick="testCfDb()" style="font-size:.75rem;">
+        🔍 Tester CF-DB
+      </button>
     </div>
+    <div id="cfdb-test-result" style="display:none;margin-bottom:12px;"></div>
     <div class="table-wrapper" id="admin-table-wrapper">
       <p style="padding:20px;color:var(--txt3);">Cliquez sur Actualiser pour charger les données.</p>
     </div>
@@ -486,7 +490,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
 /* ═══════════════════════════════════════════════════════════════════════
    CONFIGURATION
 ═══════════════════════════════════════════════════════════════════════ */
-const GS_URL = "https://script.google.com/macros/s/AKfycbwqy5wimZj2XVxlbKMvk4bpPGMmsl5aq2ELr2h0pxrsiIqySiDST8IeWNolO6G6dd5H/exec";
+const GS_URL = "https://script.google.com/macros/s/AKfycbwI46jHy_eQP0sdwRfqoU9jt32KjL4muCLneCIl3z_OI6KT7hdtMf7FZP9Tt5g9EU2d/exec";
 const ADMIN_CREDS = { id: "admin", pw: "VoteConnect2026" };
 const LSK = { session: "cf_lms_session", progress: "cf_lms_progress" };
 
@@ -788,11 +792,35 @@ function loadLocalProgress() {
    APPELS CF-DB
 ═══════════════════════════════════════════════════════════════════════ */
 async function cfGet(route, params = {}) {
-  const url = new URL(GS_URL);
-  url.searchParams.set("route", route);
-  Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, v));
-  const r = await fetch(url.toString());
-  return r.json();
+  return new Promise((resolve, reject) => {
+    const cbName = "cf_cb_" + Date.now() + "_" + Math.random().toString(36).slice(2);
+    const url = new URL(GS_URL);
+    url.searchParams.set("route", route);
+    url.searchParams.set("callback", cbName);
+    Object.entries(params).forEach(([k,v]) => url.searchParams.set(k, String(v)));
+
+    const timer = setTimeout(() => {
+      delete window[cbName];
+      script.remove();
+      reject(new Error("Timeout CF-DB (15s)"));
+    }, 15000);
+
+    window[cbName] = (data) => {
+      clearTimeout(timer);
+      delete window[cbName];
+      script.remove();
+      resolve(data);
+    };
+
+    const script = document.createElement("script");
+    script.src = url.toString();
+    script.onerror = () => {
+      clearTimeout(timer);
+      delete window[cbName];
+      reject(new Error("Erreur chargement script CF-DB"));
+    };
+    document.head.appendChild(script);
+  });
 }
 
 async function cfPost(route, data = {}) {
@@ -1217,15 +1245,8 @@ function renderFormateurDash(users) {
 async function renderAdminDash() {
   showLoader("Chargement CF-DB...");
   try {
-    const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 15000);
-
-    const rStats = await fetch(GS_URL + "?route=stats", { signal: ctrl.signal });
-    const stats = await rStats.json();
-    clearTimeout(tid);
-
-    const rUsers = await fetch(GS_URL + "?route=get_users");
-    const users = await rUsers.json();
+    const stats = await cfGet("stats");
+    const users = await cfGet("get_users");
 
     hideLoader();
 
@@ -1278,6 +1299,27 @@ async function adminLoadUsers() {
 
 function adminExportCSV() {
   toast("Export CSV — fonctionnalité disponible via le GSheet CF-DB directement.", "info", 4000);
+}
+
+async function testCfDb() {
+  const el = $("cfdb-test-result");
+  el.style.display = "block";
+  el.style.cssText = "display:block;padding:12px;background:rgba(26,92,53,.1);border:1px solid rgba(26,92,53,.3);border-radius:8px;font-size:.82rem;color:var(--txt2);margin-bottom:12px;";
+  el.textContent = "⏳ Test en cours...";
+  try {
+    const t0 = Date.now();
+    const data = await cfGet("ping");
+    const ms = Date.now() - t0;
+    el.style.background = "rgba(26,92,53,.2)";
+    el.style.borderColor = "rgba(46,204,113,.4)";
+    el.innerHTML = `<span style="color:#2ecc71;">✅ CF-DB répond en ${ms}ms</span><br>
+      <span style="color:var(--txt3);">Version : ${data.version || "inconnue"} | TS : ${data.ts || ""}</span>`;
+  } catch(e) {
+    el.style.background = "rgba(192,57,43,.15)";
+    el.style.borderColor = "rgba(192,57,43,.4)";
+    el.innerHTML = `<span style="color:#e74c3c;">❌ CF-DB inaccessible : ${e.message}</span><br>
+      <span style="color:var(--txt3);">Vérifiez que le déploiement Apps Script est bien en accès "Tout le monde"</span>`;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
