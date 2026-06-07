@@ -868,6 +868,10 @@ async function authApprenant() {
         nom, zone, code: cle, role: "apprenant", source: "LMS_WEB",
         userId, categorie: "LMS_MODULE_1"
       });
+      // Marquer la clé comme utilisée dans CLES_ACTIVATION
+      try {
+        await cfGet("valider_cle", { cle, nom, type: "LMS_MODULE", cible_id: userId });
+      } catch(e) {}
     }
 
     hideLoader();
@@ -1189,19 +1193,19 @@ async function updateProgress(modId, pct, score, quizDone) {
   if (quizDone) p.quizDone = true;
   saveProgress();
 
-  // Sync CF-DB via GET (POST bloqué par CORS GitHub Pages)
+  // Sync CF-DB progression via GET avec paramètres minimaux
   try {
-    await cfGet("update_progression_lms", {
+    const mod = MODS.find(m=>m.id===modId);
+    await cfGet("sync_progression", {
       user_id: STATE.user.userId,
       module_id: modId,
-      module_titre: MODS.find(m=>m.id===modId)?.titre || "",
-      nom: STATE.user.nom,
-      zone: STATE.user.zone,
+      nom: (STATE.user.nom||"").slice(0,40),
+      zone: (STATE.user.zone||"").slice(0,30),
+      module_titre: (MODS.find(m=>m.id===modId)?.titre||"").slice(0,30),
       progression_pct: p.pct,
       score: score || 0,
       nb_quiz: quizDone ? 1 : 0,
-      certificat: p.pct >= 100 ? "OUI" : "NON",
-      source: "LMS_WEB"
+      certificat: p.pct >= 100 ? "OUI" : "NON"
     });
   } catch(e) { /* silencieux — données sauvegardées localement */ }
 }
