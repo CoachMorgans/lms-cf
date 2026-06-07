@@ -910,8 +910,9 @@ function authAdmin() {
 
   STATE.user = { nom: "Administrateur", role: "admin" };
   saveSession();
-  renderAdminDash();
+  // Ne pas appeler renderAdminDash() au login — l'admin clique "Actualiser"
   showScreen("screen-admin");
+  toast("✅ Connecté — cliquez 'Actualiser' pour charger les données.", "success", 4000);
 }
 
 function logout() {
@@ -1214,12 +1215,18 @@ function renderFormateurDash(users) {
    PANNEAU ADMIN
 ═══════════════════════════════════════════════════════════════════════ */
 async function renderAdminDash() {
-  showLoader("Chargement des données admin...");
+  showLoader("Chargement CF-DB...");
   try {
-    const [stats, users] = await Promise.all([
-      cfGet("stats"),
-      cfGet("get_users")
-    ]);
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 15000);
+
+    const rStats = await fetch(GS_URL + "?route=stats", { signal: ctrl.signal });
+    const stats = await rStats.json();
+    clearTimeout(tid);
+
+    const rUsers = await fetch(GS_URL + "?route=get_users");
+    const users = await rUsers.json();
+
     hideLoader();
 
     $("admin-stats-grid").innerHTML = [
@@ -1251,9 +1258,17 @@ async function renderAdminDash() {
       </table>
     ` : "<p style='padding:20px;color:var(--txt3);'>Aucun utilisateur inscrit.</p>";
 
+    toast("Données chargées avec succès.", "success", 2500);
+
   } catch(e) {
     hideLoader();
-    toast("Erreur lors du chargement des données.", "error");
+    const msg = e.name === "AbortError" ? "Délai dépassé (15s) — CF-DB ne répond pas" : (e.message || "Erreur réseau");
+    $("admin-stats-grid").innerHTML = `<div style="grid-column:1/-1;padding:16px;background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3);border-radius:10px;color:#e74c3c;font-size:.85rem;">
+      Erreur CF-DB : <strong>${msg}</strong><br>
+      <span style="color:var(--txt3);font-size:.8rem;">GS_URL cible : ${GS_URL.slice(0,60)}...</span>
+    </div>`;
+    $("admin-table-wrapper").innerHTML = "";
+    toast("CF-DB : " + msg, "error", 6000);
   }
 }
 
