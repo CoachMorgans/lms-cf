@@ -864,8 +864,8 @@ async function authApprenant() {
     // Clé valide — enregistrer dans COMPTES_LMS si nouveau
     const userId = "USR-" + cle.replace(/-/g,"").slice(-8);
     if (!dejaUtilisee) {
-      await cfPost("inscrire_user", {
-        nom, zone, cle, role: "apprenant", source: "LMS_WEB",
+      await cfGet("inscrire_user", {
+        nom, zone, code: cle, role: "apprenant", source: "LMS_WEB",
         userId, categorie: "LMS_MODULE_1"
       });
     }
@@ -1189,9 +1189,9 @@ async function updateProgress(modId, pct, score, quizDone) {
   if (quizDone) p.quizDone = true;
   saveProgress();
 
-  // Sync CF-DB
+  // Sync CF-DB via GET (POST bloqué par CORS GitHub Pages)
   try {
-    await cfPost("update_progression_lms", {
+    await cfGet("update_progression_lms", {
       user_id: STATE.user.userId,
       module_id: modId,
       module_titre: MODS.find(m=>m.id===modId)?.titre || "",
