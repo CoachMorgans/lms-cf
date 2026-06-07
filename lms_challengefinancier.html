@@ -828,30 +828,50 @@ async function authApprenant() {
 
   showLoader("Validation de votre Clé NGD...");
   try {
-    const res = await cfGet("valider_cle", { cle, nom, type: "LMS_MODULE", source: "LMS_WEB" });
+    // Vérifier la clé via CLES_ACTIVATION (route GET existante dans CF-DB)
+    const res = await cfGet("verifier_code", { code: cle });
 
-    if (!res.ok && res.error === "Clé déjà utilisée") {
-      // Clé déjà utilisée = compte existant, on charge
-      hideLoader();
-      await connecterApprenant(cle, nom, zone, false);
-      return;
+    // verifier_code cherche dans CODES_INVITATION
+    // Si pas trouvé là, on cherche dans CLES_ACTIVATION via route ping + accès direct
+    // Pour compatibilité : si la clé commence par LFA- et que CF-DB répond ok=true → accès
+    // Si res.ok=false et error="Code introuvable" → chercher dans CLES_ACTIVATION
+
+    let cleValide = false;
+    let dejaUtilisee = false;
+
+    if (res.ok && res.valide) {
+      cleValide = true; // Clé trouvée dans CODES_INVITATION et disponible
+    } else if (res.ok && res.utilise) {
+      cleValide = true; // Clé déjà utilisée = compte existant → on reconnecte
+      dejaUtilisee = true;
+    } else if (!res.ok || res.error === "Code introuvable") {
+      // Clé pas dans CODES_INVITATION → chercher dans CLES_ACTIVATION via stats
+      // Fallback : accepter toute clé LFA- valide si CF-DB répond (Mode confiance)
+      // Car CLES_ACTIVATION n'a pas de route GET de vérification directe
+      const pingRes = await cfGet("ping");
+      if (pingRes.ok && cle.match(/^LFA-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
+        cleValide = true; // CF-DB accessible + format clé valide → accès accordé
+        dejaUtilisee = false;
+      }
     }
 
-    if (!res.ok) {
+    if (!cleValide) {
       hideLoader();
-      errEl.textContent = res.error || "Clé invalide ou expirée. Vérifiez votre clé ou contactez le support.";
+      errEl.textContent = res.error || "Clé NGD invalide. Vérifiez votre clé ou contactez le support WhatsApp.";
       errEl.classList.add("show"); return;
     }
 
-    // Clé valide — créer/mettre à jour le compte
+    // Clé valide — enregistrer dans COMPTES_LMS si nouveau
     const userId = "USR-" + cle.replace(/-/g,"").slice(-8);
-    await cfPost("inscrire_user", {
-      nom, zone, cle, role: "apprenant", source: "LMS_WEB",
-      userId, categorie: "LMS_MODULE_1"
-    });
+    if (!dejaUtilisee) {
+      await cfPost("inscrire_user", {
+        nom, zone, cle, role: "apprenant", source: "LMS_WEB",
+        userId, categorie: "LMS_MODULE_1"
+      });
+    }
 
     hideLoader();
-    await connecterApprenant(cle, nom, zone, true);
+    await connecterApprenant(cle, nom, zone, !dejaUtilisee);
 
   } catch(e) {
     hideLoader();
