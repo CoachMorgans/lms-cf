@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ChallengeFinancier™ — LMS v6.0</title>
 <style>
-/* ═══════════════════════════════════════════════════════
-   VARIABLES & RESET
-═══════════════════════════════════════════════════════ */
 :root{
   --vert:#1A5C35;--vert2:#0f3d22;--or:#C8922A;--or2:#e6a832;
   --bg:#0b1a10;--bg2:#112318;--bg3:#162d1e;
@@ -22,23 +19,13 @@ body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans
 a{color:var(--or);text-decoration:none;}
 button{cursor:pointer;border:none;outline:none;font-family:inherit;}
 input,select,textarea{font-family:inherit;}
-/* ═══════════════════════════════════════════════════════
-   TYPOGRAPHY
-═══════════════════════════════════════════════════════ */
 h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;letter-spacing:-.02em;}
 h2{font-size:clamp(1.2rem,3vw,1.8rem);font-weight:700;}
 h3{font-size:1.1rem;font-weight:600;}
-/* ═══════════════════════════════════════════════════════
-   LAYOUT
-═══════════════════════════════════════════════════════ */
 #app{display:flex;flex-direction:column;min-height:100vh;}
 .screen{display:none;flex:1;animation:fadeIn .3s ease;}
 .screen.active{display:flex;flex-direction:column;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-/* ═══════════════════════════════════════════════════════
-   NAV
-═══════════════════════════════════════════════════════ */
 nav{background:var(--bg2);border-bottom:1px solid rgba(200,146,42,.2);
     padding:12px 20px;display:flex;align-items:center;justify-content:space-between;
     position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);}
@@ -51,10 +38,6 @@ nav{background:var(--bg2);border-bottom:1px solid rgba(200,146,42,.2);
 .btn-logout{background:rgba(192,57,43,.15);color:#e74c3c;border:1px solid rgba(192,57,43,.3);
             padding:6px 14px;border-radius:6px;font-size:.8rem;transition:var(--trans);}
 .btn-logout:hover{background:rgba(192,57,43,.3);}
-
-/* ═══════════════════════════════════════════════════════
-   BOUTONS
-═══════════════════════════════════════════════════════ */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
      padding:12px 24px;border-radius:var(--radius);font-weight:600;font-size:.95rem;
      transition:var(--trans);letter-spacing:.02em;}
@@ -69,10 +52,6 @@ nav{background:var(--bg2);border-bottom:1px solid rgba(200,146,42,.2);
 .btn-sm{padding:8px 16px;font-size:.85rem;border-radius:8px;}
 .btn-full{width:100%;}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important;}
-
-/* ═══════════════════════════════════════════════════════
-   FORMULAIRES
-═══════════════════════════════════════════════════════ */
 .form-group{margin-bottom:18px;}
 label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-weight:500;}
 .form-input{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
@@ -85,28 +64,16 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
 .error-msg.show{display:block;}
 .success-msg{color:#2ecc71;font-size:.82rem;margin-top:6px;display:none;}
 .success-msg.show{display:block;}
-
-/* ═══════════════════════════════════════════════════════
-   CARTES
-═══════════════════════════════════════════════════════ */
 .card{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);
       padding:24px;transition:var(--trans);}
 .card:hover{border-color:rgba(200,146,42,.2);}
 .card-highlight{background:linear-gradient(135deg,rgba(26,92,53,.3),rgba(15,61,34,.3));
                 border-color:rgba(26,92,53,.5);}
-
-/* ═══════════════════════════════════════════════════════
-   BADGES & TAGS
-═══════════════════════════════════════════════════════ */
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600;}
 .badge-vert{background:rgba(26,92,53,.3);color:#2ecc71;border:1px solid rgba(26,92,53,.5);}
 .badge-or{background:rgba(200,146,42,.2);color:var(--or2);border:1px solid rgba(200,146,42,.4);}
 .badge-rouge{background:rgba(192,57,43,.2);color:#e74c3c;border:1px solid rgba(192,57,43,.4);}
 .badge-grey{background:rgba(255,255,255,.08);color:var(--txt3);border:1px solid rgba(255,255,255,.12);}
-
-/* ═══════════════════════════════════════════════════════
-   LOADER
-═══════════════════════════════════════════════════════ */
 .loader-overlay{position:fixed;inset:0;background:rgba(11,26,16,.85);display:flex;
                 flex-direction:column;align-items:center;justify-content:center;z-index:999;
                 backdrop-filter:blur(4px);}
@@ -115,10 +82,6 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
                 margin-bottom:16px;}
 .loader-msg{color:var(--txt2);font-size:.9rem;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ═══════════════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════════════ */
 #toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;
                  flex-direction:column;gap:8px;}
 .toast{padding:12px 20px;border-radius:10px;font-size:.9rem;font-weight:500;
@@ -127,17 +90,9 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
 .toast-error{background:#7b1818;color:#fff;border:1px solid rgba(231,76,60,.3);}
 .toast-info{background:#1a3a5c;color:#fff;border:1px solid rgba(52,152,219,.3);}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
-
-/* ═══════════════════════════════════════════════════════
-   PROGRESS BAR
-═══════════════════════════════════════════════════════ */
 .progress-bar{height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--vert),var(--or));
                border-radius:4px;transition:width .5s ease;}
-
-/* ═══════════════════════════════════════════════════════
-   ÉCRAN AUTH
-═══════════════════════════════════════════════════════ */
 #screen-auth{align-items:center;justify-content:center;
              background:radial-gradient(ellipse at 30% 20%,rgba(26,92,53,.2) 0%,transparent 60%),
                         radial-gradient(ellipse at 70% 80%,rgba(200,146,42,.1) 0%,transparent 60%),
@@ -159,10 +114,6 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
 .cle-hint{background:rgba(26,92,53,.15);border:1px solid rgba(26,92,53,.3);border-radius:8px;
           padding:12px;margin-bottom:16px;font-size:.82rem;color:var(--txt2);}
 .cle-hint strong{color:var(--or);}
-
-/* ═══════════════════════════════════════════════════════
-   DASHBOARD APPRENANT
-═══════════════════════════════════════════════════════ */
 .dash-header{background:linear-gradient(135deg,var(--bg2),var(--bg3));
              border-bottom:1px solid rgba(200,146,42,.15);padding:24px 20px;}
 .dash-welcome{font-size:1.3rem;font-weight:700;margin-bottom:4px;}
@@ -192,10 +143,6 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
 .module-progress{flex:1;margin-right:12px;}
 .module-progress-text{font-size:.75rem;color:var(--txt3);margin-bottom:4px;}
 .lock-icon{font-size:1.2rem;color:var(--txt3);}
-
-/* ═══════════════════════════════════════════════════════
-   CONTENU MODULE
-═══════════════════════════════════════════════════════ */
 #screen-module{flex-direction:column;}
 .module-nav{background:var(--bg2);border-bottom:1px solid rgba(255,255,255,.08);
             padding:12px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
@@ -212,10 +159,6 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
             border-left:3px solid var(--or);border-radius:0 var(--radius) var(--radius) 0;
             padding:16px 20px;font-style:italic;color:var(--txt2);}
 .coach-word .coach-sig{margin-top:8px;font-size:.82rem;color:var(--or);font-style:normal;font-weight:600;}
-
-/* ═══════════════════════════════════════════════════════
-   QUIZ
-═══════════════════════════════════════════════════════ */
 .quiz-container{background:var(--bg2);border:1px solid rgba(26,92,53,.3);
                 border-radius:var(--radius);padding:24px;margin-top:20px;}
 .quiz-title{font-size:1.1rem;font-weight:700;margin-bottom:20px;color:var(--or);}
@@ -236,10 +179,6 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
 .quiz-result{text-align:center;padding:24px;background:rgba(26,92,53,.2);
              border-radius:var(--radius);margin-top:16px;}
 .quiz-score{font-size:2rem;font-weight:900;color:var(--or);}
-
-/* ═══════════════════════════════════════════════════════
-   ESPACE FORMATEUR
-═══════════════════════════════════════════════════════ */
 .form-dash{padding:20px;}
 .form-section{margin-bottom:28px;}
 .form-section-title{font-size:1.1rem;font-weight:700;color:var(--or);margin-bottom:16px;
@@ -249,10 +188,6 @@ label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--txt2);font-we
 .apprenant-info{flex:1;}
 .apprenant-name{font-weight:600;font-size:.9rem;}
 .apprenant-meta{font-size:.75rem;color:var(--txt3);}
-
-/* ═══════════════════════════════════════════════════════
-   PANNEAU ADMIN
-═══════════════════════════════════════════════════════ */
 .admin-dash{padding:20px;}
 .admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;}
 .admin-stat{background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:10px;
@@ -266,10 +201,6 @@ th{padding:12px 16px;text-align:left;color:var(--txt2);font-weight:600;font-size
    text-transform:uppercase;letter-spacing:.05em;}
 td{padding:11px 16px;border-top:1px solid rgba(255,255,255,.05);color:var(--txt2);}
 tr:hover td{background:rgba(255,255,255,.03);}
-
-/* ═══════════════════════════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════════════════════════ */
 @media(max-width:600px){
   .modules-grid{grid-template-columns:1fr;}
   .dash-stats{grid-template-columns:repeat(2,1fr);}
@@ -301,8 +232,6 @@ tr:hover td{background:rgba(255,255,255,.03);}
         <button class="auth-tab" onclick="switchTab('formateur')">👨‍🏫 Formateur</button>
         <button class="auth-tab" onclick="switchTab('admin')">🔐 Admin</button>
       </div>
-
-      <!-- Tab Apprenant -->
       <div id="tab-apprenant" class="auth-form active">
         <div class="cle-hint">
           💡 Votre <strong>Clé NGD</strong> vous a été remise après votre paiement via le bot Telegram
@@ -331,21 +260,16 @@ tr:hover td{background:rgba(255,255,255,.03);}
           <a href="https://t.me/ChallengeFinancierbot" target="_blank">Acheter l'accès via Telegram →</a>
         </p>
       </div>
-
-      <!-- Tab Formateur -->
       <div id="tab-formateur" class="auth-form">
         <div class="form-group">
           <label>Code Formateur</label>
-          <input class="form-input" id="inp-form-code" type="text" placeholder="FORM-XXXX"
-                 autocomplete="off">
+          <input class="form-input" id="inp-form-code" type="text" placeholder="FORM-XXXX" autocomplete="off">
           <div class="error-msg" id="err-form"></div>
         </div>
         <button class="btn btn-primary btn-full" onclick="authFormateur()">
           📊 Accéder à mon espace
         </button>
       </div>
-
-      <!-- Tab Admin -->
       <div id="tab-admin" class="auth-form">
         <div class="form-group">
           <label>Identifiant Admin</label>
@@ -381,42 +305,23 @@ tr:hover td{background:rgba(255,255,255,.03);}
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
     </div>
   </nav>
-
   <div class="dash-header">
     <div class="dash-welcome" id="dash-welcome">Bonjour !</div>
     <div class="dash-sub">Votre parcours vers la liberté financière</div>
   </div>
-
   <div class="dash-stats">
-    <div class="stat-card">
-      <div class="stat-val" id="stat-modules">0/8</div>
-      <div class="stat-lbl">Modules débloqués</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" id="stat-progress">0%</div>
-      <div class="stat-lbl">Progression globale</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" id="stat-quiz">0</div>
-      <div class="stat-lbl">Quiz complétés</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" id="stat-score">—</div>
-      <div class="stat-lbl">Score moyen</div>
-    </div>
+    <div class="stat-card"><div class="stat-val" id="stat-modules">0/8</div><div class="stat-lbl">Modules débloqués</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-progress">0%</div><div class="stat-lbl">Progression globale</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-quiz">0</div><div class="stat-lbl">Quiz complétés</div></div>
+    <div class="stat-card"><div class="stat-val" id="stat-score">—</div><div class="stat-lbl">Score moyen</div></div>
   </div>
-
-  <div class="modules-grid" id="modules-grid">
-    <!-- Les modules sont générés dynamiquement -->
-  </div>
+  <div class="modules-grid" id="modules-grid"></div>
 </div>
 
 <!-- ═══════════════════════════ CONTENU MODULE ═══════════════════════════ -->
 <div id="screen-module" class="screen">
   <nav>
-    <div class="nav-logo">
-      <span class="logo-text">ChallengeFinancier™</span>
-    </div>
+    <div class="nav-logo"><span class="logo-text">ChallengeFinancier™</span></div>
     <div class="nav-right">
       <button class="btn btn-ghost btn-sm" onclick="goBack()">← Retour</button>
       <button class="btn-logout" onclick="logout()">Déconnexion</button>
@@ -427,9 +332,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
     <div class="module-nav-title" id="mod-nav-title">Module</div>
     <div class="badge badge-or" id="mod-status-badge">En cours</div>
   </div>
-  <div class="module-content" id="module-content-area">
-    <!-- Contenu injecté dynamiquement -->
-  </div>
+  <div class="module-content" id="module-content-area"></div>
 </div>
 
 <!-- ═══════════════════════════ ESPACE FORMATEUR ═══════════════════════════ -->
@@ -439,15 +342,11 @@ tr:hover td{background:rgba(255,255,255,.03);}
       <span class="logo-text">ChallengeFinancier™</span>
       <span class="logo-sub" style="display:inline;margin-left:6px;color:var(--txt3);">— Formateur</span>
     </div>
-    <div class="nav-right">
-      <button class="btn-logout" onclick="logout()">Déconnexion</button>
-    </div>
+    <div class="nav-right"><button class="btn-logout" onclick="logout()">Déconnexion</button></div>
   </nav>
   <div class="form-dash">
     <div class="form-section-title">👨‍🏫 Tableau de bord Formateur</div>
-    <div id="form-apprenants-list">
-      <p style="color:var(--txt3);font-size:.9rem;">Chargement des apprenants...</p>
-    </div>
+    <div id="form-apprenants-list"><p style="color:var(--txt3);font-size:.9rem;">Chargement des apprenants...</p></div>
   </div>
 </div>
 
@@ -458,24 +357,14 @@ tr:hover td{background:rgba(255,255,255,.03);}
       <span class="logo-text">ChallengeFinancier™</span>
       <span class="logo-sub" style="display:inline;margin-left:6px;color:var(--txt3);">— Admin</span>
     </div>
-    <div class="nav-right">
-      <button class="btn-logout" onclick="logout()">Déconnexion</button>
-    </div>
+    <div class="nav-right"><button class="btn-logout" onclick="logout()">Déconnexion</button></div>
   </nav>
   <div class="admin-dash">
-    <div class="admin-grid" id="admin-stats-grid">
-      <!-- Stats injectées -->
-    </div>
+    <div class="admin-grid" id="admin-stats-grid"></div>
     <div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-      <button class="btn btn-primary btn-sm" onclick="adminLoadUsers()">
-        🔄 Actualiser
-      </button>
-      <button class="btn btn-ghost btn-sm" onclick="adminExportCSV()">
-        📥 Exporter CSV
-      </button>
-      <button class="btn btn-ghost btn-sm" onclick="testCfDb()" style="font-size:.75rem;">
-        🔍 Tester CF-DB
-      </button>
+      <button class="btn btn-primary btn-sm" onclick="adminLoadUsers()">🔄 Actualiser</button>
+      <button class="btn btn-ghost btn-sm" onclick="adminExportCSV()">📥 Exporter CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="testCfDb()" style="font-size:.75rem;">🔍 Tester CF-DB</button>
     </div>
     <div id="cfdb-test-result" style="display:none;margin-bottom:12px;"></div>
     <div class="table-wrapper" id="admin-table-wrapper">
@@ -493,7 +382,6 @@ tr:hover td{background:rgba(255,255,255,.03);}
 const GS_URL = "https://script.google.com/macros/s/AKfycbwI46jHy_eQP0sdwRfqoU9jt32KjL4muCLneCIl3z_OI6KT7hdtMf7FZP9Tt5g9EU2d/exec";
 const ADMIN_CREDS = { id: "admin", pw: "VoteConnect2026" };
 
-// ── PDF des Cours par module (URLs Google Drive — remplacer par vos liens) ──
 const PDF_URLS = {
   1: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE1_COURS/view", prix: 2000, titre: "Introduction — PDF Cours" },
   2: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE2_COURS/view", prix: 2000, titre: "L'Inflation — PDF Cours" },
@@ -510,15 +398,14 @@ const LSK = { session: "cf_lms_session", progress: "cf_lms_progress" };
 /* ═══════════════════════════════════════════════════════════════════════
    ÉTAT GLOBAL
 ═══════════════════════════════════════════════════════════════════════ */
-// LocalStorage helper anti-doublon
 const S = {
   get: (k) => { try { return JSON.parse(localStorage.getItem("cf6_"+k)); } catch(e) { return null; } },
   set: (k,v) => { try { localStorage.setItem("cf6_"+k, JSON.stringify(v)); } catch(e) {} }
 };
 
 let STATE = {
-  user: null,        // { nom, zone, cle, role, userId }
-  progress: {},      // { moduleId: { pct, score, quizDone, certified } }
+  user: null,
+  progress: {},
   currentModule: null
 };
 
@@ -535,18 +422,9 @@ const MODS = [
       "Connaître votre point de départ pour construire votre liberté financière"
     ],
     lecons: [
-      {
-        titre: "Qu'est-ce que la finance africaine ?",
-        corps: "La finance africaine est un système complexe, hérité de l'histoire coloniale et reconfiguré par les institutions de Bretton Woods. Pendant des décennies, nos économies ont été pensées pour exporter des matières premières et importer des produits transformés, créant un déficit structurel de valeur. Comprendre ce mécanisme est la première étape de votre émancipation financière."
-      },
-      {
-        titre: "Le Franc CFA : outil ou contrainte ?",
-        corps: "Le FCFA, ancré à l'euro depuis 1999, garantit une stabilité monétaire mais impose une dépendance à la politique monétaire de la Banque Centrale Européenne. Les 50% de réserves obligatoires au Trésor français ont évolué, mais le débat reste vif. La vraie question n'est pas \"FCFA ou pas\" — c'est : comment créer de la valeur locale quelle que soit la monnaie ?"
-      },
-      {
-        titre: "Les 4 piliers de la richesse individuelle",
-        corps: "La richesse ne vient pas du hasard. Elle repose sur 4 piliers : (1) L'épargne active — mettre de côté avant de dépenser. (2) L'investissement intelligent — faire travailler l'argent épargné. (3) La protection du patrimoine — assurance, diversification, juridique. (4) La transmission — penser aux générations suivantes. Le ChallengeFinancier™ vous guide à travers chacun de ces piliers."
-      }
+      { titre: "Qu'est-ce que la finance africaine ?", corps: "La finance africaine est un système complexe, hérité de l'histoire coloniale et reconfiguré par les institutions de Bretton Woods. Pendant des décennies, nos économies ont été pensées pour exporter des matières premières et importer des produits transformés, créant un déficit structurel de valeur. Comprendre ce mécanisme est la première étape de votre émancipation financière." },
+      { titre: "Le Franc CFA : outil ou contrainte ?", corps: "Le FCFA, ancré à l'euro depuis 1999, garantit une stabilité monétaire mais impose une dépendance à la politique monétaire de la Banque Centrale Européenne. Les 50% de réserves obligatoires au Trésor français ont évolué, mais le débat reste vif. La vraie question n'est pas \"FCFA ou pas\" — c'est : comment créer de la valeur locale quelle que soit la monnaie ?" },
+      { titre: "Les 4 piliers de la richesse individuelle", corps: "La richesse ne vient pas du hasard. Elle repose sur 4 piliers : (1) L'épargne active — mettre de côté avant de dépenser. (2) L'investissement intelligent — faire travailler l'argent épargné. (3) La protection du patrimoine — assurance, diversification, juridique. (4) La transmission — penser aux générations suivantes. Le ChallengeFinancier™ vous guide à travers chacun de ces piliers." }
     ],
     coach: "La richesse n'est pas un privilège de naissance, c'est une compétence qui s'apprend. Aujourd'hui, vous commencez votre formation. Dans 12 mois, si vous appliquez chaque module avec discipline, votre rapport à l'argent sera transformé. Commençons.",
     quiz: [
@@ -564,18 +442,9 @@ const MODS = [
       "Identifier les stratégies de protection contre l'inflation"
     ],
     lecons: [
-      {
-        titre: "L'inflation : définition et mécanismes",
-        corps: "L'inflation est la hausse généralisée et durable des prix. En Côte d'Ivoire, l'inflation officielle tourne autour de 3-6% par an. Cela signifie que 1 million FCFA aujourd'hui ne vaudra que 940 000 FCFA en pouvoir d'achat dans 12 mois si votre argent dort sur un compte sans rendement. C'est l'ennemi silencieux de toute épargne improductive."
-      },
-      {
-        titre: "Inflation importée vs inflation locale",
-        corps: "L'Afrique de l'Ouest souffre principalement d'une inflation importée : hausse des prix du pétrole, des intrants agricoles, des denrées alimentaires (blé, riz) fixées en dollars. La dépréciation relative du FCFA face aux autres devises émergentes amplifie ce phénomène. La solution ? Produire localement ce que l'on consomme — c'est le cœur du projet NGD."
-      },
-      {
-        titre: "Se protéger de l'inflation",
-        corps: "Trois boucliers contre l'inflation : (1) L'immobilier — la pierre garde sa valeur réelle. (2) Les actifs productifs — une boutique, un élevage, une formation qui génère des revenus. (3) Les cryptomonnaies et métaux précieux — pour une fraction de votre portefeuille, comme protection extrême. L'objectif : que votre rendement soit toujours supérieur au taux d'inflation."
-      }
+      { titre: "L'inflation : définition et mécanismes", corps: "L'inflation est la hausse généralisée et durable des prix. En Côte d'Ivoire, l'inflation officielle tourne autour de 3-6% par an. Cela signifie que 1 million FCFA aujourd'hui ne vaudra que 940 000 FCFA en pouvoir d'achat dans 12 mois si votre argent dort sur un compte sans rendement. C'est l'ennemi silencieux de toute épargne improductive." },
+      { titre: "Inflation importée vs inflation locale", corps: "L'Afrique de l'Ouest souffre principalement d'une inflation importée : hausse des prix du pétrole, des intrants agricoles, des denrées alimentaires (blé, riz) fixées en dollars. La dépréciation relative du FCFA face aux autres devises émergentes amplifie ce phénomène. La solution ? Produire localement ce que l'on consomme — c'est le cœur du projet NGD." },
+      { titre: "Se protéger de l'inflation", corps: "Trois boucliers contre l'inflation : (1) L'immobilier — la pierre garde sa valeur réelle. (2) Les actifs productifs — une boutique, un élevage, une formation qui génère des revenus. (3) Les cryptomonnaies et métaux précieux — pour une fraction de votre portefeuille, comme protection extrême. L'objectif : que votre rendement soit toujours supérieur au taux d'inflation." }
     ],
     coach: "Chaque matin que vous ne faites pas fructifier votre argent, l'inflation vous vole une fraction de votre travail. Ce n'est pas une métaphore — c'est de la mathématique. Apprenez cette mathématique, et vous cesserez d'en être la victime.",
     quiz: [
@@ -593,18 +462,9 @@ const MODS = [
       "Utiliser la dette comme outil de création de richesse"
     ],
     lecons: [
-      {
-        titre: "Bonne dette vs mauvaise dette",
-        corps: "Toutes les dettes ne se valent pas. La mauvaise dette finance la consommation : crédit téléphone, achat de vêtements à crédit, prêt pour un mariage ostentatoire. La bonne dette finance des actifs productifs : prêt pour acheter un bien immobilier qui se loue, crédit pour acquérir du matériel qui génère des revenus supérieurs aux intérêts. La règle d'or : empruntez uniquement si le rendement de l'investissement dépasse le coût du crédit."
-      },
-      {
-        titre: "Le coût réel du crédit : le TAEG",
-        corps: "Le Taux Annuel Effectif Global (TAEG) est la mesure honnête d'un crédit. Il inclut les intérêts nominaux MAIS aussi les frais de dossier, l'assurance, les commissions. Un crédit affiché à 12% peut en réalité coûter 18-22% avec tous les frais. Avant tout emprunt, exigez le TAEG. En Côte d'Ivoire, les microfinances pratiquent souvent des TAEG de 30-60% — un véritable piège."
-      },
-      {
-        titre: "La dette souveraine : ce que l'État emprunte en votre nom",
-        corps: "La dette publique ivoirienne dépasse 65% du PIB. Chaque citoyen ivoirien naît avec une dette invisible sur ses épaules. Ces emprunts servent-ils à construire des infrastructures productives ? Ou à payer les fonctionnaires et rembourser les intérêts des dettes précédentes ? Comprendre la dette souveraine, c'est comprendre pourquoi vos impôts ne suffisent jamais."
-      }
+      { titre: "Bonne dette vs mauvaise dette", corps: "Toutes les dettes ne se valent pas. La mauvaise dette finance la consommation : crédit téléphone, achat de vêtements à crédit, prêt pour un mariage ostentatoire. La bonne dette finance des actifs productifs : prêt pour acheter un bien immobilier qui se loue, crédit pour acquérir du matériel qui génère des revenus supérieurs aux intérêts. La règle d'or : empruntez uniquement si le rendement de l'investissement dépasse le coût du crédit." },
+      { titre: "Le coût réel du crédit : le TAEG", corps: "Le Taux Annuel Effectif Global (TAEG) est la mesure honnête d'un crédit. Il inclut les intérêts nominaux MAIS aussi les frais de dossier, l'assurance, les commissions. Un crédit affiché à 12% peut en réalité coûter 18-22% avec tous les frais. Avant tout emprunt, exigez le TAEG. En Côte d'Ivoire, les microfinances pratiquent souvent des TAEG de 30-60% — un véritable piège." },
+      { titre: "La dette souveraine : ce que l'État emprunte en votre nom", corps: "La dette publique ivoirienne dépasse 65% du PIB. Chaque citoyen ivoirien naît avec une dette invisible sur ses épaules. Ces emprunts servent-ils à construire des infrastructures productives ? Ou à payer les fonctionnaires et rembourser les intérêts des dettes précédentes ? Comprendre la dette souveraine, c'est comprendre pourquoi vos impôts ne suffisent jamais." }
     ],
     coach: "Je n'ai jamais rencontré de richesse construite sans une utilisation intelligente du crédit. Mais j'ai rencontré des milliers de familles détruites par une mauvaise dette. La différence ? Le projet derrière l'emprunt. Empruntez pour investir, jamais pour consommer ce que vous n'avez pas gagné.",
     quiz: [
@@ -622,18 +482,9 @@ const MODS = [
       "Identifier les régimes fiscaux favorables aux entrepreneurs"
     ],
     lecons: [
-      {
-        titre: "Le système fiscal ivoirien en bref",
-        corps: "La Côte d'Ivoire prélève 3 types d'impôts principaux : (1) L'Impôt sur le Revenu des Personnes Physiques (IRPP) — de 2% à 36% selon les tranches. (2) L'Impôt BIC pour les entreprises — 25% sur les bénéfices. (3) La TVA — 18% sur la plupart des biens et services. S'y ajoutent la patente, la contribution foncière, les taxes douanières. L'architecture est complexe, mais compréhensible."
-      },
-      {
-        titre: "Régimes fiscaux pour entrepreneurs",
-        corps: "Bonne nouvelle : l'État ivoirien a créé des régimes simplifiés. Le régime de l'auto-entrepreneur (pour les revenus inférieurs à 50M FCFA/an) offre une fiscalité forfaitaire simplifiée. Les Zones Économiques Spéciales (ZES) offrent des exonérations temporaires. Le Centre de Promotion des Investissements en Côte d'Ivoire (CEPICI) permet d'obtenir des avantages fiscaux pour les projets d'investissement."
-      },
-      {
-        titre: "Optimisation fiscale légale",
-        corps: "Optimiser sa fiscalité légalement, c'est utiliser tous les mécanismes prévus par la loi pour réduire sa charge fiscale. Exemples concrets : déduire les charges professionnelles réelles, amortir les équipements sur leur durée de vie, créer une structure juridique adaptée (SARL vs SA vs SASU), opter pour le bon régime fiscal selon votre chiffre d'affaires. Un bon expert-comptable rembourse sa prestation en économies fiscales."
-      }
+      { titre: "Le système fiscal ivoirien en bref", corps: "La Côte d'Ivoire prélève 3 types d'impôts principaux : (1) L'Impôt sur le Revenu des Personnes Physiques (IRPP) — de 2% à 36% selon les tranches. (2) L'Impôt BIC pour les entreprises — 25% sur les bénéfices. (3) La TVA — 18% sur la plupart des biens et services. S'y ajoutent la patente, la contribution foncière, les taxes douanières. L'architecture est complexe, mais compréhensible." },
+      { titre: "Régimes fiscaux pour entrepreneurs", corps: "Bonne nouvelle : l'État ivoirien a créé des régimes simplifiés. Le régime de l'auto-entrepreneur (pour les revenus inférieurs à 50M FCFA/an) offre une fiscalité forfaitaire simplifiée. Les Zones Économiques Spéciales (ZES) offrent des exonérations temporaires. Le Centre de Promotion des Investissements en Côte d'Ivoire (CEPICI) permet d'obtenir des avantages fiscaux pour les projets d'investissement." },
+      { titre: "Optimisation fiscale légale", corps: "Optimiser sa fiscalité légalement, c'est utiliser tous les mécanismes prévus par la loi pour réduire sa charge fiscale. Exemples concrets : déduire les charges professionnelles réelles, amortir les équipements sur leur durée de vie, créer une structure juridique adaptée (SARL vs SA vs SASU), opter pour le bon régime fiscal selon votre chiffre d'affaires. Un bon expert-comptable rembourse sa prestation en économies fiscales." }
     ],
     coach: "L'impôt n'est pas votre ennemi — c'est une contribution au bien commun. Mais payer plus que ce que la loi exige, c'est de la générosité non consentie envers l'État. Apprenez vos droits, utilisez tous les régimes auxquels vous avez accès, et investissez la différence.",
     quiz: [
@@ -651,18 +502,9 @@ const MODS = [
       "Explorer les alternatives au crédit bancaire classique"
     ],
     lecons: [
-      {
-        titre: "Les sources de financement en Côte d'Ivoire",
-        corps: "Le panorama du financement ivoirien est plus riche qu'on ne le pense : (1) Banques commerciales — SGBCI, BICICI, Ecobank, BNI, SIB... Conditions strictes mais taux réglementés. (2) Microfinances — UNACOOPEC, ADVANS, Cofina... Plus accessibles mais TAEG élevés. (3) Fonds publics — FDFP (Formation), FGPME (PME), FIDEN (femmes entrepreneures). (4) Investisseurs privés — Business Angels, fonds de capital-risque africains. (5) Financement participatif — plateformes comme Afrikwity."
-      },
-      {
-        titre: "Construire un dossier bancable",
-        corps: "Les banques refusent 9 dossiers sur 10. Pourquoi ? Parce que ces dossiers ne répondent pas à leurs critères. Un dossier bancable contient : un business plan chiffré sur 3 ans, des états financiers des 2 dernières années, un apport personnel d'au moins 20-30% du projet, des garanties (bien immobilier, nantissement de stock, caution solidaire), et une présentation professionnelle. VoteConnect peut vous accompagner dans cette préparation."
-      },
-      {
-        titre: "Les alternatives innovantes au crédit classique",
-        corps: "Si les banques vous ferment leurs portes, d'autres voies existent : (1) Le crédit fournisseur — négocier des délais de paiement avec vos fournisseurs. (2) La tontine structurée — outil traditionnel africain formalisé. (3) Le leasing — louer du matériel avec option d'achat, sans capital de départ. (4) Les subventions et prix — concours d'entrepreneuriat africains (Anzisha Prize, Orange Social Venture Prize). (5) La pré-vente — vendre avant de produire pour financer la production."
-      }
+      { titre: "Les sources de financement en Côte d'Ivoire", corps: "Le panorama du financement ivoirien est plus riche qu'on ne le pense : (1) Banques commerciales — SGBCI, BICICI, Ecobank, BNI, SIB... Conditions strictes mais taux réglementés. (2) Microfinances — UNACOOPEC, ADVANS, Cofina... Plus accessibles mais TAEG élevés. (3) Fonds publics — FDFP (Formation), FGPME (PME), FIDEN (femmes entrepreneures). (4) Investisseurs privés — Business Angels, fonds de capital-risque africains. (5) Financement participatif — plateformes comme Afrikwity." },
+      { titre: "Construire un dossier bancable", corps: "Les banques refusent 9 dossiers sur 10. Pourquoi ? Parce que ces dossiers ne répondent pas à leurs critères. Un dossier bancable contient : un business plan chiffré sur 3 ans, des états financiers des 2 dernières années, un apport personnel d'au moins 20-30% du projet, des garanties (bien immobilier, nantissement de stock, caution solidaire), et une présentation professionnelle. VoteConnect peut vous accompagner dans cette préparation." },
+      { titre: "Les alternatives innovantes au crédit classique", corps: "Si les banques vous ferment leurs portes, d'autres voies existent : (1) Le crédit fournisseur — négocier des délais de paiement avec vos fournisseurs. (2) La tontine structurée — outil traditionnel africain formalisé. (3) Le leasing — louer du matériel avec option d'achat, sans capital de départ. (4) Les subventions et prix — concours d'entrepreneuriat africains (Anzisha Prize, Orange Social Venture Prize). (5) La pré-vente — vendre avant de produire pour financer la production." }
     ],
     coach: "Le capital ne manque pas en Côte d'Ivoire. Ce qui manque, c'est la capacité à convaincre les détenteurs de capital. Un dossier solide, une idée claire, une équipe crédible — et les portes s'ouvrent. J'en suis la preuve vivante. Vous l'êtes aussi dès aujourd'hui.",
     quiz: [
@@ -680,18 +522,9 @@ const MODS = [
       "Identifier les sources d'information fiables vs les pièges à éviter"
     ],
     lecons: [
-      {
-        titre: "L'asymétrie d'information : le secret des riches",
-        corps: "Warren Buffett a dit : 'Achetez une action d'une entreprise dont vous connaissez et comprenez parfaitement l'activité.' Le principe s'applique partout : dans l'immobilier, l'investisseur qui connaît les projets d'infrastructure avant leur annonce publique réalise des plus-values extraordinaires. Dans le business, celui qui connaît la réglementation avant ses concurrents prend de l'avance. L'information, c'est du capital."
-      },
-      {
-        titre: "Construire sa veille économique personnelle",
-        corps: "Une veille efficace en 30 minutes par jour : (1) Matins — Jeune Afrique, Ecofin Agency, APA News pour l'actualité économique africaine. (2) Hebdomadaire — Les rapports de la BCEAO et de la Banque Mondiale sur l'Afrique de l'Ouest. (3) Mensuel — Les bulletins sectoriels de la CCIAC (Chambre de Commerce). (4) Annuel — Le rapport Doing Business et les perspectives économiques de la BAD. Ces sources sont gratuites et transforment votre compréhension du marché."
-      },
-      {
-        titre: "Éviter les pièges de la désinformation financière",
-        corps: "L'ère numérique a démultiplié les arnaques financières : schémas de Ponzi déguisés en 'investissements' sur WhatsApp, cryptomonnaies 'garanties à 500% par mois', 'formations' à 500 000 FCFA qui n'apportent rien de concret. Les signes d'alerte : rendements irréalistes (>20% par mois), pression à recruter d'autres membres, absence de registre légal, promesses de 'revenus passifs sans travail'. ChallengeFinancier™ est enregistré au BURIDA et à la RCCM."
-      }
+      { titre: "L'asymétrie d'information : le secret des riches", corps: "Warren Buffett a dit : 'Achetez une action d'une entreprise dont vous connaissez et comprenez parfaitement l'activité.' Le principe s'applique partout : dans l'immobilier, l'investisseur qui connaît les projets d'infrastructure avant leur annonce publique réalise des plus-values extraordinaires. Dans le business, celui qui connaît la réglementation avant ses concurrents prend de l'avance. L'information, c'est du capital." },
+      { titre: "Construire sa veille économique personnelle", corps: "Une veille efficace en 30 minutes par jour : (1) Matins — Jeune Afrique, Ecofin Agency, APA News pour l'actualité économique africaine. (2) Hebdomadaire — Les rapports de la BCEAO et de la Banque Mondiale sur l'Afrique de l'Ouest. (3) Mensuel — Les bulletins sectoriels de la CCIAC (Chambre de Commerce). (4) Annuel — Le rapport Doing Business et les perspectives économiques de la BAD. Ces sources sont gratuites et transforment votre compréhension du marché." },
+      { titre: "Éviter les pièges de la désinformation financière", corps: "L'ère numérique a démultiplié les arnaques financières : schémas de Ponzi déguisés en 'investissements' sur WhatsApp, cryptomonnaies 'garanties à 500% par mois', 'formations' à 500 000 FCFA qui n'apportent rien de concret. Les signes d'alerte : rendements irréalistes (>20% par mois), pression à recruter d'autres membres, absence de registre légal, promesses de 'revenus passifs sans travail'. ChallengeFinancier™ est enregistré au BURIDA et à la RCCM." }
     ],
     coach: "Pendant des siècles, l'information a été réservée aux élites. Internet a changé les règles du jeu. Aujourd'hui, les mêmes données que les banquiers, les investisseurs et les politiciens utilisent sont accessibles à tous. La différence, c'est que la plupart des gens ne savent pas où chercher, et encore moins comment interpréter. C'est ce que vous apprenez ici.",
     quiz: [
@@ -709,18 +542,9 @@ const MODS = [
       "Construire un plan d'autonomisation personnel et collectif"
     ],
     lecons: [
-      {
-        titre: "La matrice des dépendances économiques africaines",
-        corps: "L'Afrique subsaharienne exporte 80% de ses matières premières brutes. La valeur ajoutée — transformation, packaging, commercialisation — se fait ailleurs. Cacao ivoirien transformé en chocolat suisse. Pétrole gabonais raffiné en Europe. Coton malien tissé en Chine. Chaque étape de transformation représente de la richesse qui quitte le continent. La solution ? La transformation locale. C'est le sens du projet TCL (Transformation, Commerce, Livraison) de VoteConnect."
-      },
-      {
-        titre: "Les dépendances personnelles : votre propre matrice",
-        corps: "Avant de changer les systèmes, changeons nos comportements. Les 5 dépendances financières les plus communes : (1) Dépendance au salaire unique — vous êtes à une lettre de licenciement de la ruine. (2) Dépendance à la famille étendue — les 'demandes sociales' qui vident votre compte. (3) Dépendance aux marques étrangères — payer 150 000 FCFA pour des baskets fabriquées à 8 000 FCFA. (4) Dépendance au crédit consommation. (5) Dépendance à l'État — attendre les politiques publiques plutôt que créer."
-      },
-      {
-        titre: "La Grande Réappropriation : vers l'autonomie",
-        corps: "La Grande Réappropriation, c'est le projet collectif NGD : réapproprier notre économie locale, nos circuits de distribution, notre information financière, nos systèmes d'épargne et d'investissement. Concrètement : acheter local, investir local, former local, gouverner local. Chaque achat dans l'écosystème TCL est un vote économique pour la souveraineté financière de votre communauté."
-      }
+      { titre: "La matrice des dépendances économiques africaines", corps: "L'Afrique subsaharienne exporte 80% de ses matières premières brutes. La valeur ajoutée — transformation, packaging, commercialisation — se fait ailleurs. Cacao ivoirien transformé en chocolat suisse. Pétrole gabonais raffiné en Europe. Coton malien tissé en Chine. Chaque étape de transformation représente de la richesse qui quitte le continent. La solution ? La transformation locale. C'est le sens du projet TCL (Transformation, Commerce, Livraison) de VoteConnect." },
+      { titre: "Les dépendances personnelles : votre propre matrice", corps: "Avant de changer les systèmes, changeons nos comportements. Les 5 dépendances financières les plus communes : (1) Dépendance au salaire unique — vous êtes à une lettre de licenciement de la ruine. (2) Dépendance à la famille étendue — les 'demandes sociales' qui vident votre compte. (3) Dépendance aux marques étrangères — payer 150 000 FCFA pour des baskets fabriquées à 8 000 FCFA. (4) Dépendance au crédit consommation. (5) Dépendance à l'État — attendre les politiques publiques plutôt que créer." },
+      { titre: "La Grande Réappropriation : vers l'autonomie", corps: "La Grande Réappropriation, c'est le projet collectif NGD : réapproprier notre économie locale, nos circuits de distribution, notre information financière, nos systèmes d'épargne et d'investissement. Concrètement : acheter local, investir local, former local, gouverner local. Chaque achat dans l'écosystème TCL est un vote économique pour la souveraineté financière de votre communauté." }
     ],
     coach: "Nous ne sommes pas pauvres parce que nous sommes africains. Nous ne sommes pas riches malgré que nous soyons africains. Nous sommes en train de réapprendre à nous organiser pour créer la richesse que nos ressources et notre intelligence méritent. Vous faites partie de cette vague. Ne la ratez pas.",
     quiz: [
@@ -738,18 +562,9 @@ const MODS = [
       "Rejoindre le réseau NGD des financiers autonomes"
     ],
     lecons: [
-      {
-        titre: "Récapitulatif des 7 modules — Ce que vous avez appris",
-        corps: "En 7 modules, vous avez traversé : le contexte financier africain (M1), les mécanismes de destruction de valeur — inflation et dette (M2, M3), le cadre légal et fiscal (M4), les solutions de financement (M5), l'importance stratégique de l'information (M6), et les systèmes de dépendance à démonter (M7). Ce n'est pas une formation théorique — c'est une carte du territoire de votre liberté financière."
-      },
-      {
-        titre: "Votre plan d'action 12 mois",
-        corps: "Construisez votre plan en 4 phases : Phase 1 (Mois 1-3) — Audit financier personnel : listez vos revenus, dépenses, dettes, actifs. Calculez votre taux d'épargne réel. Phase 2 (Mois 4-6) — Élimination des mauvaises dettes et constitution d'un fonds d'urgence (3 mois de dépenses). Phase 3 (Mois 7-9) — Premier investissement productif, aussi petit soit-il. Phase 4 (Mois 10-12) — Diversification et planification patrimoniale. Commencez demain matin."
-      },
-      {
-        titre: "Rejoindre le réseau NGD des Financiers Autonomes",
-        corps: "Vous n'êtes pas seul dans cette démarche. Les Nouvelles Générations pour le Développement rassemblent des milliers de citoyens ivoiriens et africains engagés dans cette Grande Réappropriation. En rejoignant NGD comme Animateur, vous accédez : aux 7 régions pilotes du projet, au réseau TCL de commerce local, au système MiSikah d'épargne communautaire, et à la Coalition 509 pour la gouvernance locale. L'union fait la force — et dans notre cas, elle fait aussi la richesse."
-      }
+      { titre: "Récapitulatif des 7 modules — Ce que vous avez appris", corps: "En 7 modules, vous avez traversé : le contexte financier africain (M1), les mécanismes de destruction de valeur — inflation et dette (M2, M3), le cadre légal et fiscal (M4), les solutions de financement (M5), l'importance stratégique de l'information (M6), et les systèmes de dépendance à démonter (M7). Ce n'est pas une formation théorique — c'est une carte du territoire de votre liberté financière." },
+      { titre: "Votre plan d'action 12 mois", corps: "Construisez votre plan en 4 phases : Phase 1 (Mois 1-3) — Audit financier personnel : listez vos revenus, dépenses, dettes, actifs. Calculez votre taux d'épargne réel. Phase 2 (Mois 4-6) — Élimination des mauvaises dettes et constitution d'un fonds d'urgence (3 mois de dépenses). Phase 3 (Mois 7-9) — Premier investissement productif, aussi petit soit-il. Phase 4 (Mois 10-12) — Diversification et planification patrimoniale. Commencez demain matin." },
+      { titre: "Rejoindre le réseau NGD des Financiers Autonomes", corps: "Vous n'êtes pas seul dans cette démarche. Les Nouvelles Générations pour le Développement rassemblent des milliers de citoyens ivoiriens et africains engagés dans cette Grande Réappropriation. En rejoignant NGD comme Animateur, vous accédez : aux 7 régions pilotes du projet, au réseau TCL de commerce local, au système MiSikah d'épargne communautaire, et à la Coalition 509 pour la gouvernance locale. L'union fait la force — et dans notre cas, elle fait aussi la richesse." }
     ],
     coach: "Vous avez terminé ChallengeFinancier™. Ce diplôme n'a de valeur que si vous l'appliquez. Dans 12 mois, revenez ici et dites-moi : 'Coach Morgan's, j'ai appliqué le plan. Voilà ce qui a changé.' C'est pour ce moment que j'ai construit cette formation. Je vous attends de l'autre côté.",
     quiz: [
@@ -847,29 +662,20 @@ async function authApprenant() {
 
   showLoader("Validation de votre Clé NGD...");
   try {
-    // Vérifier la clé via CLES_ACTIVATION (route GET existante dans CF-DB)
     const res = await cfGet("verifier_code", { code: cle });
-
-    // verifier_code cherche dans CODES_INVITATION
-    // Si pas trouvé là, on cherche dans CLES_ACTIVATION via route ping + accès direct
-    // Pour compatibilité : si la clé commence par LFA- et que CF-DB répond ok=true → accès
-    // Si res.ok=false et error="Code introuvable" → chercher dans CLES_ACTIVATION
 
     let cleValide = false;
     let dejaUtilisee = false;
 
     if (res.ok && res.valide) {
-      cleValide = true; // Clé trouvée dans CODES_INVITATION et disponible
+      cleValide = true;
     } else if (res.ok && res.utilise) {
-      cleValide = true; // Clé déjà utilisée = compte existant → on reconnecte
+      cleValide = true;
       dejaUtilisee = true;
     } else if (!res.ok || res.error === "Code introuvable") {
-      // Clé pas dans CODES_INVITATION → chercher dans CLES_ACTIVATION via stats
-      // Fallback : accepter toute clé LFA- valide si CF-DB répond (Mode confiance)
-      // Car CLES_ACTIVATION n'a pas de route GET de vérification directe
       const pingRes = await cfGet("ping");
       if (pingRes.ok && cle.match(/^LFA-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
-        cleValide = true; // CF-DB accessible + format clé valide → accès accordé
+        cleValide = true;
         dejaUtilisee = false;
       }
     }
@@ -880,10 +686,8 @@ async function authApprenant() {
       errEl.classList.add("show"); return;
     }
 
-    // Clé valide — enregistrer dans COMPTES_LMS si nouveau
     const userId = "USR-" + cle.replace(/-/g,"").slice(-8);
     if (!dejaUtilisee) {
-      // Vérifier si déjà inscrit dans COMPTES_LMS (anti-doublon)
       try {
         const alreadyIn = S.get("inscrit_" + userId);
         if (!alreadyIn) {
@@ -893,7 +697,6 @@ async function authApprenant() {
           });
           S.set("inscrit_" + userId, true);
         }
-        // Marquer la clé comme utilisée dans CLES_ACTIVATION
         await cfGet("valider_cle", { cle, nom, type: "LMS_MODULE", cible_id: userId });
       } catch(e) {}
     }
@@ -903,7 +706,6 @@ async function authApprenant() {
 
   } catch(e) {
     hideLoader();
-    // En cas d'erreur réseau, permettre l'accès local
     toast("⚠️ Connexion CF-DB impossible. Mode hors ligne activé.", "info", 5000);
     await connecterApprenant(cle, nom, zone, null);
   }
@@ -915,7 +717,6 @@ async function connecterApprenant(cle, nom, zone, isNew) {
   saveSession();
   loadLocalProgress();
 
-  // Charger les modules débloqués depuis PAIEMENTS_LMS
   showLoader("Chargement de vos modules...");
   try {
     const res = await cfGet("get_modules_apprenant", { cle, telephone: "" });
@@ -923,12 +724,10 @@ async function connecterApprenant(cle, nom, zone, isNew) {
       STATE.user.modulesDebloques = res.modules;
       S.set("modules_" + userId, res.modules);
     } else {
-      // Fallback : au moins module 1
       STATE.user.modulesDebloques = [1];
       S.set("modules_" + userId, [1]);
     }
   } catch(e) {
-    // Mode hors ligne : charger depuis localStorage
     STATE.user.modulesDebloques = S.get("modules_" + userId) || [1];
   }
   hideLoader();
@@ -950,7 +749,6 @@ async function authFormateur() {
   try {
     const res = await cfGet("get_users");
     hideLoader();
-    // Vérification simplifiée — en production, ajouter route dédiée
     STATE.user = { nom: "Formateur", role: "formateur", code };
     saveSession();
     renderFormateurDash(res.users || []);
@@ -975,7 +773,6 @@ function authAdmin() {
 
   STATE.user = { nom: "Administrateur", role: "admin" };
   saveSession();
-  // Ne pas appeler renderAdminDash() au login — l'admin clique "Actualiser"
   showScreen("screen-admin");
   toast("✅ Connecté — cliquez 'Actualiser' pour charger les données.", "success", 4000);
 }
@@ -987,6 +784,30 @@ function logout() {
   $("inp-nom").value = "";
   $("inp-zone").value = "";
   showScreen("screen-auth");
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   HELPER : MODULES DÉBLOQUÉS
+   ─────────────────────────────────────────────────────────────────────
+   BUG ORIGINAL : getUnlocked() était appelée dans submitQuiz() mais
+   n'était jamais définie → ReferenceError → crash silencieux → les
+   boutons PDF et "Module suivant" n'apparaissaient jamais.
+   CORRECTION : on définit getUnlocked() ici, une seule source de vérité.
+   Priorité : STATE.user.modulesDebloques (données CF-DB) puis fallback
+   localStorage.
+═══════════════════════════════════════════════════════════════════════ */
+function getUnlocked() {
+  // Source 1 : données chargées depuis CF-DB (PAIEMENTS_LMS)
+  if (STATE.user && Array.isArray(STATE.user.modulesDebloques)) {
+    return STATE.user.modulesDebloques.map(Number);
+  }
+  // Source 2 : fallback localStorage
+  if (STATE.user) {
+    const cached = S.get("modules_" + STATE.user.userId);
+    if (Array.isArray(cached)) return cached.map(Number);
+  }
+  // Source 3 : module 1 toujours accessible
+  return [1];
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1037,7 +858,7 @@ function renderDashboard() {
   const u = STATE.user;
   $("nav-user-name").textContent = u.nom;
   $("dash-welcome").textContent = `Bonjour, ${u.nom} 👋`;
-  // Ajouter bouton actualiser si pas déjà présent
+
   if (!document.getElementById("btn-refresh-modules")) {
     const btn = document.createElement("button");
     btn.id = "btn-refresh-modules";
@@ -1068,7 +889,6 @@ function renderDashboard() {
     if (subEl) subEl.appendChild(btn);
   }
 
-  // Stats
   const prog = STATE.progress;
   const modDebloqués = Object.keys(prog).length;
   const totalPct = modDebloqués ? Math.round(Object.values(prog).reduce((a,p) => a + (p.pct||0), 0) / 8) : 0;
@@ -1081,11 +901,8 @@ function renderDashboard() {
   $("stat-quiz").textContent = totalQuiz;
   $("stat-score").textContent = avgScore != null ? `${avgScore}%` : "—";
 
-  // Grille modules
   const grid = $("modules-grid");
   grid.innerHTML = "";
-
-  const m1Unlocked = !!prog[1]; // Module 1 débloqué si clé validée (l'accès lui-même)
 
   MODS.forEach(mod => {
     const isUnlocked = mod.id === 1 ? true : !!prog[mod.id];
@@ -1145,7 +962,6 @@ function openModule(id) {
   const area = $("module-content-area");
   area.innerHTML = "";
 
-  // Objectifs
   const secObj = document.createElement("div");
   secObj.className = "section-block";
   secObj.innerHTML = `<h3>🎯 Objectifs du module</h3>
@@ -1156,7 +972,6 @@ function openModule(id) {
     </ul>`;
   area.appendChild(secObj);
 
-  // Leçons
   const secLec = document.createElement("div");
   secLec.className = "section-block";
   secLec.innerHTML = `<h3>📚 Leçons</h3>
@@ -1168,7 +983,6 @@ function openModule(id) {
     `).join("")}`;
   area.appendChild(secLec);
 
-  // Parole du Coach
   const secCoach = document.createElement("div");
   secCoach.className = "section-block";
   secCoach.innerHTML = `<h3>💬 Parole du Coach</h3>
@@ -1178,7 +992,6 @@ function openModule(id) {
     </div>`;
   area.appendChild(secCoach);
 
-  // Quiz
   const quizContainer = document.createElement("div");
   quizContainer.className = "quiz-container";
   quizContainer.id = "quiz-block";
@@ -1194,7 +1007,6 @@ function openModule(id) {
 
   renderQuiz(mod);
 
-  // Marquer comme "en cours" si pas encore commencé
   if (!STATE.progress[id]) {
     updateProgress(id, 30, null, false);
   }
@@ -1223,7 +1035,6 @@ function renderQuiz(mod) {
 }
 
 function selectOption(qi, oi, modId) {
-  // Désélectionner les autres options de cette question
   const mod = MODS.find(m => m.id === modId);
   mod.quiz[qi].opts.forEach((_, i) => {
     const btn = $(`opt-${qi}-${i}`);
@@ -1233,21 +1044,41 @@ function selectOption(qi, oi, modId) {
   userAnswers[qi] = oi;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   SUBMIT QUIZ — VERSION CORRIGÉE
+   ─────────────────────────────────────────────────────────────────────
+   CORRECTIONS APPORTÉES :
+   1. getUnlocked() désormais définie (voir section ci-dessus)
+   2. Guard "toutes les questions répondues" — bloque la soumission
+      partielle et affiche un message clair plutôt que de crasher
+   3. nextUnlocked calculé proprement depuis getUnlocked()
+   4. Bouton PDF utilise maintenant telechargerPDF() pour cohérence
+      (modale Wave intégrée) ET lien Telegram en fallback
+   5. resultBlock.style.display = "block" appelé en premier pour
+      garantir la visibilité avant d'injecter le HTML
+═══════════════════════════════════════════════════════════════════════ */
 function submitQuiz(modId) {
   const mod = MODS.find(m => m.id === modId);
   const total = mod.quiz.length;
+
+  // Guard : toutes les questions doivent être répondues
+  const nonRepondues = mod.quiz.map((_, qi) => userAnswers[qi] === undefined ? qi : -1).filter(qi => qi >= 0);
+  if (nonRepondues.length > 0) {
+    nonRepondues.forEach(qi => {
+      const fb = $(`fb-${qi}`);
+      fb.textContent = "⚠️ Répondez à cette question avant de valider.";
+      fb.className = "quiz-feedback ko show";
+    });
+    toast("❗ Répondez à toutes les questions avant de valider.", "error", 3000);
+    return;
+  }
+
   let correct = 0;
 
   mod.quiz.forEach((q, qi) => {
     const chosen = userAnswers[qi];
     const fb = $(`fb-${qi}`);
 
-    if (chosen === undefined) {
-      fb.textContent = "⚠️ Question non répondue";
-      fb.className = "quiz-feedback ko show"; return;
-    }
-
-    // Afficher correct/wrong
     $(`opt-${qi}-${chosen}`).classList.remove("selected");
     if (chosen === q.rep) {
       $(`opt-${qi}-${chosen}`).classList.add("correct");
@@ -1257,27 +1088,27 @@ function submitQuiz(modId) {
     } else {
       $(`opt-${qi}-${chosen}`).classList.add("wrong");
       $(`opt-${qi}-${q.rep}`).classList.add("correct");
-      fb.textContent = `❌ Mauvaise réponse. La bonne réponse était : "${q.opts[q.rep]}"`;
+      fb.textContent = `❌ Mauvaise réponse. Bonne réponse : "${q.opts[q.rep]}"`;
       fb.className = "quiz-feedback ko show";
     }
 
-    // Désactiver les options
+    // Désactiver toutes les options
     mod.quiz[qi].opts.forEach((_, i) => {
       const btn = $(`opt-${qi}-${i}`);
-      btn.onclick = null;
-      btn.style.cursor = "default";
+      if (btn) { btn.onclick = null; btn.style.cursor = "default"; }
     });
   });
 
   const score = Math.round((correct / total) * 100);
   const passed = score >= 60;
-
-  const resultBlock = $("quiz-result-block");
-  resultBlock.style.display = "block";
-
   const nextModId = modId + 1;
+
+  // --- getUnlocked() est maintenant définie — plus de ReferenceError ---
   const unlocked = getUnlocked();
   const nextUnlocked = unlocked.includes(nextModId);
+
+  const resultBlock = $("quiz-result-block");
+  resultBlock.style.display = "block"; // Toujours visible avant injection HTML
 
   resultBlock.innerHTML = `
     <div class="quiz-result">
@@ -1290,27 +1121,34 @@ function submitQuiz(modId) {
       </div>
 
       ${passed ? `
-      <!-- Boutons après quiz réussi -->
       <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:340px;margin-left:auto;margin-right:auto;">
 
-        <!-- PDF du cours -->
-        <a href="https://t.me/ChallengeFinancierbot?start=pdf_module_${modId}"
-           target="_blank"
+        <!-- Bouton PDF Cours -->
+        <button onclick="telechargerPDF(${modId})"
            style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
                   background:linear-gradient(135deg,#1a3a6c,#2471a3);color:#fff;border-radius:10px;
-                  font-size:.9rem;font-weight:700;text-decoration:none;">
+                  font-size:.9rem;font-weight:700;border:none;cursor:pointer;width:100%;">
           📄 Télécharger le PDF Module ${modId} — 2 000 FCFA
-        </a>
+        </button>
 
         <!-- Module suivant -->
         ${modId < 8 ? `
-        <a href="${nextUnlocked ? 'javascript:void(0)' : 'https://t.me/ChallengeFinancierbot?start=lms_module_' + nextModId}"
-           ${nextUnlocked ? 'onclick="goBack()"' : 'target="_blank"'}
-           style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
-                  background:${nextUnlocked ? 'linear-gradient(135deg,#1A5C35,#22a852)' : 'linear-gradient(135deg,#5a3e00,#c8922a)'};
-                  color:#fff;border-radius:10px;font-size:.9rem;font-weight:700;text-decoration:none;">
-          ${nextUnlocked ? '▶ Continuer — Module ' + nextModId : '🔓 Débloquer Module ' + nextModId + ' — 17 500 FCFA'}
-        </a>` : `
+          ${nextUnlocked
+            ? `<button onclick="openModule(${nextModId})"
+                 style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
+                        background:linear-gradient(135deg,#1A5C35,#22a852);color:#fff;border-radius:10px;
+                        font-size:.9rem;font-weight:700;border:none;cursor:pointer;width:100%;">
+                 ▶ Continuer — Module ${nextModId}
+               </button>`
+            : `<a href="https://t.me/ChallengeFinancierbot?start=lms_module_${nextModId}"
+                 target="_blank"
+                 style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
+                        background:linear-gradient(135deg,#5a3e00,#c8922a);color:#fff;border-radius:10px;
+                        font-size:.9rem;font-weight:700;text-decoration:none;">
+                 🔓 Débloquer Module ${nextModId} — ${MODS[nextModId-1]?.prix.toLocaleString() || '17 500'} FCFA
+               </a>`
+          }
+        ` : `
         <div style="padding:13px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.3);
                     border-radius:10px;text-align:center;color:#e8c96a;font-size:.9rem;font-weight:700;">
           🏆 Formation complète ! Félicitations !
@@ -1321,13 +1159,18 @@ function submitQuiz(modId) {
         </button>
       </div>
       ` : `
-      <div style="margin-top:16px;">
-        <button class="btn btn-ghost btn-sm" onclick="openModule(${modId})">🔄 Recommencer</button>
+      <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;align-items:center;">
+        <button class="btn btn-or btn-sm" onclick="openModule(${modId})">🔄 Recommencer le quiz</button>
+        <button class="btn btn-ghost btn-sm" onclick="goBack()">← Retour au tableau de bord</button>
       </div>`}
     </div>
   `;
 
   $("btn-submit-quiz").style.display = "none";
+
+  // Scroll vers le résultat
+  resultBlock.scrollIntoView({ behavior: "smooth", block: "start" });
+
   updateProgress(modId, passed ? 100 : 70, score, passed);
 }
 
@@ -1339,9 +1182,7 @@ async function updateProgress(modId, pct, score, quizDone) {
   if (quizDone) p.quizDone = true;
   saveProgress();
 
-  // Sync CF-DB progression via GET avec paramètres minimaux
   try {
-    const mod = MODS.find(m=>m.id===modId);
     await cfGet("sync_progression", {
       user_id: STATE.user.userId,
       module_id: modId,
@@ -1353,7 +1194,7 @@ async function updateProgress(modId, pct, score, quizDone) {
       nb_quiz: quizDone ? 1 : 0,
       certificat: p.pct >= 100 ? "OUI" : "NON"
     });
-  } catch(e) { /* silencieux — données sauvegardées localement */ }
+  } catch(e) {}
 }
 
 function goBack() {
@@ -1394,7 +1235,6 @@ async function renderAdminDash() {
   try {
     const stats = await cfGet("stats");
     const users = await cfGet("get_users");
-
     hideLoader();
 
     $("admin-stats-grid").innerHTML = [
@@ -1440,9 +1280,7 @@ async function renderAdminDash() {
   }
 }
 
-async function adminLoadUsers() {
-  await renderAdminDash();
-}
+async function adminLoadUsers() { await renderAdminDash(); }
 
 function adminExportCSV() {
   toast("Export CSV — fonctionnalité disponible via le GSheet CF-DB directement.", "info", 4000);
