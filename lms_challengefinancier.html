@@ -813,17 +813,35 @@ function getUnlocked() {
 /* ═══════════════════════════════════════════════════════════════════════
    TÉLÉCHARGEMENT PDF DES COURS
 ═══════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════
+   TÉLÉCHARGEMENT PDF DES COURS — v6.1
+   ─────────────────────────────────────────────────────────────────────
+   Flux Option B :
+   1. Apprenant clique "PDF Module N"
+   2. Modale s'ouvre : bouton Wave + bouton "✅ J'ai payé"
+   3. Apprenant paie via Wave → revient sur le LMS
+   4. Il clique "✅ J'ai payé" → ouvre Telegram deeplink pdf_confirme_N
+   5. Bot reçoit → enregistre CF-DB → envoie lien PDF Drive dans Telegram
+═══════════════════════════════════════════════════════════════════════ */
 function telechargerPDF(modId) {
   const pdfInfo = PDF_URLS[modId];
   if (!pdfInfo) { toast("PDF non disponible pour ce module.", "info"); return; }
+
+  // Si déjà payé et lien Drive dispo → ouvrir directement
   const pdfPaye = S.get("pdf_paye_" + STATE.user.userId + "_" + modId);
-  if (pdfPaye) {
+  if (pdfPaye && pdfInfo.cours && !pdfInfo.cours.includes("VOTRE_ID")) {
     window.open(pdfInfo.cours, "_blank");
     toast("✅ PDF Module " + modId + " ouvert !", "success", 2500);
     return;
   }
+
   const old = document.getElementById("pdf-modal");
   if (old) old.remove();
+
+  // Deeplink bot : pdf_confirme_N_USERID
+  const userId = STATE.user?.userId || "unknown";
+  const deeplink = "https://t.me/ChallengeFinancierbot?start=pdf_confirme_" + modId + "_" + userId;
+
   const el = document.createElement("div");
   el.id = "pdf-modal";
   el.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;";
@@ -837,15 +855,27 @@ function telechargerPDF(modId) {
       <div style="background:rgba(200,146,42,.07);border:1px solid rgba(200,146,42,.2);border-radius:10px;padding:14px;margin-bottom:16px;">
         <div style="font-size:.75rem;color:#6a9e78;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Prix</div>
         <div style="font-size:1.8rem;font-weight:900;color:#e8c96a;">${pdfInfo.prix.toLocaleString()} FCFA</div>
-        <div style="font-size:.75rem;color:#6a9e78;margin-top:4px;">Paiement Wave · Accès immédiat</div>
+        <div style="font-size:.75rem;color:#6a9e78;margin-top:4px;">Paiement Wave · Confirmation via Telegram</div>
       </div>
-      <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
-         style="display:block;padding:12px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;font-size:.9rem;font-weight:700;text-decoration:none;margin-bottom:10px;">
+
+      <!-- Étape 1 : Payer via Wave -->
+      <div style="font-size:.78rem;color:#6a9e78;margin-bottom:8px;font-weight:600;">ÉTAPE 1 — Payez via Wave</div>
+      <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/?amount=${pdfInfo.prix}" target="_blank"
+         style="display:block;padding:12px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;font-size:.9rem;font-weight:700;text-decoration:none;margin-bottom:16px;">
         💳 Payer ${pdfInfo.prix.toLocaleString()} FCFA via Wave
       </a>
+
+      <!-- Étape 2 : Confirmer le paiement -->
+      <div style="font-size:.78rem;color:#6a9e78;margin-bottom:8px;font-weight:600;">ÉTAPE 2 — Confirmez votre paiement</div>
+      <a href="${deeplink}" target="_blank"
+         onclick="S.set('pdf_paye_${userId}_${modId}', true)"
+         style="display:block;padding:12px;background:linear-gradient(135deg,#1A5C35,#22a852);color:#fff;border-radius:10px;font-size:.9rem;font-weight:700;text-decoration:none;margin-bottom:12px;">
+        ✅ J'ai payé — Recevoir mon PDF sur Telegram
+      </a>
+
       <div style="font-size:.72rem;color:#6a9e78;line-height:1.6;">
-        Après paiement → WhatsApp <strong style="color:#2ecc71;">+225 07 67 81 43 33</strong><br>
-        Lien de téléchargement envoyé sous 24h
+        Le lien PDF vous sera envoyé directement dans<br>
+        <strong style="color:#2ecc71;">@ChallengeFinancierbot</strong> après confirmation
       </div>
     </div>`;
   document.body.appendChild(el);
