@@ -492,6 +492,19 @@ tr:hover td{background:rgba(255,255,255,.03);}
 ═══════════════════════════════════════════════════════════════════════ */
 const GS_URL = "https://script.google.com/macros/s/AKfycbwI46jHy_eQP0sdwRfqoU9jt32KjL4muCLneCIl3z_OI6KT7hdtMf7FZP9Tt5g9EU2d/exec";
 const ADMIN_CREDS = { id: "admin", pw: "VoteConnect2026" };
+
+// ── PDF des Cours par module (URLs Google Drive — remplacer par vos liens) ──
+const PDF_URLS = {
+  1: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE1_COURS/view", prix: 2000, titre: "Introduction — PDF Cours" },
+  2: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE2_COURS/view", prix: 2000, titre: "L'Inflation — PDF Cours" },
+  3: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE3_COURS/view", prix: 2000, titre: "La Dette — PDF Cours" },
+  4: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE4_COURS/view", prix: 2000, titre: "La Fiscalité — PDF Cours" },
+  5: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE5_COURS/view", prix: 2000, titre: "L'Accès au Capital — PDF Cours" },
+  6: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE6_COURS/view", prix: 2000, titre: "L'Information — PDF Cours" },
+  7: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE7_COURS/view", prix: 2000, titre: "Système de Dépendance — PDF Cours" },
+  8: { cours: "https://drive.google.com/file/d/VOTRE_ID_MODULE8_COURS/view", prix: 2000, titre: "Conclusion — PDF Cours" }
+};
+
 const LSK = { session: "cf_lms_session", progress: "cf_lms_progress" };
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -902,14 +915,26 @@ async function connecterApprenant(cle, nom, zone, isNew) {
   saveSession();
   loadLocalProgress();
 
-  // Sync progression depuis CF-DB
+  // Charger les modules débloqués depuis PAIEMENTS_LMS
+  showLoader("Chargement de vos modules...");
   try {
-    const prog = await cfGet("stats", {});
-    // On charge la progression locale enrichie côté serveur si possible
-  } catch(e) {}
+    const res = await cfGet("get_modules_apprenant", { cle, telephone: "" });
+    if (res.ok && res.modules && res.modules.length > 0) {
+      STATE.user.modulesDebloques = res.modules;
+      S.set("modules_" + userId, res.modules);
+    } else {
+      // Fallback : au moins module 1
+      STATE.user.modulesDebloques = [1];
+      S.set("modules_" + userId, [1]);
+    }
+  } catch(e) {
+    // Mode hors ligne : charger depuis localStorage
+    STATE.user.modulesDebloques = S.get("modules_" + userId) || [1];
+  }
+  hideLoader();
 
   if (isNew) toast(`🎉 Bienvenue ${nom} ! Votre accès est activé.`, "success", 4000);
-  else if (isNew === false) toast(`Bon retour ${nom} !`, "success", 3000);
+  else if (isNew === false) toast(`Bon retour ${nom} ! ${STATE.user.modulesDebloques.length} module(s) débloqué(s).`, "success", 3000);
 
   renderDashboard();
   showScreen("screen-dash");
@@ -962,6 +987,47 @@ function logout() {
   $("inp-nom").value = "";
   $("inp-zone").value = "";
   showScreen("screen-auth");
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   TÉLÉCHARGEMENT PDF DES COURS
+═══════════════════════════════════════════════════════════════════════ */
+function telechargerPDF(modId) {
+  const pdfInfo = PDF_URLS[modId];
+  if (!pdfInfo) { toast("PDF non disponible pour ce module.", "info"); return; }
+  const pdfPaye = S.get("pdf_paye_" + STATE.user.userId + "_" + modId);
+  if (pdfPaye) {
+    window.open(pdfInfo.cours, "_blank");
+    toast("✅ PDF Module " + modId + " ouvert !", "success", 2500);
+    return;
+  }
+  const old = document.getElementById("pdf-modal");
+  if (old) old.remove();
+  const el = document.createElement("div");
+  el.id = "pdf-modal";
+  el.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;";
+  el.innerHTML = `
+    <div style="background:#0d1e10;border:1px solid rgba(200,146,42,.4);border-radius:20px;max-width:380px;width:100%;padding:28px;text-align:center;position:relative;">
+      <button onclick="document.getElementById('pdf-modal').remove()"
+        style="position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;">✕</button>
+      <div style="font-size:2rem;margin-bottom:10px;">📄</div>
+      <div style="font-family:serif;font-size:1.1rem;color:#e8c96a;font-weight:700;margin-bottom:5px;">PDF Module ${modId}</div>
+      <div style="font-size:.82rem;color:#a8c8b0;margin-bottom:16px;">${pdfInfo.titre}</div>
+      <div style="background:rgba(200,146,42,.07);border:1px solid rgba(200,146,42,.2);border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:.75rem;color:#6a9e78;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Prix</div>
+        <div style="font-size:1.8rem;font-weight:900;color:#e8c96a;">${pdfInfo.prix.toLocaleString()} FCFA</div>
+        <div style="font-size:.75rem;color:#6a9e78;margin-top:4px;">Paiement Wave · Accès immédiat</div>
+      </div>
+      <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/" target="_blank"
+         style="display:block;padding:12px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:10px;font-size:.9rem;font-weight:700;text-decoration:none;margin-bottom:10px;">
+        💳 Payer ${pdfInfo.prix.toLocaleString()} FCFA via Wave
+      </a>
+      <div style="font-size:.72rem;color:#6a9e78;line-height:1.6;">
+        Après paiement → WhatsApp <strong style="color:#2ecc71;">+225 07 67 81 43 33</strong><br>
+        Lien de téléchargement envoyé sous 24h
+      </div>
+    </div>`;
+  document.body.appendChild(el);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
