@@ -1037,6 +1037,36 @@ function renderDashboard() {
   const u = STATE.user;
   $("nav-user-name").textContent = u.nom;
   $("dash-welcome").textContent = `Bonjour, ${u.nom} 👋`;
+  // Ajouter bouton actualiser si pas déjà présent
+  if (!document.getElementById("btn-refresh-modules")) {
+    const btn = document.createElement("button");
+    btn.id = "btn-refresh-modules";
+    btn.innerHTML = "🔄 Actualiser mes modules";
+    btn.style.cssText = "margin-top:10px;padding:7px 14px;background:rgba(26,92,53,.3);border:1px solid rgba(26,92,53,.5);border-radius:8px;color:#2ecc71;font-size:.8rem;cursor:pointer;font-family:inherit;";
+    btn.onclick = async function() {
+      btn.textContent = "⏳ Chargement...";
+      btn.disabled = true;
+      try {
+        const res = await cfGet("get_modules_apprenant", { cle: STATE.user.cle, telephone: "" });
+        if (res.ok && res.modules && res.modules.length > 0) {
+          STATE.user.modulesDebloques = res.modules;
+          S.set("modules_" + STATE.user.userId, res.modules);
+          toast(`✅ ${res.modules.length} module(s) débloqué(s) !`, "success", 3000);
+          renderDashboard();
+        } else {
+          toast("Aucun nouveau module trouvé.", "info", 3000);
+          btn.textContent = "🔄 Actualiser mes modules";
+          btn.disabled = false;
+        }
+      } catch(e) {
+        toast("Erreur de connexion CF-DB.", "error", 3000);
+        btn.textContent = "🔄 Actualiser mes modules";
+        btn.disabled = false;
+      }
+    };
+    const subEl = document.querySelector(".dash-sub") || document.getElementById("dash-welcome")?.parentElement;
+    if (subEl) subEl.appendChild(btn);
+  }
 
   // Stats
   const prog = STATE.progress;
@@ -1084,8 +1114,11 @@ function renderDashboard() {
                ${pct > 0 ? "Continuer →" : "Commencer →"}
              </button>`
           : `<div style="text-align:center;font-size:.75rem;color:var(--txt3)">
-               ${mod.prix.toLocaleString()} FCFA<br>
-               <a href="https://t.me/ChallengeFinancierbot" target="_blank" style="font-size:.7rem">Acheter →</a>
+               <div style="font-size:.85rem;font-weight:700;color:#e8c96a;margin-bottom:4px">${mod.prix.toLocaleString()} FCFA</div>
+               <a href="https://t.me/ChallengeFinancierbot?start=lms_module_${mod.id}" target="_blank"
+                  style="display:inline-block;padding:6px 14px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:8px;font-size:.75rem;font-weight:700;text-decoration:none;margin-top:4px;">
+                 📱 Acheter via Bot →
+               </a>
              </div>`
         }
       </div>
@@ -1241,6 +1274,11 @@ function submitQuiz(modId) {
 
   const resultBlock = $("quiz-result-block");
   resultBlock.style.display = "block";
+
+  const nextModId = modId + 1;
+  const unlocked = getUnlocked();
+  const nextUnlocked = unlocked.includes(nextModId);
+
   resultBlock.innerHTML = `
     <div class="quiz-result">
       <div class="quiz-score">${score}%</div>
@@ -1250,9 +1288,40 @@ function submitQuiz(modId) {
       <div class="${passed ? 'badge badge-vert' : 'badge badge-rouge'}" style="font-size:.85rem;padding:6px 16px;">
         ${passed ? "✅ Quiz réussi !" : "❌ Score insuffisant — réessayez"}
       </div>
-      ${passed ? `<div style="margin-top:16px;">
-        <button class="btn btn-primary btn-sm" onclick="goBack()">← Retour aux modules</button>
-      </div>` : `<div style="margin-top:16px;">
+
+      ${passed ? `
+      <!-- Boutons après quiz réussi -->
+      <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px;max-width:340px;margin-left:auto;margin-right:auto;">
+
+        <!-- PDF du cours -->
+        <a href="https://t.me/ChallengeFinancierbot?start=pdf_module_${modId}"
+           target="_blank"
+           style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
+                  background:linear-gradient(135deg,#1a3a6c,#2471a3);color:#fff;border-radius:10px;
+                  font-size:.9rem;font-weight:700;text-decoration:none;">
+          📄 Télécharger le PDF Module ${modId} — 2 000 FCFA
+        </a>
+
+        <!-- Module suivant -->
+        ${modId < 8 ? `
+        <a href="${nextUnlocked ? 'javascript:void(0)' : 'https://t.me/ChallengeFinancierbot?start=lms_module_' + nextModId}"
+           ${nextUnlocked ? 'onclick="goBack()"' : 'target="_blank"'}
+           style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
+                  background:${nextUnlocked ? 'linear-gradient(135deg,#1A5C35,#22a852)' : 'linear-gradient(135deg,#5a3e00,#c8922a)'};
+                  color:#fff;border-radius:10px;font-size:.9rem;font-weight:700;text-decoration:none;">
+          ${nextUnlocked ? '▶ Continuer — Module ' + nextModId : '🔓 Débloquer Module ' + nextModId + ' — 17 500 FCFA'}
+        </a>` : `
+        <div style="padding:13px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.3);
+                    border-radius:10px;text-align:center;color:#e8c96a;font-size:.9rem;font-weight:700;">
+          🏆 Formation complète ! Félicitations !
+        </div>`}
+
+        <button class="btn btn-ghost btn-sm" onclick="goBack()" style="font-size:.8rem;">
+          ← Retour au tableau de bord
+        </button>
+      </div>
+      ` : `
+      <div style="margin-top:16px;">
         <button class="btn btn-ghost btn-sm" onclick="openModule(${modId})">🔄 Recommencer</button>
       </div>`}
     </div>
