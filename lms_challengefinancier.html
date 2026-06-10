@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ChallengeFinancier™ — LMS v6.0</title>
+<title>ChallengeFinancier™ — LMS v6.3</title>
 <style>
 :root{
   --vert:#1A5C35;--vert2:#0f3d22;--or:#C8922A;--or2:#e6a832;
@@ -230,6 +230,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchTab('apprenant')">🎓 Apprenant</button>
         <button class="auth-tab" onclick="switchTab('formateur')">👨‍🏫 Formateur</button>
+        <button class="auth-tab" onclick="switchTab('expert')">📊 Expert</button>
         <button class="auth-tab" onclick="switchTab('admin')">🔐 Admin</button>
       </div>
       <div id="tab-apprenant" class="auth-form active">
@@ -270,6 +271,22 @@ tr:hover td{background:rgba(255,255,255,.03);}
           📊 Accéder à mon espace
         </button>
       </div>
+
+      <!-- Tab Expert Consultant -->
+      <div id="tab-expert" class="auth-form">
+        <div class="cle-hint">
+          💡 Votre <strong>Code Expert</strong> vous a été attribué par l'Admin NGD.
+          Format&nbsp;: <strong>FORM-XXXX</strong> avec rôle Expert Consultant.
+        </div>
+        <div class="form-group">
+          <label>Code Expert Consultant</label>
+          <input class="form-input" id="inp-expert-code" type="text" placeholder="FORM-XXXX" autocomplete="off">
+          <div class="error-msg" id="err-expert"></div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="authExpert()">
+          📊 Accéder à mon Dashboard Expert
+        </button>
+      </div>
       <div id="tab-admin" class="auth-form">
         <div class="form-group">
           <label>Identifiant Admin</label>
@@ -286,7 +303,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
       </div>
     </div>
     <p style="text-align:center;margin-top:16px;font-size:.75rem;color:var(--txt3);">
-      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.2 | NGD International
+      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.3 | NGD International
     </p>
   </div>
 </div>
@@ -350,6 +367,106 @@ tr:hover td{background:rgba(255,255,255,.03);}
   </div>
 </div>
 
+<!-- ═══════════════════════════ DASHBOARD EXPERT CONSULTANT ═══════════════════════════ -->
+<div id="screen-expert" class="screen">
+  <nav>
+    <div class="nav-logo">
+      <span class="logo-text">ChallengeFinancier™</span>
+      <span class="logo-sub" style="display:inline;margin-left:6px;color:var(--txt3);">— Expert Consultant</span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user" id="nav-expert-name"></span>
+      <button class="btn-logout" onclick="logout()">Déconnexion</button>
+    </div>
+  </nav>
+  <div style="padding:20px;max-width:900px;margin:0 auto;width:100%;">
+
+    <!-- Stats Expert -->
+    <div id="expert-stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:24px;"></div>
+
+    <!-- Tabs Expert -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <button id="tab-expert-upload" class="btn btn-primary btn-sm" onclick="expertShowTab('upload')">➕ Uploader un PDF</button>
+      <button id="tab-expert-mes-pdfs" class="btn btn-ghost btn-sm" onclick="expertShowTab('mes-pdfs')">📚 Mes PDFs</button>
+      <button id="tab-expert-catalogue" class="btn btn-ghost btn-sm" onclick="expertShowTab('catalogue')">🌐 Catalogue commun</button>
+    </div>
+
+    <!-- Section Upload -->
+    <div id="expert-section-upload" class="section-block">
+      <h3>➕ Uploader un nouveau PDF Expert</h3>
+      <div class="form-group">
+        <label>Titre du PDF</label>
+        <input class="form-input" id="expert-pdf-titre" type="text" placeholder="Ex : Stratégies avancées d'investissement immobilier">
+      </div>
+      <div class="form-group">
+        <label>Module LMS associé</label>
+        <select class="form-input" id="expert-pdf-module">
+          <option value="">— Sélectionnez un module —</option>
+          <option value="1">Module 1 — Introduction</option>
+          <option value="2">Module 2 — L'Inflation</option>
+          <option value="3">Module 3 — La Dette</option>
+          <option value="4">Module 4 — La Fiscalité</option>
+          <option value="5">Module 5 — L'Accès au Capital</option>
+          <option value="6">Module 6 — L'Information</option>
+          <option value="7">Module 7 — Le Système de Dépendance</option>
+          <option value="8">Module 8 — Conclusion</option>
+          <option value="0">Hors module (thématique libre)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Lien Google Drive du PDF (partagé en lecture)</label>
+        <input class="form-input" id="expert-pdf-url" type="text" placeholder="https://drive.google.com/file/d/.../view">
+      </div>
+      <div class="form-group">
+        <label>Prix de vente</label>
+        <select class="form-input" id="expert-pdf-prix">
+          <option value="1000">1 000 FCFA</option>
+          <option value="2500">2 500 FCFA</option>
+          <option value="5000" selected>5 000 FCFA</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Description courte (optionnelle)</label>
+        <textarea class="form-input" id="expert-pdf-desc" rows="3" placeholder="Décrivez brièvement le contenu de ce PDF Expert..."></textarea>
+      </div>
+      <div class="error-msg" id="err-expert-upload"></div>
+      <button class="btn btn-or btn-full" onclick="soumettreExpertPdf()" style="margin-top:8px;">
+        📤 Soumettre pour validation Admin
+      </button>
+      <div style="margin-top:12px;font-size:.78rem;color:var(--txt3);">
+        ⏳ Votre PDF sera visible dans le catalogue après validation par l'Admin NGD.
+      </div>
+    </div>
+
+    <!-- Section Mes PDFs -->
+    <div id="expert-section-mes-pdfs" class="section-block" style="display:none;">
+      <h3>📚 Mes PDFs soumis</h3>
+      <div id="expert-mes-pdfs-list">
+        <p style="color:var(--txt3);">Chargement...</p>
+      </div>
+    </div>
+
+    <!-- Section Catalogue commun -->
+    <div id="expert-section-catalogue" class="section-block" style="display:none;">
+      <h3>🌐 Catalogue commun — Tous les PDFs Experts validés</h3>
+      <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <select class="form-input" id="catalogue-filtre-module" style="width:auto;padding:8px 12px;font-size:.85rem;" onchange="filtrerCatalogue()">
+          <option value="">Tous les modules</option>
+          <option value="1">Module 1</option><option value="2">Module 2</option>
+          <option value="3">Module 3</option><option value="4">Module 4</option>
+          <option value="5">Module 5</option><option value="6">Module 6</option>
+          <option value="7">Module 7</option><option value="8">Module 8</option>
+          <option value="0">Hors module</option>
+        </select>
+      </div>
+      <div id="expert-catalogue-list">
+        <p style="color:var(--txt3);">Chargement...</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ═══════════════════════════ PANNEAU ADMIN ═══════════════════════════ -->
 <div id="screen-admin" class="screen">
   <nav>
@@ -394,6 +511,16 @@ const PDF_URLS = {
 };
 
 const LSK = { session: "cf_lms_session", progress: "cf_lms_progress" };
+
+// ─── GRILLE PRIX PDF EXPERT (définie par Admin) ───────────────────────
+const GRILLE_PRIX_EXPERT = [
+  { valeur: 1000,  label: "1 000 FCFA — Essentiel" },
+  { valeur: 2500,  label: "2 500 FCFA — Standard" },
+  { valeur: 5000,  label: "5 000 FCFA — Premium" }
+];
+
+// Cache local catalogue Expert
+let CATALOGUE_EXPERT_CACHE = [];
 
 // ─── PDF EXPERTS CONSULTANTS (5 000 FCFA) — URLs à configurer ───
 const PDF_EXPERT_URLS = {
@@ -615,7 +742,8 @@ function switchTab(tab) {
   document.querySelectorAll(".auth-tab").forEach(t => t.classList.remove("active"));
   document.querySelectorAll(".auth-form").forEach(f => f.classList.remove("active"));
   document.querySelector(`[onclick="switchTab('${tab}')"]`).classList.add("active");
-  $(`tab-${tab}`).classList.add("active");
+  const tabEl = $(`tab-${tab}`);
+  if (tabEl) tabEl.classList.add("active");
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -1209,6 +1337,14 @@ function submitQuiz(modId) {
           🏆 Formation complète ! Félicitations !
         </div>`}
 
+        <!-- Catalogue Expert pour ce module -->
+        <button onclick="voirCatalogueExpertModule(${modId})"
+           style="display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 18px;
+                  background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);color:#e8c96a;
+                  border-radius:10px;font-size:.85rem;font-weight:600;cursor:pointer;width:100%;">
+          🌐 Voir les PDFs Experts — Module ${modId}
+        </button>
+
         <button class="btn btn-ghost btn-sm" onclick="goBack()" style="font-size:.8rem;">
           ← Retour au tableau de bord
         </button>
@@ -1439,6 +1575,214 @@ async function testCfDb() {
 /* ═══════════════════════════════════════════════════════════════════════
    INITIALISATION
 ═══════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════
+   EXPERT CONSULTANT — v6.3
+   Dashboard personnel + Catalogue commun
+═══════════════════════════════════════════════════════════════════════ */
+
+async function authExpert() {
+  const code = $("inp-expert-code").value.trim().toUpperCase();
+  const errEl = $("err-expert");
+  errEl.classList.remove("show");
+  if (!code) { errEl.textContent = "Code Expert requis."; errEl.classList.add("show"); return; }
+
+  showLoader("Vérification de votre code Expert...");
+  try {
+    const res = await cfGet("get_formateur", { code });
+    hideLoader();
+    if (!res.ok) {
+      errEl.textContent = res.error || "Code Expert invalide.";
+      errEl.classList.add("show"); return;
+    }
+    STATE.user = {
+      nom: res.formateur.nom,
+      role: "expert",
+      code,
+      formateurId: res.formateur.id,
+      specialite: res.formateur.specialite,
+      moduleIds: res.formateur.module_ids
+    };
+    saveSession();
+    toast(`✅ Bienvenue ${res.formateur.nom} !`, "success", 3000);
+    await renderExpertDash();
+    showScreen("screen-expert");
+  } catch(e) {
+    hideLoader();
+    errEl.textContent = "Erreur de connexion. Réessayez.";
+    errEl.classList.add("show");
+  }
+}
+
+async function renderExpertDash() {
+  const u = STATE.user;
+  $("nav-expert-name").textContent = u.nom;
+
+  // Stats
+  $("expert-stats-grid").innerHTML = [
+    { val: "📊", lbl: "Expert Consultant" },
+    { val: u.specialite || "—", lbl: "Spécialité" },
+    { val: GRILLE_PRIX_EXPERT.length, lbl: "Niveaux de prix" },
+    { val: "✅", lbl: "Statut actif" }
+  ].map(s => `<div class="stat-card"><div class="stat-val" style="font-size:1.2rem;">${s.val}</div><div class="stat-lbl">${s.lbl}</div></div>`).join("");
+
+  // Charger catalogue
+  await chargerCatalogueExpert();
+  expertShowTab('upload');
+}
+
+function expertShowTab(tab) {
+  ["upload","mes-pdfs","catalogue"].forEach(t => {
+    const sec = $(`expert-section-${t}`);
+    const btn = $(`tab-expert-${t}`);
+    if (sec) sec.style.display = t === tab ? "block" : "none";
+    if (btn) { btn.className = t === tab ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"; }
+  });
+  if (tab === "mes-pdfs") chargerMesPdfs();
+  if (tab === "catalogue") afficherCatalogue();
+}
+
+async function soumettreExpertPdf() {
+  const titre  = $("expert-pdf-titre").value.trim();
+  const module = $("expert-pdf-module").value;
+  const url    = $("expert-pdf-url").value.trim();
+  const prix   = $("expert-pdf-prix").value;
+  const desc   = $("expert-pdf-desc").value.trim();
+  const errEl  = $("err-expert-upload");
+  errEl.classList.remove("show");
+
+  if (!titre) { errEl.textContent = "Le titre est requis."; errEl.classList.add("show"); return; }
+  if (!url || !url.includes("drive.google.com")) { errEl.textContent = "URL Google Drive invalide."; errEl.classList.add("show"); return; }
+  if (!prix) { errEl.textContent = "Choisissez un prix."; errEl.classList.add("show"); return; }
+
+  showLoader("Soumission en cours...");
+  try {
+    const res = await cfGet("soumettre_pdf_expert", {
+      formateur_id:  STATE.user.formateurId,
+      nom_expert:    STATE.user.nom,
+      titre_pdf:     titre,
+      module_id:     module || "0",
+      url_drive:     url,
+      prix:          prix,
+      description:   desc,
+      source:        "LMS_v6.3"
+    });
+    hideLoader();
+    if (res.ok) {
+      toast("✅ PDF soumis avec succès ! En attente de validation Admin.", "success", 5000);
+      $("expert-pdf-titre").value = "";
+      $("expert-pdf-url").value = "";
+      $("expert-pdf-desc").value = "";
+      expertShowTab("mes-pdfs");
+    } else {
+      errEl.textContent = res.error || "Erreur lors de la soumission.";
+      errEl.classList.add("show");
+    }
+  } catch(e) {
+    hideLoader();
+    errEl.textContent = "Erreur de connexion CF-DB.";
+    errEl.classList.add("show");
+  }
+}
+
+async function chargerCatalogueExpert() {
+  try {
+    const res = await cfGet("get_catalogue_expert", { statut: "VALIDE" });
+    if (res.ok && res.catalogue) {
+      CATALOGUE_EXPERT_CACHE = res.catalogue;
+    }
+  } catch(e) {}
+}
+
+async function chargerMesPdfs() {
+  const el = $("expert-mes-pdfs-list");
+  el.innerHTML = "<p style='color:var(--txt3);'>Chargement...</p>";
+  try {
+    const res = await cfGet("get_catalogue_expert", {
+      formateur_id: STATE.user.formateurId
+    });
+    if (res.ok && res.catalogue && res.catalogue.length > 0) {
+      el.innerHTML = res.catalogue.map(p => renderPdfExpertCard(p, true)).join("");
+    } else {
+      el.innerHTML = "<p style='color:var(--txt3);font-size:.9rem;'>Vous n'avez pas encore soumis de PDF.</p>";
+    }
+  } catch(e) {
+    el.innerHTML = "<p style='color:#e74c3c;'>Erreur de connexion.</p>";
+  }
+}
+
+function afficherCatalogue(moduleFiltre) {
+  const el = $("expert-catalogue-list");
+  let liste = CATALOGUE_EXPERT_CACHE;
+  if (moduleFiltre) liste = liste.filter(p => String(p.module_id) === String(moduleFiltre));
+  if (!liste.length) {
+    el.innerHTML = "<p style='color:var(--txt3);font-size:.9rem;'>Aucun PDF Expert disponible pour ce filtre.</p>";
+    return;
+  }
+  el.innerHTML = liste.map(p => renderPdfExpertCard(p, false)).join("");
+}
+
+function filtrerCatalogue() {
+  const val = $("catalogue-filtre-module").value;
+  afficherCatalogue(val || null);
+}
+
+function renderPdfExpertCard(p, isOwner) {
+  const badgeColor = p.statut === "VALIDE" ? "badge-vert" : p.statut === "EN_ATTENTE" ? "badge-or" : "badge-rouge";
+  const prixLabel = GRILLE_PRIX_EXPERT.find(g => g.valeur == p.prix)?.label || p.prix + " FCFA";
+  return `
+    <div style="background:var(--bg2);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:16px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-weight:700;font-size:.95rem;margin-bottom:4px;">📊 ${p.titre_pdf || '—'}</div>
+          <div style="font-size:.78rem;color:var(--txt3);">
+            ${p.module_id && p.module_id != 0 ? 'Module ' + p.module_id + ' — ' : 'Hors module — '}
+            par <strong>${p.nom_expert || '—'}</strong>
+          </div>
+          ${p.description ? `<div style="font-size:.8rem;color:var(--txt2);margin-top:6px;">${p.description}</div>` : ''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <div style="font-size:1.1rem;font-weight:800;color:#e8c96a;">${Number(p.prix).toLocaleString()} FCFA</div>
+          <span class="badge ${badgeColor}">${p.statut || 'EN_ATTENTE'}</span>
+        </div>
+      </div>
+      ${p.statut === "VALIDE" && !isOwner ? `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="https://pay.wave.com/m/M_ci_QlW5ke-hYGbA/c/ci/?amount=${p.prix}" target="_blank"
+           style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:linear-gradient(135deg,#0050c8,#1a3a8a);color:#fff;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none;">
+          💳 Payer ${Number(p.prix).toLocaleString()} FCFA
+        </a>
+        <a href="https://t.me/ChallengeFinancierbot?start=pdf_catalogue_${p.id}_${STATE.user?.userId || 'guest'}" target="_blank"
+           style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:linear-gradient(135deg,#1A5C35,#22a852);color:#fff;border-radius:8px;font-size:.85rem;font-weight:700;text-decoration:none;">
+          ✅ J'ai payé — Recevoir sur Telegram
+        </a>
+      </div>` : ""}
+    </div>`;
+}
+
+async function voirCatalogueExpertModule(moduleId) {
+  // Appelé depuis la page module après quiz réussi
+  await chargerCatalogueExpert();
+  const liste = CATALOGUE_EXPERT_CACHE.filter(p => String(p.module_id) === String(moduleId) && p.statut === "VALIDE");
+
+  const old = document.getElementById("catalogue-module-modal");
+  if (old) old.remove();
+  const el = document.createElement("div");
+  el.id = "catalogue-module-modal";
+  el.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;";
+
+  el.innerHTML = `
+    <div style="background:#0d1e10;border:1px solid rgba(200,146,42,.4);border-radius:20px;max-width:480px;width:100%;padding:28px;position:relative;max-height:90vh;overflow-y:auto;">
+      <button onclick="document.getElementById('catalogue-module-modal').remove()"
+        style="position:absolute;top:12px;right:14px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;">✕</button>
+      <h3 style="color:var(--or);margin-bottom:16px;">🌐 PDFs Experts — Module ${moduleId}</h3>
+      ${liste.length === 0
+        ? `<p style="color:var(--txt3);font-size:.9rem;">Aucun PDF Expert disponible pour ce module pour l'instant.</p>`
+        : liste.map(p => renderPdfExpertCard(p, false)).join("")
+      }
+    </div>`;
+  document.body.appendChild(el);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
   hideLoader();
   showScreen("screen-auth");
