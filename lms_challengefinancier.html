@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ChallengeFinancier™ — LMS v6.4</title>
+<title>ChallengeFinancier™ — LMS v6.4b</title>
 <style>
 :root{
   --vert:#1A5C35;--vert2:#0f3d22;--or:#C8922A;--or2:#e6a832;
@@ -304,7 +304,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
       </div>
     </div>
     <p style="text-align:center;margin-top:16px;font-size:.75rem;color:var(--txt3);">
-      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4 | NGD International
+      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4b | NGD International
     </p>
   </div>
 </div>
@@ -1092,7 +1092,9 @@ function renderDashboard() {
   grid.innerHTML = "";
 
   MODS.forEach(mod => {
-    const isUnlocked = mod.id === 1 ? true : !!prog[mod.id];
+    // v6.4 FIX : vérifier modulesDebloques (CF-DB) ET progress (localStorage)
+    const unlocked = getUnlocked();
+    const isUnlocked = mod.id === 1 ? true : unlocked.includes(mod.id) || !!prog[mod.id];
     const p = prog[mod.id] || {};
     const pct = p.pct || 0;
 
