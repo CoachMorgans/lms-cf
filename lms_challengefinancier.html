@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ChallengeFinancier™ — LMS v6.3</title>
+<title>ChallengeFinancier™ — LMS v6.4</title>
 <style>
 :root{
   --vert:#1A5C35;--vert2:#0f3d22;--or:#C8922A;--or2:#e6a832;
@@ -235,8 +235,9 @@ tr:hover td{background:rgba(255,255,255,.03);}
       </div>
       <div id="tab-apprenant" class="auth-form active">
         <div class="cle-hint">
-          💡 Votre <strong>Clé NGD</strong> vous a été remise après votre paiement via le bot Telegram
-          <strong>@ChallengeFinancierbot</strong>. Format&nbsp;: <strong>LFA-XXXX-XXXX</strong>
+          💡 Votre <strong>Clé NGD (Module 1)</strong> est votre identifiant unique et permanent.
+          Elle vous a été remise lors du paiement du Module 1 via <strong>@ChallengeFinancierbot</strong>.
+          Format&nbsp;: <strong>LFA-XXXX-XXXX</strong>. Les modules 2 à 8 sont automatiquement liés à votre compte via votre numéro de téléphone.
         </div>
         <div class="form-group">
           <label>Votre Clé NGD</label>
@@ -303,7 +304,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
       </div>
     </div>
     <p style="text-align:center;margin-top:16px;font-size:.75rem;color:var(--txt3);">
-      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.3 | NGD International
+      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4 | NGD International
     </p>
   </div>
 </div>
@@ -859,7 +860,9 @@ async function connecterApprenant(cle, nom, zone, isNew) {
 
   showLoader("Chargement de vos modules...");
   try {
-    const res = await cfGet("get_modules_apprenant", { cle, telephone: "" });
+    // v6.4 : passer aussi le téléphone stocké pour retrouver les modules 2-8
+    const telStored = S.get("tel_" + userId) || "";
+    const res = await cfGet("get_modules_apprenant", { cle, telephone: telStored });
     if (res.ok && res.modules && res.modules.length > 0) {
       STATE.user.modulesDebloques = res.modules;
       S.set("modules_" + userId, res.modules);
@@ -1051,7 +1054,8 @@ function renderDashboard() {
       btn.textContent = "⏳ Chargement...";
       btn.disabled = true;
       try {
-        const res = await cfGet("get_modules_apprenant", { cle: STATE.user.cle, telephone: "" });
+        const telStored = S.get("tel_" + STATE.user.userId) || STATE.user.telephone || "";
+        const res = await cfGet("get_modules_apprenant", { cle: STATE.user.cle, telephone: telStored });
         if (res.ok && res.modules && res.modules.length > 0) {
           STATE.user.modulesDebloques = res.modules;
           S.set("modules_" + STATE.user.userId, res.modules);
@@ -1323,13 +1327,18 @@ function submitQuiz(modId) {
                         font-size:.9rem;font-weight:700;border:none;cursor:pointer;width:100%;">
                  ▶ Continuer — Module ${nextModId}
                </button>`
-            : `<a href="https://t.me/ChallengeFinancierbot?start=lms_module_${nextModId}"
-                 target="_blank"
-                 style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
-                        background:linear-gradient(135deg,#5a3e00,#c8922a);color:#fff;border-radius:10px;
-                        font-size:.9rem;font-weight:700;text-decoration:none;">
-                 🔓 Débloquer Module ${nextModId} — ${MODS[nextModId-1]?.prix.toLocaleString() || '17 500'} FCFA
-               </a>`
+            : `<div style="display:flex;flex-direction:column;gap:8px;">
+                 <a href="https://t.me/ChallengeFinancierbot?start=lms_module_${nextModId}"
+                    target="_blank"
+                    style="display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 18px;
+                           background:linear-gradient(135deg,#5a3e00,#c8922a);color:#fff;border-radius:10px;
+                           font-size:.9rem;font-weight:700;text-decoration:none;">
+                   🔓 Débloquer Module ${nextModId} — ${MODS[nextModId-1]?.prix.toLocaleString() || '17 500'} FCFA
+                 </a>
+                 <div style="font-size:.75rem;color:var(--txt3);text-align:center;padding:6px;">
+                   💡 Après paiement, revenez ici avec votre <strong style="color:var(--or);">clé Module 1</strong> et cliquez 🔄 Actualiser
+                 </div>
+               </div>`
           }
         ` : `
         <div style="padding:13px;background:rgba(200,146,42,.1);border:1px solid rgba(200,146,42,.3);
