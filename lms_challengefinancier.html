@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ChallengeFinancier™ — LMS v6.4b</title>
+<title>ChallengeFinancier™ — LMS v6.4c</title>
 <style>
 :root{
   --vert:#1A5C35;--vert2:#0f3d22;--or:#C8922A;--or2:#e6a832;
@@ -304,7 +304,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
       </div>
     </div>
     <p style="text-align:center;margin-top:16px;font-size:.75rem;color:var(--txt3);">
-      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4b | NGD International
+      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4c | NGD International
     </p>
   </div>
 </div>
@@ -534,6 +534,19 @@ const PDF_EXPERT_URLS = {
   7: { cours: "https://drive.google.com/file/d/EXPERT_ID_MODULE7/view", prix: 5000, titre: "Système de Dépendance — Analyse Expert Consultant" },
   8: { cours: "https://drive.google.com/file/d/EXPERT_ID_MODULE8/view", prix: 5000, titre: "Conclusion — Analyse Expert Consultant" }
 };
+
+/* ═══════════════════════════════════════════════════════════════════════
+   UTILITAIRE — NORMALISATION TÉLÉPHONE (cohérence avec CF-DB)
+   CF-DB stocke sans le préfixe 00 : 002250505761784 → 2250505761784
+═══════════════════════════════════════════════════════════════════════ */
+function normTelLMS(tel) {
+  if (!tel) return '';
+  let t = String(tel).replace(/[\s\-\.]/g, '');
+  t = t.replace(/^(\+|00)225/, '225');
+  if (/^0\d{9}$/.test(t)) t = '225' + t.slice(1);
+  if (/^\d{9}$/.test(t)) t = '225' + t;
+  return t;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════
    ÉTAT GLOBAL
@@ -861,7 +874,7 @@ async function connecterApprenant(cle, nom, zone, isNew) {
   showLoader("Chargement de vos modules...");
   try {
     // v6.4 : passer aussi le téléphone stocké pour retrouver les modules 2-8
-    const telStored = S.get("tel_" + userId) || "";
+    const telStored = normTelLMS(S.get("tel_" + userId) || "");
     const res = await cfGet("get_modules_apprenant", { cle, telephone: telStored });
     if (res.ok && res.modules && res.modules.length > 0) {
       STATE.user.modulesDebloques = res.modules;
@@ -1054,7 +1067,7 @@ function renderDashboard() {
       btn.textContent = "⏳ Chargement...";
       btn.disabled = true;
       try {
-        const telStored = S.get("tel_" + STATE.user.userId) || STATE.user.telephone || "";
+        const telStored = normTelLMS(S.get("tel_" + STATE.user.userId) || STATE.user.telephone || "");
         const res = await cfGet("get_modules_apprenant", { cle: STATE.user.cle, telephone: telStored });
         if (res.ok && res.modules && res.modules.length > 0) {
           STATE.user.modulesDebloques = res.modules;
