@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>ChallengeFinancier™ — LMS v6.4c</title>
+<title>ChallengeFinancier™ — LMS v6.4d</title>
 <style>
 :root{
   --vert:#1A5C35;--vert2:#0f3d22;--or:#C8922A;--or2:#e6a832;
@@ -304,7 +304,7 @@ tr:hover td{background:rgba(255,255,255,.03);}
       </div>
     </div>
     <p style="text-align:center;margin-top:16px;font-size:.75rem;color:var(--txt3);">
-      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4c | NGD International
+      © 2026 VoteConnect SARL — ChallengeFinancier™ v6.4d | NGD International
     </p>
   </div>
 </div>
@@ -1070,10 +1070,14 @@ function renderDashboard() {
         const telStored = normTelLMS(S.get("tel_" + STATE.user.userId) || STATE.user.telephone || "");
         const res = await cfGet("get_modules_apprenant", { cle: STATE.user.cle, telephone: telStored });
         if (res.ok && res.modules && res.modules.length > 0) {
-          STATE.user.modulesDebloques = res.modules;
-          S.set("modules_" + STATE.user.userId, res.modules);
-          toast(`✅ ${res.modules.length} module(s) débloqué(s) !`, "success", 3000);
+          // v6.4d : forcer la mise à jour avant render
+          STATE.user.modulesDebloques = res.modules.map(Number);
+          S.set("modules_" + STATE.user.userId, STATE.user.modulesDebloques);
+          const nbNew = STATE.user.modulesDebloques.length;
+          toast(`✅ ${nbNew} module(s) débloqué(s) !`, "success", 3000);
+          // Double render pour forcer le recalcul de isUnlocked
           renderDashboard();
+          setTimeout(() => renderDashboard(), 300);
         } else {
           toast("Aucun nouveau module trouvé.", "info", 3000);
           btn.textContent = "🔄 Actualiser mes modules";
